@@ -1,0 +1,35 @@
+{
+	"version": "2.0.0",
+	"presentation": {
+		"echo": true,
+		"reveal": "always",
+		"focus": false,
+		"panel": "shared",
+		"showReuseMessage": true,
+		"clear": true
+	},
+	"type": "shell",
+	"problemMatcher": [],
+	"command": "make",
+	"args": ["verbose=1"],
+	"options": {
+		"cwd": "MyFiles"
+	},
+	"tasks": [
+		{
+			"label": "Make debug",
+			"group": {"kind": "build",
+			"isDefault": true},
+		},
+		{
+			"label": "Make clang-debug",
+			"type": "shell",
+			"args": ["config=clang"]
+		},
+		{
+			"label": "Make Release",
+			"type": "shell",
+			"args": ["config=release"]
+		}
+	]
+}

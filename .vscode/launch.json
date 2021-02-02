@@ -1,0 +1,56 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [    
+        {
+            "name": "(lldb) Iniciar",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/MyFiles/bin/Clang/HelloWorld.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/MyFiles",
+            "environment": [],
+            "MIMode": "lldb",
+            "miDebuggerPath": "C:\\LLVM_11_0_0\\bin\\lldb-mi.exe",
+            "logging": {
+                "trace": true,
+                "traceResponse": true,
+                "engineLogging": true
+            },
+            "setupCommands": [
+                {
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "Make clang-debug"
+        },
+        {
+            "name": "(gbd) Iniciar",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/MyFiles/bin/Debug/HelloWorld.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/MyFiles",
+            "environment": [],
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:\\mingw64\\bin\\gdb.exe",
+            "logging": {
+                "trace": true,
+                "traceResponse": true,
+                "engineLogging": true
+            },
+            "setupCommands": [
+                {
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "Make debug"
+        }
+    ]
+}
