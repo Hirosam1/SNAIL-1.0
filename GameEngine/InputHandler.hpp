@@ -30,6 +30,7 @@ class InputHandler{
                 inputs_info[i] = InputInfo{false};
             }
         };
+        //Use this function to get inout info based on the commands you passed. Use it once per frame.
         void HandleInput(){ 
             ResetInputInfo();
             for(int i = 0; i < inputs_config.size(); i++){

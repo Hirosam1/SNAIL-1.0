@@ -12,7 +12,7 @@ void CarFollower::Update(){
         
 }
 void CarFollower::Begin(){
-    for(GameObject* go : *Window::main_window->go_list){
+    for(GameObject* go : Window::main_window->go_list){
         if(go->object_name == "Car"){
             car = go;
         }

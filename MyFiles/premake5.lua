@@ -12,6 +12,7 @@ project "HelloWorld"
     libdirs{"../thirdparty/GLFW"}
     links{"glfw3", "gdi32", "GameEngine"}
     filter "configurations:Debug"
+        kind "ConsoleApp"
         defines {"DEBUG"}
         symbols "On"
         optimize "Off"

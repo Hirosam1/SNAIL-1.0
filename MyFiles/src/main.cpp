@@ -1,6 +1,6 @@
 #include "GameEngine.hpp"
-
 #include "windows.h"
+#include "CameraMovement.hpp"
 
 #ifdef DEBUG
     const bool debug = true;
@@ -13,8 +13,6 @@
     const bool debug = false;
 #endif
 
-//calls when ever the size of the glfw window is resized
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 //Proccess basic input
 void processInput(GLFWwindow* window);
 
@@ -47,9 +45,6 @@ int main(int argc, char** argv){
     
     Window* a_window = new Window(SCR_WIDTH,SCR_HEIGHT,"Engine Thing");
     a_window->frame_buffer_size_callback = framebuffer_callback;
-    //Perspective Configuration---------------------------------------------
-    a_window->window_info.projection_function = Projection::Orthographic;
-    a_window->window_info.projection = a_window->window_info.projection_function(a_window->window_info.FOV,SCR_WIDTH/(float)SCR_HEIGHT,.15f,100.0f, a_window->window_info.ortho_size);
     // glfwSetCursorPosCallback(window,mouse_callback);
     glfwSwapInterval(1);
     //-----------------------------------------------------------------------------------------------------
@@ -63,37 +58,30 @@ int main(int argc, char** argv){
     //--------------------------------------------------------------------
     Shader sprite_shader = Shader("resources/shaders/vertex/basic.vert", "resources/shaders/fragment/sprite.frag");
     Shader atlas_shader = Shader("resources/shaders/vertex/atlas.vert", "resources/shaders/fragment/sprite.frag");
-    SpriteAtlas sprite_atlas = SpriteAtlas(&sprite_sheet,2,4);
-    Sprite main_sprite = Sprite(&square_model,&sprite_atlas,0,0,&atlas_shader);
-    Sprite car_sprite = Sprite(&square_model,&sprite_atlas,3,1,&atlas_shader);
-    Sprite zombir_sprite = Sprite(&square_model,&sprite_atlas,2,0, &atlas_shader);
+    SpriteAtlas sprite_atlas = SpriteAtlas(&sprite_sheet,1,3);
+    Sprite floor_sprite = Sprite(&square_model,&sprite_atlas,0,0,&atlas_shader);
     //------------------------------------------------------------------------------------------------------------
-    std::list<GameObject*> go_list = std::list<GameObject*>();
-    a_window->go_list = &go_list;
+    std::list<Object*>& o_list = a_window->object_list;
     GameObject* go = new GameObject();
-    go->PushComponentBack(&main_sprite);
-    //go.PushComponentBack(new HeadScript());
-    go_list.push_back(go);
+    go->PushComponentBack(new CameraMovement());
+    o_list.push_back(dynamic_cast<Object*>(go));
     go = new GameObject();
-    go->PushComponentBack(&car_sprite);
-    go->transform->SetPos(Vector3(1.0f,0.0f,0.1f));
-    go->object_name = "Car";
-    go_list.push_back(go);
-    go = new GameObject();
-    go->PushComponentBack(&zombir_sprite);
-    go->transform->SetPos(Vector3(-1,0,0));
-    go_list.push_back(go);
+    go->PushComponentBack(&floor_sprite);
+    o_list.push_back(dynamic_cast<Object*>(go));
     // Uniform names-----------------------------------------------------
     std::string view_str = "view";
     std::string projection_str = "projection";
     ///----------------------------
-    Camera a_camera;
+    //Creates a camera and sets up projection configuration
+    Camera a_camera(Camera_Projection::PERSPECTIVE_PROJECTION);
     a_camera.SetCameraPos(Vector3(0.0,0.0,1.0));
+    o_list.push_back(dynamic_cast<Object*>(&a_camera));
+    a_camera.object_name = "Main Camera";
     Time time;
     //Kill cursor----------
     //glfwSetInputMode(window,GLFW_CURSOR,GLFW_CURSOR_DISABLED);
     glClearColor(0.02f,0.05,0.12,1.0);
-    for(GameObject* _go : go_list){
+    for(Object* _go : o_list){
         _go->Begin();
     }
     //Main loop----------------------------------
@@ -108,7 +96,7 @@ int main(int argc, char** argv){
         atlas_shader.SetUniformMatrix4f(view_str,a_camera.View().GetPtr());
         atlas_shader.SetUniformMatrix4f(projection_str,Window::main_window->window_info.projection.GetPtr());
 
-        for(GameObject* _go : go_list){
+        for(Object* _go : a_window->object_list){
             _go->Update();
         }
 
@@ -120,11 +108,6 @@ int main(int argc, char** argv){
     glfwTerminate();
     return 0;
 }
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height){
-    glViewport(0,0,width,height);
-}
-
 
 void processInput(GLFWwindow* window){
     if(glfwGetKey(window,GLFW_KEY_ESCAPE) == GLFW_PRESS){

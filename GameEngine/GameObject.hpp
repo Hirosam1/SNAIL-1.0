@@ -2,10 +2,10 @@
 #include "Components/Component.hpp"
 #include "GMpch.hpp"
 #include "Components/Transform.hpp"
+#include "Object.hpp"
 
-class GameObject{
+class GameObject : public Object{
     public:
-        std::string object_name = "New GameObject";
         Transform* transform;
         GameObject(){transform = new Transform(); PushComponentBack(transform);};
         void Begin(){for(Component* component : components){component->Begin(this);};}

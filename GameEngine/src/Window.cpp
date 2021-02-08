@@ -1,8 +1,12 @@
 #include "Window.hpp"
+//#include "GameObject.hpp"
 Window* Window::main_window = nullptr;
 
 Window::Window(unsigned int width, unsigned int height, std::string game_name){
     if(!Window::main_window){
+        this->width = width;
+        this->height = height;
+        object_list = std::list<Object*>();
         glfwInit();
         //Set upo version of openGL
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,3);
@@ -20,6 +24,7 @@ Window::Window(unsigned int width, unsigned int height, std::string game_name){
             std::cout<<"Failed to initialize GLAD\n";
         }
         glfwSetFramebufferSizeCallback(window,this->FrameBufferCallBack);
+        glfwSetCursorPosCallback(window,this->CursorPosCallBack);
         glfwSetWindowUserPointer(window,static_cast<void*>(this));
         glViewport(0,0,width,height);
         glEnable(GL_DEPTH_TEST);
@@ -32,4 +37,10 @@ void Window::FrameBufferCallBack(GLFWwindow* window,int width,int height){
     _window->width = width;
     _window->height = height;
     _window->frame_buffer_size_callback(_window,width,height);
+}
+
+void Window::CursorPosCallBack(GLFWwindow* window,double xpos, double ypos){
+    Window* _window =  static_cast<Window*>(glfwGetWindowUserPointer(window));
+    _window->cursor_info.x_pos = xpos;
+    _window->cursor_info.y_pos = ypos;
 }

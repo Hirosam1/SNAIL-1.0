@@ -1,12 +1,20 @@
 #pragma once
+#include "GMpch.hpp"
 #include "Matrix.hpp"
 #include "Vector.hpp"
 #include "Math.hpp"
 #include "Matrix_Transform.hpp"
+#include "Window.hpp"
+#include "Object.hpp"
 
-class Camera{
+enum Camera_Projection{
+    PERSPECTIVE_PROJECTION,
+    ORTHOGRAPHIC_PROJECTION
+};
+
+class Camera : public Object{
     public:
-        Camera();
+        Camera(Camera_Projection camera_projection = Camera_Projection::ORTHOGRAPHIC_PROJECTION);
         //Sets the camera to desired position
         const Matrix4& SetCameraPos(const Vector3& pos);
         //Sets the camera direction (looking at) direction
