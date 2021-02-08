@@ -6,14 +6,7 @@
 #include "Matrix.hpp"
 
 class Object;
-
-struct WindowInfo{
-    Matrix4 projection;
-    float FOV = ToRadians(90.0f);
-    float ortho_size = 3.0;
-    //(float FOV, float aspect_ratio, float near, float far)
-    Matrix4(*projection_function)(float,float ,float ,float, float);
-};
+class Camera;
 
 struct CursorInfo{
     int x_pos;
@@ -26,11 +19,13 @@ class Window{
         static Window* main_window;
         Window(unsigned int width, unsigned int height,std::string game_name);
         GLFWwindow* window;
-        window_framebuffer frame_buffer_size_callback;
-        WindowInfo window_info;
         int width;
         int height;
+        //Scene stuff--------
         std::list<Object*> object_list;
+        Camera** main_camera;
+        //-------------------
+        //Input stuff--------
         CursorInfo cursor_info;
     private:
         static void FrameBufferCallBack(GLFWwindow* window, int width, int height);

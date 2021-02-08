@@ -17,14 +17,21 @@ Sprite::Sprite(Model* model, SpriteAtlas* atlas, unsigned int x_coord, unsigned 
 void Sprite::Draw(Transform* transform){
     //transform.SetScale(sprite_scale * transform.Scale());
     Transform trans = Transform(transform->Pos(),transform->Rot(),transform->Scale() * sprite_scale);
-    trans.BuildMat();
+    Camera* main_camera = *Window::main_window->main_camera;
     shader->SetUniformMatrix4f(model_str, trans.ModelMat().GetPtr());
     shader->SetUniform4f(atlas_str,tex_coord.x,tex_coord.y,tex_coord.z,tex_coord.w);
-    //sprite_texture->UseTexture(*shader,tex1_str,0);
+    shader->SetUniformMatrix4f(MVP_str, (main_camera->Projection() * main_camera->View() * trans.ModelMat()).GetPtr());
+
     //Chooses the winding order based on the scale
     glFrontFace(trans.Scale().x * trans.Scale().y > 0 ? GL_CCW : GL_CW );
-    //glFrontFace(GL_CW * (trans.Scale().x < 0) + GL_CCW* (trans.Scale().x > 0));
     sprite_model->Draw(*shader);
+    
+}
+
+bool Sprite::FrustumCulling(const Transform& tranform){
+    float bigger = tranform.Scale().x > tranform.Scale().y ? tranform.Scale().x : tranform.Scale().y;
+    Vector3 direction_frustum = Normalize(-tranform.Pos()) * bigger;
+    // return direction_frustum 
 }
 
 void Sprite::SetAtlasCoordinate(const Vector2&  atlas_coords){

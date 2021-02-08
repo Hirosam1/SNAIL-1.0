@@ -5,10 +5,11 @@ Transform::Transform(){
     rotation = Vector3();
     scale = Vector3(1.0f,1.0f,1.0f);
     model_mat = Matrix4(1.0);
+    BuildMat();
 }
 
 Transform::Transform(const Vector3& pos, const Vector3& rot, const Vector3& scale): position(pos), rotation(rot), scale(scale){
-    //BuildMat();
+    BuildMat();
 }
 
 void Transform::BuildMat(){

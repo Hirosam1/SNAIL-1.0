@@ -17,8 +17,7 @@
 void processInput(GLFWwindow* window);
 
 void framebuffer_callback(Window* window, int width, int height){
-    window->window_info.projection = window->window_info.projection_function(window->window_info.FOV,width/(float)height,.15f,100.0f, window->window_info.ortho_size);
-    glViewport(0,0,width,height);
+
 }
 
 //Set Consts
@@ -44,7 +43,6 @@ int main(int argc, char** argv){
     }
     
     Window* a_window = new Window(SCR_WIDTH,SCR_HEIGHT,"Engine Thing");
-    a_window->frame_buffer_size_callback = framebuffer_callback;
     // glfwSetCursorPosCallback(window,mouse_callback);
     glfwSwapInterval(1);
     //-----------------------------------------------------------------------------------------------------
@@ -73,10 +71,11 @@ int main(int argc, char** argv){
     std::string projection_str = "projection";
     ///----------------------------
     //Creates a camera and sets up projection configuration
-    Camera a_camera(Camera_Projection::PERSPECTIVE_PROJECTION);
-    a_camera.SetCameraPos(Vector3(0.0,0.0,1.0));
-    o_list.push_back(dynamic_cast<Object*>(&a_camera));
-    a_camera.object_name = "Main Camera";
+    Camera* a_camera = new Camera(Camera_Projection::PERSPECTIVE_PROJECTION);
+    a_camera->SetCameraPos(Vector3(0.0,0.0,1.0));
+    o_list.push_back(dynamic_cast<Object*>(a_camera));
+    a_camera->object_name = "Main Camera";
+    a_window->main_camera = &a_camera;
     Time time;
     //Kill cursor----------
     //glfwSetInputMode(window,GLFW_CURSOR,GLFW_CURSOR_DISABLED);
@@ -92,10 +91,7 @@ int main(int argc, char** argv){
     while(!glfwWindowShouldClose(Window::main_window->window)){
         time.UpdateTime();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        a_camera.BuildMat();
-        atlas_shader.SetUniformMatrix4f(view_str,a_camera.View().GetPtr());
-        atlas_shader.SetUniformMatrix4f(projection_str,Window::main_window->window_info.projection.GetPtr());
-
+        // a_camera->BuildMat();
         for(Object* _go : a_window->object_list){
             _go->Update();
         }

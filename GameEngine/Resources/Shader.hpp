@@ -12,15 +12,15 @@ class Shader{
         //Uses the shader. Use this before any shader operations
         void UseShader();
         //Set uniform for vec3
-        void SetUniform3f(std::string& uniform_name, float a, float b, float c);
+        void SetUniform3f(const std::string& uniform_name, float a, float b, float c);
         //Set uniform for vec4
-        void SetUniform4f(std::string& uniform_name, float a, float b, float c,float d);
+        void SetUniform4f(const std::string& uniform_name, float a, float b, float c,float d);
         //Set uniform for int
-        void SetUniform1i(std::string& uniform_name, int a);
+        void SetUniform1i(const std::string& uniform_name, int a);
         //Set uniform for float
-        void SetUniform1f(std::string& uniform_name, float a);
+        void SetUniform1f(const std::string& uniform_name, float a);
         //Set uniform for mat4
-        void SetUniformMatrix4f(std::string& uniform_name, const float* mat_ptr);
+        void SetUniformMatrix4f(const std::string& uniform_name, const float* mat_ptr);
     private:
         GLuint program_id;  
         GLuint LoadShader(GLenum shader_type, std::string& shader_path);

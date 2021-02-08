@@ -9,9 +9,15 @@ Camera::Camera(Camera_Projection camera_projection){
     view = Transformation::CamLookAt(camera_pos, camera_pos + camera_front, camera_up);
     //Perspective Configuration---------------------------------------------
     
-    a_window->window_info.projection_function = camera_projection == Camera_Projection::PERSPECTIVE_PROJECTION ? Projection::Perspective : 
+    proj_info.projection_function = camera_projection == Camera_Projection::PERSPECTIVE_PROJECTION ? Projection::Perspective : 
                                                 camera_projection == Camera_Projection::ORTHOGRAPHIC_PROJECTION? Projection::Orthographic : Projection::Orthographic;
-    a_window->window_info.projection = a_window->window_info.projection_function(a_window->window_info.FOV,a_window->width/(float)a_window->height,.15f,100.0f, a_window->window_info.ortho_size);
+    proj_info.projection = proj_info.projection_function(proj_info.FOV, Window::main_window->width/(float)Window::main_window->height,.15f,100.0f,proj_info.ortho_size);
+   
+}
+
+void Camera::BuildProj(){
+    proj_info.projection = proj_info.projection_function(proj_info.FOV, Window::main_window->width/(float)Window::main_window->height,.15f,100.0f,proj_info.ortho_size);
+
 }
 
 const Matrix4& Camera::SetCameraPos(const Vector3& pos){
@@ -36,8 +42,16 @@ void Camera::BuildMat(){
     view = Transformation::CamLookAt(camera_pos, camera_pos + camera_front, camera_up);
 }
 
+void Camera::Update(){
+    BuildMat();
+}
+
 const Matrix4& Camera::View() const{
     return view;
+}
+
+const Matrix4& Camera::Projection() const{
+    return proj_info.projection;
 }
 
 const Vector3& Camera::Pos() const{

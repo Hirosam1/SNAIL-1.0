@@ -9,6 +9,8 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
+uniform mat4 MVP;
+
 uniform vec4 altas_coord;
 //Remaps texture from (0,1) to (point1.x, point2.x) for x and y
 vec2 RemapTex(vec2 inputTex, vec4 mapcoords){
@@ -18,6 +20,6 @@ vec2 RemapTex(vec2 inputTex, vec4 mapcoords){
 }
 
 void main(){
-    gl_Position =  projection * view * model * vec4(aPos,1.0);
+    gl_Position =  MVP * vec4(aPos,1.0);
     TexCoord = RemapTex(aTexPos,altas_coord);
 }

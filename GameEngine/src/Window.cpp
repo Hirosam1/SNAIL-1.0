@@ -1,9 +1,11 @@
 #include "Window.hpp"
-//#include "GameObject.hpp"
+#include "Camera.hpp"
 Window* Window::main_window = nullptr;
 
 Window::Window(unsigned int width, unsigned int height, std::string game_name){
     if(!Window::main_window){
+        cursor_info.x_pos = -1.0;
+        cursor_info.y_pos = -1.0;
         this->width = width;
         this->height = height;
         object_list = std::list<Object*>();
@@ -36,7 +38,8 @@ void Window::FrameBufferCallBack(GLFWwindow* window,int width,int height){
     Window* _window =  static_cast<Window*>(glfwGetWindowUserPointer(window));
     _window->width = width;
     _window->height = height;
-    _window->frame_buffer_size_callback(_window,width,height);
+    (*_window->main_camera)->BuildProj();
+    glViewport(0,0,width,height);
 }
 
 void Window::CursorPosCallBack(GLFWwindow* window,double xpos, double ypos){

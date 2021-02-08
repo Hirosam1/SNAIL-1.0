@@ -20,7 +20,7 @@ class CameraMovement : public Behaviour{
     InputHandler ih = InputHandler(6);
     float velocity = 2.0f;
     void CalculateYawnPitch(){
-        if(first_mouse){
+        if(first_mouse && main_window->cursor_info.x_pos >= 0){
             first_mouse = false;
             lastX = main_window->cursor_info.x_pos;
             lastY = main_window->cursor_info.y_pos;
@@ -78,7 +78,7 @@ class CameraMovement : public Behaviour{
             if(ih.GetInputInfo(MOVE_DOWNWARDS).was_activated){
                 move_pos -= main_camera->Up();
             }
-            main_camera->MoveCameraPos(Normalize(move_pos) * Time::deltaTime* velocity);
+            main_camera->MoveCameraPos(Normalize(move_pos) * Time::deltaTime * velocity);
             main_camera->SetCameraDir(direction);
         }
 };

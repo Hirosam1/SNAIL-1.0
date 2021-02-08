@@ -8,6 +8,8 @@
 #include "Components/Component.hpp"
 #include "GameObject.hpp"
 #include "Components/Transform.hpp"
+#include "Window.hpp"
+#include "Camera.hpp"
 
 class Sprite : public Component{
     public:
@@ -32,6 +34,7 @@ class Sprite : public Component{
         std::string tex1_str = "Texture1";
         std::string model_str = "model";
         std::string atlas_str = "altas_coord";
+        std::string MVP_str = "MVP";
         
     private:
         //The scale format of the sprite so it does not deform when dealing with non square sprites
@@ -40,5 +43,7 @@ class Sprite : public Component{
         Model* sprite_model;
         //Texture Coordinate to the sprite atlas
         Vector4 tex_coord;
+        //Does the frustum culling returning positive if it is to be rendered and negative if it is not
+        bool FrustumCulling(const Transform& transform);
         
 };
