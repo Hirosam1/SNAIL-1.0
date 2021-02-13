@@ -1,4 +1,5 @@
 #include "Vector.hpp"
+#include "Matrix.hpp"
 
 /*========================Vector 4====================================*/
 #pragma region
@@ -52,12 +53,20 @@ Vector4 Vector4::Multiply(const float val )const{
     return Vector4(x * val, y * val, z * val, w * val);
 }
 
+Vector4 Vector4::Dot(const Matrix4& matrix) const{
+    return matrix.Dot(*this);
+}
+
 Vector4 Vector4::operator*(const Vector4& other)const{
     return Multiply(other);
 }
 
 Vector4 Vector4::operator*(const float val)const{
     return Multiply(val);
+}
+
+Vector4 Vector4::operator*(const Matrix4& matrix) const{
+    return Dot(matrix);
 }
 
 Vector4 Vector4::Divide(const float val) const {

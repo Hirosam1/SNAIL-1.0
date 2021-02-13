@@ -8,15 +8,16 @@ Camera::Camera(Camera_Projection camera_projection){
     camera_up = Vector3(0.0f,1.0f,0.0f);
     view = Transformation::CamLookAt(camera_pos, camera_pos + camera_front, camera_up);
     //Perspective Configuration---------------------------------------------
-    
+    near_plane = .15f;
+    far_plane = 100.0f;
     proj_info.projection_function = camera_projection == Camera_Projection::PERSPECTIVE_PROJECTION ? Projection::Perspective : 
                                                 camera_projection == Camera_Projection::ORTHOGRAPHIC_PROJECTION? Projection::Orthographic : Projection::Orthographic;
-    proj_info.projection = proj_info.projection_function(proj_info.FOV, Window::main_window->width/(float)Window::main_window->height,.15f,100.0f,proj_info.ortho_size);
+    proj_info.projection = proj_info.projection_function(proj_info.FOV, Window::main_window->width/(float)Window::main_window->height,near_plane,far_plane,proj_info.ortho_size);
    
 }
 
 void Camera::BuildProj(){
-    proj_info.projection = proj_info.projection_function(proj_info.FOV, Window::main_window->width/(float)Window::main_window->height,.15f,100.0f,proj_info.ortho_size);
+    proj_info.projection = proj_info.projection_function(proj_info.FOV, Window::main_window->width/(float)Window::main_window->height,near_plane,far_plane,proj_info.ortho_size);
 
 }
 
@@ -64,4 +65,8 @@ const Vector3& Camera::Front() const{
 
 const Vector3& Camera::Up() const{
     return camera_up;
+}
+
+const ProjectionInfo& Camera::ProjInfo() const{
+    return proj_info;
 }

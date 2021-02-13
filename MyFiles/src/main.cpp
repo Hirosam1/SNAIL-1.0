@@ -58,6 +58,7 @@ int main(int argc, char** argv){
     Shader atlas_shader = Shader("resources/shaders/vertex/atlas.vert", "resources/shaders/fragment/sprite.frag");
     SpriteAtlas sprite_atlas = SpriteAtlas(&sprite_sheet,1,3);
     Sprite floor_sprite = Sprite(&square_model,&sprite_atlas,0,0,&atlas_shader);
+    Sprite rocky_sprite = Sprite (&square_model,&sprite_atlas,1,0,&atlas_shader);
     //------------------------------------------------------------------------------------------------------------
     std::list<Object*>& o_list = a_window->object_list;
     GameObject* go = new GameObject();
@@ -65,6 +66,10 @@ int main(int argc, char** argv){
     o_list.push_back(dynamic_cast<Object*>(go));
     go = new GameObject();
     go->PushComponentBack(&floor_sprite);
+    o_list.push_back(dynamic_cast<Object*>(go));
+    go = new GameObject();
+    go->PushComponentBack(&rocky_sprite);
+    go->transform = new Transform(Vector3(0.0,0.0,1.5f),Vector3(0.0,ToRadians(180),0.0),Vector3(1.0,1.0,1.0));
     o_list.push_back(dynamic_cast<Object*>(go));
     // Uniform names-----------------------------------------------------
     std::string view_str = "view";
@@ -92,10 +97,12 @@ int main(int argc, char** argv){
         time.UpdateTime();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         // a_camera->BuildMat();
+        Sprite::draw_count = 0;
         for(Object* _go : a_window->object_list){
             _go->Update();
         }
-
+        // std::cout<<"Sprites rendered->"<<Sprite::draw_count<<"\n";
+        // std::cout<<"FPS->"<<1/Time::deltaTime<<"\n";
         glfwSwapBuffers(Window::main_window->window);
         glfwPollEvents();
         processInput(Window::main_window->window);

@@ -3,7 +3,7 @@
 
 #include <glad/glad.h>
 
-
+class Matrix4;
 //Vector4 Holds 4 values. And have operations between the same vector-type
 struct Vector4{
         public:
@@ -29,8 +29,10 @@ struct Vector4{
 
         Vector4 Multiply(const Vector4& other)const;
         Vector4 Multiply(const float val)const;
+        Vector4 Dot(const Matrix4& matrix) const;
         Vector4 operator*(const Vector4& other) const;
         Vector4 operator*(const float val) const;
+        Vector4 operator*(const Matrix4& matrix) const;
 
         Vector4 Divide(const float val) const;
         Vector4 operator/(const float val) const;

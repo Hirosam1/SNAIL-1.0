@@ -13,25 +13,40 @@ Sprite::Sprite(Model* model, SpriteAtlas* atlas, unsigned int x_coord, unsigned 
     atlas_coords = Vector2(x_coord,y_coord);
     tex_coord = sprite_atlas->GetCoordinate(atlas_coords);
 }
-
+int Sprite::draw_count = 0;
 void Sprite::Draw(Transform* transform){
     //transform.SetScale(sprite_scale * transform.Scale());
     Transform trans = Transform(transform->Pos(),transform->Rot(),transform->Scale() * sprite_scale);
     Camera* main_camera = *Window::main_window->main_camera;
-    shader->SetUniformMatrix4f(model_str, trans.ModelMat().GetPtr());
-    shader->SetUniform4f(atlas_str,tex_coord.x,tex_coord.y,tex_coord.z,tex_coord.w);
-    shader->SetUniformMatrix4f(MVP_str, (main_camera->Projection() * main_camera->View() * trans.ModelMat()).GetPtr());
+    Matrix4 MVP = (main_camera->Projection() * main_camera->View() * trans.ModelMat());
+    if(TestAABBAgainstFrustum(trans,MVP)){
+        shader->SetUniformMatrix4f(model_str, trans.ModelMat().GetPtr());
+        shader->SetUniform4f(atlas_str,tex_coord.x,tex_coord.y,tex_coord.z,tex_coord.w);
+        shader->SetUniformMatrix4f(MVP_str, MVP.GetPtr());
+        //Chooses the winding order based on the scale
+        glFrontFace(trans.Scale().x * trans.Scale().y > 0 ? GL_CCW : GL_CW );
+        Sprite::draw_count++;
+        sprite_model->Draw(*shader);
+    }
 
-    //Chooses the winding order based on the scale
-    glFrontFace(trans.Scale().x * trans.Scale().y > 0 ? GL_CCW : GL_CW );
-    sprite_model->Draw(*shader);
     
 }
 
-bool Sprite::FrustumCulling(const Transform& tranform){
-    float bigger = tranform.Scale().x > tranform.Scale().y ? tranform.Scale().x : tranform.Scale().y;
-    Vector3 direction_frustum = Normalize(-tranform.Pos()) * bigger;
-    // return direction_frustum 
+//This could be a function inherited from a parent class called "renderer"
+bool Sprite::TestAABBAgainstFrustum(const Transform& tranform, const Matrix4& MVP){
+    Camera* main_camera = *Window::main_window->main_camera;
+    ImplicitVolumes::AABB aabb = {Vector3(-0.5,-0.5,0.0),Vector3(0.5,0.5,0.0)};
+    Vector4 corners[4] = {Vector4(aabb.min.x,aabb.min.y,aabb.min.z,1.0),
+                            Vector4(aabb.min.x,aabb.max.y,aabb.min.z,1.0),
+                            Vector4(aabb.max.x,aabb.min.y,aabb.min.z,1.0),
+                            Vector4(aabb.max.x,aabb.max.y,aabb.min.z,1.0)
+                        };
+        for(int i = 0; i < 4; i++){
+            Vector4 corner = corners[i]* MVP;
+            //if(corner.x < corner.w && corner.x > -corner.w|| corner.y < corner.w && corner.y > -corner.w||corner.z < corner.w && corner.z >0){return true;}
+            if(abs(corner.x) < corner.w || abs(corner.y) < corner.w || corner.z < corner.w && corner.z > 0){return true;}
+        }
+        return false;
 }
 
 void Sprite::SetAtlasCoordinate(const Vector2&  atlas_coords){

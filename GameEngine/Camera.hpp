@@ -36,7 +36,7 @@ class Camera : public Object{
         void Update() override;
         //Returns the view matrix
         const Matrix4& View() const;
-        //Returns the projection matrix
+        //Returns the projection matrix of the camera
         const Matrix4& Projection() const;
         //Returns the current position
         const Vector3& Pos() const;
@@ -44,7 +44,10 @@ class Camera : public Object{
         const Vector3& Up() const;
         //Returns the front vector of the camera
         const Vector3& Front() const;
-        //Returns the projection matrix of the camera
+        //Returns the projection info of the camera
+        const ProjectionInfo& ProjInfo() const;
+        float near_plane;
+        float far_plane;
         
     private:
         Matrix4 view;
