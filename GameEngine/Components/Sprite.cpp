@@ -18,8 +18,8 @@ void Sprite::Draw(Transform* transform){
     //transform.SetScale(sprite_scale * transform.Scale());
     Transform trans = Transform(transform->Pos(),transform->Rot(),transform->Scale() * sprite_scale);
     Camera* main_camera = *Window::main_window->main_camera;
-    Matrix4 MVP = (main_camera->Projection() * main_camera->View() * trans.ModelMat());
-    if(TestAABBAgainstFrustum(trans,MVP)){
+    Matrix4 MVP = (main_camera->ViewProjection() * trans.ModelMat());
+    if(/*TestAABBAgainstFrustum(trans,MVP)*/ true){
         shader->SetUniformMatrix4f(model_str, trans.ModelMat().GetPtr());
         shader->SetUniform4f(atlas_str,tex_coord.x,tex_coord.y,tex_coord.z,tex_coord.w);
         shader->SetUniformMatrix4f(MVP_str, MVP.GetPtr());
@@ -41,11 +41,15 @@ bool Sprite::TestAABBAgainstFrustum(const Transform& tranform, const Matrix4& MV
                             Vector4(aabb.max.x,aabb.min.y,aabb.min.z,1.0),
                             Vector4(aabb.max.x,aabb.max.y,aabb.min.z,1.0)
                         };
+        Vector4 outer_corner;
         for(int i = 0; i < 4; i++){
             Vector4 corner = corners[i]* MVP;
-            //if(corner.x < corner.w && corner.x > -corner.w|| corner.y < corner.w && corner.y > -corner.w||corner.z < corner.w && corner.z >0){return true;}
-            if(abs(corner.x) < corner.w || abs(corner.y) < corner.w || corner.z < corner.w && corner.z > 0){return true;}
+            // if(corner.x < corner.w && corner.x > -corner.w && corner.y < corner.w && corner.y > -corner.w && corner.z < corner.w && corner.z >0){std::cout<<"NOT CULLED|"<<corner<<"\n";return true;}
+
+            if(abs(corner.x) < corner.w && abs(corner.y) < corner.w && (corner.z < corner.w && corner.z > 0)){std::cout<<"NOT CULLED|"<<corner<<"\n"; return true;}
+            outer_corner = corner;
         }
+        std::cout<<"CULLED|xX"<<outer_corner<<"Xx|\n";
         return false;
 }
 

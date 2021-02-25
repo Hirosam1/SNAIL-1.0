@@ -12,9 +12,9 @@ void CarFollower::Update(){
         
 }
 void CarFollower::Begin(){
-    for(GameObject* go : Window::main_window->go_list){
+    for(Object* go : Window::main_window->object_list){
         if(go->object_name == "Car"){
-            car = go;
+            car = dynamic_cast<GameObject*>(go);
         }
     }
 }

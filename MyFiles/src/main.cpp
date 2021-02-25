@@ -69,7 +69,7 @@ int main(int argc, char** argv){
     o_list.push_back(dynamic_cast<Object*>(go));
     go = new GameObject();
     go->PushComponentBack(&rocky_sprite);
-    go->transform = new Transform(Vector3(0.0,0.0,1.5f),Vector3(0.0,ToRadians(180),0.0),Vector3(1.0,1.0,1.0));
+    go->transform = new Transform(Vector3(0.0,0.0,2.0),Vector3(0.0,ToRadians(180),0.0),Vector3(1.0,1.0,1.0));
     o_list.push_back(dynamic_cast<Object*>(go));
     // Uniform names-----------------------------------------------------
     std::string view_str = "view";

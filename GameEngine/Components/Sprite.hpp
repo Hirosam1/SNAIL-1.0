@@ -10,7 +10,7 @@
 #include "Components/Transform.hpp"
 #include "Window.hpp"
 #include "Camera.hpp"
-#include "Resources/ImplicitVolumes.hpp"
+#include "ImplicitObjects.hpp"
 
 class Sprite : public Component{
     public:

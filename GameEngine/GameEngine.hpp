@@ -24,4 +24,4 @@
 #include "Debug.hpp"
 #include "Components/RigidBody2D.hpp"
 #include "Components/Collider2D.hpp"
-// #include "Components/Physics.hpp"
+#include "ImplicitObjects.hpp"

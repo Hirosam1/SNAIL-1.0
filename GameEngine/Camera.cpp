@@ -41,6 +41,7 @@ const Matrix4& Camera::MoveCameraPos(const Vector3& pos){
 
 void Camera::BuildMat(){
     view = Transformation::CamLookAt(camera_pos, camera_pos + camera_front, camera_up);
+    view_projection = proj_info.projection * view;
 }
 
 void Camera::Update(){
@@ -53,6 +54,10 @@ const Matrix4& Camera::View() const{
 
 const Matrix4& Camera::Projection() const{
     return proj_info.projection;
+}
+
+const Matrix4& Camera::ViewProjection() const{
+    return view_projection;
 }
 
 const Vector3& Camera::Pos() const{
@@ -69,4 +74,8 @@ const Vector3& Camera::Up() const{
 
 const ProjectionInfo& Camera::ProjInfo() const{
     return proj_info;
+}
+
+const ViewFrustum& Camera::Frustum() const{
+    return frustum;
 }
