@@ -7,6 +7,7 @@
 #include "Window.hpp"
 #include "Object.hpp"
 #include "ImplicitObjects.hpp"
+#include "Math.hpp"
 
 enum Camera_Projection{
     PERSPECTIVE_PROJECTION,
@@ -21,10 +22,10 @@ struct ProjectionInfo{
 };
 
 struct ViewFrustum{
-    Plane3 front;
+    Plane3 near;
     Plane3 left;
     Plane3 right;
-    Plane3 back;
+    Plane3 far;
     Plane3 top;
     Plane3 bottom;
 };
@@ -66,6 +67,7 @@ class Camera : public Object{
         float far_plane;
         
     private:
+        void NormalizeFrustum();
         ViewFrustum frustum;
         Matrix4 view;
         Matrix4 view_projection;

@@ -15,7 +15,7 @@
 
 //Proccess basic input
 void processInput(GLFWwindow* window);
-
+\
 void framebuffer_callback(Window* window, int width, int height){
 
 }
@@ -82,7 +82,8 @@ int main(int argc, char** argv){
     a_camera->object_name = "Main Camera";
     a_window->main_camera = &a_camera;
     Time time;
-    //Kill cursor----------
+    //Testing things----------------------------------------------------
+    
     //glfwSetInputMode(window,GLFW_CURSOR,GLFW_CURSOR_DISABLED);
     glClearColor(0.02f,0.05,0.12,1.0);
     for(Object* _go : o_list){
@@ -103,6 +104,8 @@ int main(int argc, char** argv){
         }
         // std::cout<<"Sprites rendered->"<<Sprite::draw_count<<"\n";
         // std::cout<<"FPS->"<<1/Time::deltaTime<<"\n";
+        // std::cout<<"Frustum left: " << a_camera->Frustum().left.normal << "| " << a_camera->Frustum().left.d <<
+        //  "\nFrustum right: " << a_camera->Frustum().right.normal << "| " << a_camera->Frustum().right.d <<"\n";
         glfwSwapBuffers(Window::main_window->window);
         glfwPollEvents();
         processInput(Window::main_window->window);

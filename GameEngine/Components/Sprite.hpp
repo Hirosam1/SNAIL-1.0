@@ -12,6 +12,7 @@
 #include "Camera.hpp"
 #include "ImplicitObjects.hpp"
 
+//!!!  Might consider changing this to SpriteRenderer?? !!!!
 class Sprite : public Component{
     public:
         //I really dont think I should be passing the model in the sprite constructor! Neighther the Texture! or maaybe yes?
@@ -44,7 +45,7 @@ class Sprite : public Component{
         Model* sprite_model;
         //Texture Coordinate to the sprite atlas
         Vector4 tex_coord;
-        //Does the frustum culling returning positive if it is to be rendered and negative if it is not
-        bool TestAABBAgainstFrustum(const Transform& transform, const Matrix4& MVP);
-        
+
+        //!!!!!! I don't think frustum culling belongs to the Sprite renderer class !!!!!
+        bool TestSphereAgainstFrustum(const Transform& tranform, const Matrix4& Model);
 };

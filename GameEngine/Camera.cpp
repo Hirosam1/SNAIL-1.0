@@ -12,13 +12,42 @@ Camera::Camera(Camera_Projection camera_projection){
     far_plane = 100.0f;
     proj_info.projection_function = camera_projection == Camera_Projection::PERSPECTIVE_PROJECTION ? Projection::Perspective : 
                                                 camera_projection == Camera_Projection::ORTHOGRAPHIC_PROJECTION? Projection::Orthographic : Projection::Orthographic;
-    proj_info.projection = proj_info.projection_function(proj_info.FOV, Window::main_window->width/(float)Window::main_window->height,near_plane,far_plane,proj_info.ortho_size);
+    BuildProj();
+    BuildMat();
+    BuildFrustum();
    
 }
 
 void Camera::BuildProj(){
     proj_info.projection = proj_info.projection_function(proj_info.FOV, Window::main_window->width/(float)Window::main_window->height,near_plane,far_plane,proj_info.ortho_size);
 
+}
+
+void Camera::BuildFrustum(){
+    const float* projection = view_projection.mat;
+    float n;
+    frustum.left = Plane3{ Vector3(projection[3] + projection[0], projection[7] + projection[4], projection[11] + projection[8]), projection[15] + projection[12] };
+    frustum.right = Plane3{Vector3(projection[3] - projection[0], projection[7] - projection[4], projection[11] - projection[8]), projection[15] - projection[12]};
+
+    frustum.bottom = Plane3{Vector3(projection[3] + projection[1], projection[7] + projection[5], projection[11] + projection[9]), projection[15] + projection[13]};
+    frustum.top =    Plane3{Vector3(projection[3] - projection[1], projection[7] - projection[5], projection[11] - projection[9]), projection[15] - projection[13]};
+
+    frustum.near = Plane3{Vector3(projection[3] + projection[2], projection[7] + projection[6], projection[11] + projection[10]), projection[15] + projection[14]};
+    frustum.far =  Plane3{Vector3(projection[3] - projection[2], projection[7] - projection[6], projection[11] - projection[10]), projection[15] - projection[14]};
+
+
+}
+
+void Camera::NormalizeFrustum(){
+    float n;
+    frustum.left = NormalizePlane(frustum.left,&n);
+    frustum.right = NormalizePlaneWithLength(frustum.right,n);
+
+    frustum.top = NormalizePlane(frustum.top,&n);
+    frustum.bottom = NormalizePlaneWithLength(frustum.bottom,n);
+
+    frustum.near = NormalizePlane(frustum.near,&n);
+    frustum.far = NormalizePlaneWithLength(frustum.far,n);
 }
 
 const Matrix4& Camera::SetCameraPos(const Vector3& pos){
@@ -46,6 +75,7 @@ void Camera::BuildMat(){
 
 void Camera::Update(){
     BuildMat();
+    BuildFrustum();
 }
 
 const Matrix4& Camera::View() const{

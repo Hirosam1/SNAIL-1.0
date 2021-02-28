@@ -19,7 +19,7 @@ void Sprite::Draw(Transform* transform){
     Transform trans = Transform(transform->Pos(),transform->Rot(),transform->Scale() * sprite_scale);
     Camera* main_camera = *Window::main_window->main_camera;
     Matrix4 MVP = (main_camera->ViewProjection() * trans.ModelMat());
-    if(/*TestAABBAgainstFrustum(trans,MVP)*/ true){
+    if(TestSphereAgainstFrustum(trans,MVP)){
         shader->SetUniformMatrix4f(model_str, trans.ModelMat().GetPtr());
         shader->SetUniform4f(atlas_str,tex_coord.x,tex_coord.y,tex_coord.z,tex_coord.w);
         shader->SetUniformMatrix4f(MVP_str, MVP.GetPtr());
@@ -32,25 +32,22 @@ void Sprite::Draw(Transform* transform){
     
 }
 
-//This could be a function inherited from a parent class called "renderer"
-bool Sprite::TestAABBAgainstFrustum(const Transform& tranform, const Matrix4& MVP){
+bool Sprite::TestSphereAgainstFrustum(const Transform& transform, const Matrix4& Model){
+    //!!! Getting the main camera like this might be a bad idea !!!!!
     Camera* main_camera = *Window::main_window->main_camera;
-    ImplicitVolumes::AABB aabb = {Vector3(-0.5,-0.5,0.0),Vector3(0.5,0.5,0.0)};
-    Vector4 corners[4] = {Vector4(aabb.min.x,aabb.min.y,aabb.min.z,1.0),
-                            Vector4(aabb.min.x,aabb.max.y,aabb.min.z,1.0),
-                            Vector4(aabb.max.x,aabb.min.y,aabb.min.z,1.0),
-                            Vector4(aabb.max.x,aabb.max.y,aabb.min.z,1.0)
-                        };
-        Vector4 outer_corner;
-        for(int i = 0; i < 4; i++){
-            Vector4 corner = corners[i]* MVP;
-            // if(corner.x < corner.w && corner.x > -corner.w && corner.y < corner.w && corner.y > -corner.w && corner.z < corner.w && corner.z >0){std::cout<<"NOT CULLED|"<<corner<<"\n";return true;}
-
-            if(abs(corner.x) < corner.w && abs(corner.y) < corner.w && (corner.z < corner.w && corner.z > 0)){std::cout<<"NOT CULLED|"<<corner<<"\n"; return true;}
-            outer_corner = corner;
+    ImplicitVolumes::Sphere bounding_sphere =  ImplicitVolumes::Sphere{transform.Scale().x,transform.Pos()};
+    ViewFrustum frustum = main_camera->Frustum();
+    Plane3* plane = (Plane3*) &frustum;
+    for(int i = 0; i < 8; i++){
+        float D = bounding_sphere.position.x * plane->normal.x + bounding_sphere.position.y * plane->normal.y + bounding_sphere.position.z * plane->normal.z + plane->d;
+        D += bounding_sphere.radius;
+        if(D < 0){
+            return false;
         }
-        std::cout<<"CULLED|xX"<<outer_corner<<"Xx|\n";
-        return false;
+        plane++;
+    }
+
+    return true;
 }
 
 void Sprite::SetAtlasCoordinate(const Vector2&  atlas_coords){
