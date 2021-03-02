@@ -1,6 +1,7 @@
 #include "GameEngine.hpp"
 #include "windows.h"
 #include "CameraMovement.hpp"
+#include "MovingObject.hpp"
 
 #ifdef DEBUG
     const bool debug = true;
@@ -69,12 +70,13 @@ int main(int argc, char** argv){
     o_list.push_back(dynamic_cast<Object*>(go));
     go = new GameObject();
     go->PushComponentBack(&rocky_sprite);
-    go->transform = new Transform(Vector3(0.0,0.0,2.0),Vector3(0.0,ToRadians(180),0.0),Vector3(1.0,1.0,1.0));
+    go->PushComponentBack(new MovingObject());
+    go->transform = new Transform(Vector3(-1.5,0.0,0.5),Vector3(0.0,-ToRadians(90),0.0),Vector3(1.0,1.0,1.0));
     o_list.push_back(dynamic_cast<Object*>(go));
     go = new GameObject();
     go->PushComponentBack(&floor_sprite);
     go->transform->SetPos(Vector3(1.0,0.0,0.0));
-    //o_list.push_back(dynamic_cast<Object*>(go));
+    o_list.push_back(dynamic_cast<Object*>(go));
     // Uniform names-----------------------------------------------------
     std::string view_str = "view";
     std::string projection_str = "projection";
@@ -103,8 +105,8 @@ int main(int argc, char** argv){
         for(Object* _go : a_window->object_list){
             _go->Update();
         }
-        std::cout<<"Sprites rendered->"<<Sprite::draw_count<<"\n";
-        std::cout<<"FPS->"<<1/Time::deltaTime<<"\n";
+        // std::cout<<"Sprites rendered->"<<Sprite::draw_count<<"\n";
+        // std::cout<<"FPS->"<<1/Time::deltaTime<<"\n";
         // std::cout<<"Frustum left: " << a_camera->Frustum().left.normal << "| " << a_camera->Frustum().left.d <<
         //  "\nFrustum right: " << a_camera->Frustum().right.normal << "| " << a_camera->Frustum().right.d <<"\n";
         glfwSwapBuffers(Window::main_window->window);

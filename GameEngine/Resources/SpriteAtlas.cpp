@@ -1,5 +1,6 @@
 #include "Resources/SpriteAtlas.hpp"
 
+//This is a small value that determine the border (skin) of the texture coordinates to avoid clipping into the next texture
 const float skin_thickness = 0.001;
 
 SpriteAtlas::SpriteAtlas(Texture* texture,unsigned int vertical_count, unsigned int horizontal_count):texture(texture), 

@@ -39,7 +39,8 @@ bool Sprite::TestSphereAgainstFrustum(const Transform& transform, const Matrix4&
                                                                         transform.Pos()};
     ViewFrustum frustum = main_camera->Frustum();
     Plane3* plane = (Plane3*) &frustum;
-    for(int i = 0; i < 8; i++){
+
+    for(int i = 0; i < sizeof(frustum); i += sizeof(Plane3)){
         float D = bounding_sphere.position.x * plane->normal.x + bounding_sphere.position.y * plane->normal.y + bounding_sphere.position.z * plane->normal.z + plane->d;
         D += bounding_sphere.radius;
         if(D < 0){
@@ -47,7 +48,6 @@ bool Sprite::TestSphereAgainstFrustum(const Transform& transform, const Matrix4&
         }
         plane++;
     }
-
     return true;
 }
 
