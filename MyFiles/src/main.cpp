@@ -71,6 +71,10 @@ int main(int argc, char** argv){
     go->PushComponentBack(&rocky_sprite);
     go->transform = new Transform(Vector3(0.0,0.0,2.0),Vector3(0.0,ToRadians(180),0.0),Vector3(1.0,1.0,1.0));
     o_list.push_back(dynamic_cast<Object*>(go));
+    go = new GameObject();
+    go->PushComponentBack(&floor_sprite);
+    go->transform->SetPos(Vector3(1.0,0.0,0.0));
+    //o_list.push_back(dynamic_cast<Object*>(go));
     // Uniform names-----------------------------------------------------
     std::string view_str = "view";
     std::string projection_str = "projection";
@@ -81,9 +85,7 @@ int main(int argc, char** argv){
     o_list.push_back(dynamic_cast<Object*>(a_camera));
     a_camera->object_name = "Main Camera";
     a_window->main_camera = &a_camera;
-    Time time;
-    //Testing things----------------------------------------------------
-    
+    Time time;    
     //glfwSetInputMode(window,GLFW_CURSOR,GLFW_CURSOR_DISABLED);
     glClearColor(0.02f,0.05,0.12,1.0);
     for(Object* _go : o_list){
@@ -97,13 +99,12 @@ int main(int argc, char** argv){
     while(!glfwWindowShouldClose(Window::main_window->window)){
         time.UpdateTime();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        // a_camera->BuildMat();
         Sprite::draw_count = 0;
         for(Object* _go : a_window->object_list){
             _go->Update();
         }
-        // std::cout<<"Sprites rendered->"<<Sprite::draw_count<<"\n";
-        // std::cout<<"FPS->"<<1/Time::deltaTime<<"\n";
+        std::cout<<"Sprites rendered->"<<Sprite::draw_count<<"\n";
+        std::cout<<"FPS->"<<1/Time::deltaTime<<"\n";
         // std::cout<<"Frustum left: " << a_camera->Frustum().left.normal << "| " << a_camera->Frustum().left.d <<
         //  "\nFrustum right: " << a_camera->Frustum().right.normal << "| " << a_camera->Frustum().right.d <<"\n";
         glfwSwapBuffers(Window::main_window->window);

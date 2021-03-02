@@ -76,6 +76,7 @@ void Camera::BuildMat(){
 void Camera::Update(){
     BuildMat();
     BuildFrustum();
+    NormalizeFrustum();
 }
 
 const Matrix4& Camera::View() const{

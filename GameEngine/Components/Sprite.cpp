@@ -3,7 +3,6 @@
 Sprite::Sprite(Model* model, Texture* texture, Shader* a_shader): sprite_model(model), sprite_texture(texture), shader(a_shader){  
     float aspec_ratio = sprite_texture->image_data.width/(float)sprite_texture->image_data.height;
     sprite_scale = Vector3(1.0*aspec_ratio,1.0,1.0);
-    //transform.SetScale(sprite_scale);
 }
 
 Sprite::Sprite(Model* model, SpriteAtlas* atlas, unsigned int x_coord, unsigned int y_coord, Shader* a_shader) : sprite_model(model), sprite_atlas(atlas), shader(a_shader){
@@ -35,7 +34,9 @@ void Sprite::Draw(Transform* transform){
 bool Sprite::TestSphereAgainstFrustum(const Transform& transform, const Matrix4& Model){
     //!!! Getting the main camera like this might be a bad idea !!!!!
     Camera* main_camera = *Window::main_window->main_camera;
-    ImplicitVolumes::Sphere bounding_sphere =  ImplicitVolumes::Sphere{transform.Scale().x,transform.Pos()};
+    float diagonal = qsqrt(transform.Scale().x*transform.Scale().x + transform.Scale().y*transform.Scale().y);
+    ImplicitVolumes::Sphere bounding_sphere =  ImplicitVolumes::Sphere{diagonal/2.0f,
+                                                                        transform.Pos()};
     ViewFrustum frustum = main_camera->Frustum();
     Plane3* plane = (Plane3*) &frustum;
     for(int i = 0; i < 8; i++){

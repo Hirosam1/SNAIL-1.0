@@ -11,7 +11,7 @@ class CameraMovement : public Behaviour{
         MOVE_RIGHT
     };
     Camera* main_camera;
-    float yawn = -90;
+    float yawn = 90;
     float pitch = 0;
     const float sensitivity = 0.05f;
     bool first_mouse = true;
@@ -53,7 +53,7 @@ class CameraMovement : public Behaviour{
                     main_camera = dynamic_cast<Camera*>(obj);
                 }
             }
-
+            yawn *= main_camera->Front().z;
         }
         void Update() override{
             CalculateYawnPitch();

@@ -45,7 +45,6 @@ class Sprite : public Component{
         Model* sprite_model;
         //Texture Coordinate to the sprite atlas
         Vector4 tex_coord;
-
         //!!!!!! I don't think frustum culling belongs to the Sprite renderer class !!!!!
         bool TestSphereAgainstFrustum(const Transform& tranform, const Matrix4& Model);
 };
