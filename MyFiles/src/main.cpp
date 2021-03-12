@@ -1,7 +1,7 @@
 #include "GameEngine.hpp"
-#include "windows.h"
 #include "CameraMovement.hpp"
 #include "MovingObject.hpp"
+#include "pch.hpp"
 
 #ifdef DEBUG
     const bool debug = true;
@@ -16,7 +16,6 @@
 
 //Proccess basic input
 void processInput(GLFWwindow* window);
-\
 void framebuffer_callback(Window* window, int width, int height){
 
 }
@@ -55,7 +54,6 @@ int main(int argc, char** argv){
     //--------------------------------------------------------------------
     Texture sprite_sheet = Texture("resources/images/sprite_sheet.png");
     //--------------------------------------------------------------------
-    Shader sprite_shader = Shader("resources/shaders/vertex/basic.vert", "resources/shaders/fragment/sprite.frag");
     Shader atlas_shader = Shader("resources/shaders/vertex/atlas.vert", "resources/shaders/fragment/sprite.frag");
     SpriteAtlas sprite_atlas = SpriteAtlas(&sprite_sheet,1,3);
     Sprite floor_sprite = Sprite(&square_model,&sprite_atlas,0,0,&atlas_shader);
@@ -93,26 +91,29 @@ int main(int argc, char** argv){
     for(Object* _go : o_list){
         _go->Begin();
     }
+    //Start benchmarking-------------------------
+    TraceEventsFile tef = TraceEventsFile("Profile");
     //Main loop----------------------------------
     //Shader and texture bindings should be done on a state manager
     atlas_shader.UseShader();
     std::string text1_str = "Texture1";
     sprite_atlas.texture->UseTexture(atlas_shader,text1_str,0);
+    unsigned int frame_c = 0;
     while(!glfwWindowShouldClose(Window::main_window->window)){
+        std::string timer_str = "frame(" + std::to_string(++frame_c) + ")";
+        Timer timer = Timer(&tef, timer_str);
         time.UpdateTime();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         Sprite::draw_count = 0;
         for(Object* _go : a_window->object_list){
             _go->Update();
         }
-        // std::cout<<"Sprites rendered->"<<Sprite::draw_count<<"\n";
-        // std::cout<<"FPS->"<<1/Time::deltaTime<<"\n";
-        // std::cout<<"Frustum left: " << a_camera->Frustum().left.normal << "| " << a_camera->Frustum().left.d <<
-        //  "\nFrustum right: " << a_camera->Frustum().right.normal << "| " << a_camera->Frustum().right.d <<"\n";
         glfwSwapBuffers(Window::main_window->window);
         glfwPollEvents();
         processInput(Window::main_window->window);
+        
     }
+    tef.WriteJson();
     //-------------------------------------------
     glfwTerminate();
     return 0;

@@ -7,7 +7,7 @@ project "HelloWorld"
     targetdir "bin/%{cfg.buildcfg}"
     cppdialect "C++14"
     
-    files {"include/*.hpp","src/*.cpp"}
+    files {"include/*.hpp","src/*.cpp","../thirdparty/json/json.cpp"}
     includedirs {"include/","../thirdparty/","../GameEngine/"}
     libdirs{"../thirdparty/GLFW"}
     links{"glfw3", "gdi32", "GameEngine"}

@@ -16,5 +16,9 @@
 #include<typeinfo>
 //Data and time
 #include<chrono>
+//Memory
+#include <memory>
+
+//Thirdparty
 //OpenGL function and variables
 #include "glad/glad.h"
