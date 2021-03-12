@@ -12,7 +12,7 @@ class Time{
     private:
         float last_time =0;
 };
-
+//Info of an Event
 struct TraceEvent{
     //Trace event name
     std::string name;
@@ -30,15 +30,17 @@ struct TraceEvent{
     int pid = 0;
 };
 
-class TraceEventsFile{
+class TraceEventsSession{
     public:
-        std::list<TraceEvent> trace_events;
         
-        TraceEventsFile(std::string file_path) : file_path(file_path + ".json"){}
+        
+        TraceEventsSession(std::string file_path) : file_path(file_path + ".json"){}
+        //Pushes back an TraceEvent into the TraveEventsSession list
         void PushBackEvent(const TraceEvent& trace_event){
             trace_events.push_back(trace_event);
         }
-        void WriteJson(){
+        //Ends the file amd serialize data into json file
+        void EndSession(){
             std::cout<<"Wrting to " << file_path<<"\n";
             nlohmann::json js_events;
             std::ofstream out_f (file_path);
@@ -57,19 +59,24 @@ class TraceEventsFile{
             out_f << js_events.dump(4);
         }
     private:
+        std::list<TraceEvent> trace_events;
         std::string file_path;
 };
 
 //Measure time periods defined by the object life-time
 class Timer{
     public:
-        Timer(TraceEventsFile* tef, std::string function_name = "function") : tef(tef){
+        //Creates timer object and starts clock, it will end clock automatically on object destruction
+        Timer(TraceEventsSession* tes, std::string function_name = "function") : tes(tes){
             start_time_point =  std::chrono::high_resolution_clock::now();
             te.name = function_name;
         }
         ~Timer(){
-            Stop();
+            if(!has_stopped){
+                Stop();
+            }
         }
+        //Stops timer and pushes it info back into the TraceEventSession list
         void Stop(){
             auto end_time_point = std::chrono::high_resolution_clock::now();
             auto start = std::chrono::time_point_cast<std::chrono::microseconds>(start_time_point).time_since_epoch().count();
@@ -78,7 +85,8 @@ class Timer{
             auto duration = end - start;
             te.ts = start;
             te.dur = duration;
-            tef->PushBackEvent(te);
+            tes->PushBackEvent(te);
+            has_stopped = true;
             //double ms = duration * 0.001;
             
 
@@ -86,5 +94,6 @@ class Timer{
     private:
         std::chrono::time_point<std::chrono::high_resolution_clock> start_time_point;
         TraceEvent te;
-        TraceEventsFile* tef;
+        TraceEventsSession* tes;
+        bool has_stopped  =false;
 };

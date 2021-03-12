@@ -1,7 +1,7 @@
 #include "GameEngine.hpp"
 #include "CameraMovement.hpp"
 #include "MovingObject.hpp"
-#include "pch.hpp"
+#include "GMpch.hpp"
 
 #ifdef DEBUG
     const bool debug = true;
@@ -41,14 +41,18 @@ int main(int argc, char** argv){
             is_full_screen = strcmp(argv[i], "FullScreen=true") == 0? 1 : 0;
         }
     }
-    
+    //Start benchmarking session-------------------------
+    TraceEventsSession tes = TraceEventsSession("Profile");
+    //Benhmark windown init----------------------------------
+    Timer window_time = Timer(&tes,"Window init");
     Window* a_window = new Window(SCR_WIDTH,SCR_HEIGHT,"Engine Thing");
     // glfwSetCursorPosCallback(window,mouse_callback);
     glfwSwapInterval(1);
+    window_time.Stop();
     //-----------------------------------------------------------------------------------------------------
-    //Sets the viewport coordinates
-    //The first two sets the coordinates of the lower left corner of the window
-
+    //Benchmark resource loading---------------------------
+    Timer res_obj_all_time = Timer(&tes, "Object and resource management");
+    Timer res_load_time = Timer(&tes, "Resource loading");
     //Creating models--------------------------------
     Model square_model(DefaultShapes::SquareWithTex());
     //--------------------------------------------------------------------
@@ -58,7 +62,9 @@ int main(int argc, char** argv){
     SpriteAtlas sprite_atlas = SpriteAtlas(&sprite_sheet,1,3);
     Sprite floor_sprite = Sprite(&square_model,&sprite_atlas,0,0,&atlas_shader);
     Sprite rocky_sprite = Sprite (&square_model,&sprite_atlas,1,0,&atlas_shader);
+    res_load_time.Stop();
     //------------------------------------------------------------------------------------------------------------
+    Timer obj_loading = Timer(&tes, "Object loading");
     std::list<Object*>& o_list = a_window->object_list;
     GameObject* go = new GameObject();
     go->PushComponentBack(new CameraMovement());
@@ -75,6 +81,8 @@ int main(int argc, char** argv){
     go->PushComponentBack(&floor_sprite);
     go->transform->SetPos(Vector3(1.0,0.0,0.0));
     o_list.push_back(dynamic_cast<Object*>(go));
+    obj_loading.Stop();
+    res_obj_all_time.Stop();
     // Uniform names-----------------------------------------------------
     std::string view_str = "view";
     std::string projection_str = "projection";
@@ -88,11 +96,13 @@ int main(int argc, char** argv){
     Time time;    
     //glfwSetInputMode(window,GLFW_CURSOR,GLFW_CURSOR_DISABLED);
     glClearColor(0.02f,0.05,0.12,1.0);
-    for(Object* _go : o_list){
-        _go->Begin();
+    {
+        Timer init_ojects = Timer(&tes, "Objects initialization");
+        for(Object* _go : o_list){
+            _go->Begin();
+        }
     }
-    //Start benchmarking-------------------------
-    TraceEventsFile tef = TraceEventsFile("Profile");
+    tes.EndSession();
     //Main loop----------------------------------
     //Shader and texture bindings should be done on a state manager
     atlas_shader.UseShader();
@@ -101,7 +111,7 @@ int main(int argc, char** argv){
     unsigned int frame_c = 0;
     while(!glfwWindowShouldClose(Window::main_window->window)){
         std::string timer_str = "frame(" + std::to_string(++frame_c) + ")";
-        Timer timer = Timer(&tef, timer_str);
+        Timer timer = Timer(&tes, timer_str);
         time.UpdateTime();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         Sprite::draw_count = 0;
@@ -113,7 +123,6 @@ int main(int argc, char** argv){
         processInput(Window::main_window->window);
         
     }
-    tef.WriteJson();
     //-------------------------------------------
     glfwTerminate();
     return 0;
