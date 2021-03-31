@@ -24,7 +24,7 @@ namespace ImageIO{
 class Texture{
     public:
         Texture(std::string texture_path, bool repeat = true);
-        void UseTexture(Shader& shader,std::string& uniform_name, int tex_num);
+        void UseTexture(Shader& shader,const std::string& uniform_name, int tex_num);
         ImageIO::ImageData image_data;
     private:
         GLuint texture_id;

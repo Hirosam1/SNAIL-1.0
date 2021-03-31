@@ -38,7 +38,7 @@ void Window::FrameBufferCallBack(GLFWwindow* window,int width,int height){
     Window* _window =  static_cast<Window*>(glfwGetWindowUserPointer(window));
     _window->width = width;
     _window->height = height;
-    (*_window->main_camera)->BuildProj();
+    _window->main_camera->BuildProj();
     glViewport(0,0,width,height);
 }
 

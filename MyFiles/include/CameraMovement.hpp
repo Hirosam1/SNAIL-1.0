@@ -78,6 +78,9 @@ class CameraMovement : public Behaviour{
             if(ih.GetInputInfo(MOVE_DOWNWARDS).was_activated){
                 move_pos -= main_camera->Up();
             }
+            if(glfwGetKey(Window::main_window->window,GLFW_KEY_ESCAPE) == GLFW_PRESS){
+                glfwSetWindowShouldClose(Window::main_window->window,true);
+            }
             main_camera->MoveCameraPos(Normalize(move_pos) * Time::deltaTime * velocity);
             main_camera->SetCameraDir(direction);
         }

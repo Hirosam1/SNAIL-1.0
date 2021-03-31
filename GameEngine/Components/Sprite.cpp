@@ -16,7 +16,7 @@ int Sprite::draw_count = 0;
 void Sprite::Draw(Transform* transform){
     //transform.SetScale(sprite_scale * transform.Scale());
     Transform trans = Transform(transform->Pos(),transform->Rot(),transform->Scale() * sprite_scale);
-    Camera* main_camera = *Window::main_window->main_camera;
+    Camera* main_camera = Window::main_window->main_camera;
     Matrix4 MVP = (main_camera->ViewProjection() * trans.ModelMat());
     if(TestSphereAgainstFrustum(trans,MVP)){
         shader->SetUniformMatrix4f(model_str, trans.ModelMat().GetPtr());
@@ -33,7 +33,7 @@ void Sprite::Draw(Transform* transform){
 
 bool Sprite::TestSphereAgainstFrustum(const Transform& transform, const Matrix4& Model){
     //!!! Getting the main camera like this might be a bad idea !!!!!
-    Camera* main_camera = *Window::main_window->main_camera;
+    Camera* main_camera = Window::main_window->main_camera;
     float diagonal = qsqrt(transform.Scale().x*transform.Scale().x + transform.Scale().y*transform.Scale().y);
     ImplicitVolumes::Sphere bounding_sphere =  ImplicitVolumes::Sphere{diagonal/2.0f,
                                                                         transform.Pos()};

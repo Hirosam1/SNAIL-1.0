@@ -23,7 +23,7 @@ class Window{
         int height;
         //Scene stuff--------
         std::list<Object*> object_list;
-        Camera** main_camera;
+        Camera* main_camera;
         //-------------------
         //Input stuff--------
         CursorInfo cursor_info;

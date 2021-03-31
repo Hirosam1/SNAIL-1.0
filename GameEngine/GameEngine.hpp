@@ -5,7 +5,6 @@
 #include "Components/Behaviour.hpp"
 #include "Camera.hpp"
 #include "FileIO.hpp"
-#include "Game.hpp"
 #include "Math.hpp"
 #include "Matrix_Transform.hpp"
 #include "Matrix.hpp"
@@ -24,3 +23,4 @@
 #include "Components/RigidBody2D.hpp"
 #include "Components/Collider2D.hpp"
 #include "ImplicitObjects.hpp"
+#include "EventTracer.hpp"
