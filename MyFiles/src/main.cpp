@@ -1,10 +1,10 @@
 #include "GameEngine.hpp"
 #include "CameraMovement.hpp"
 #include "MovingObject.hpp"
+#include "EventTracer.hpp"
 #include "GMpch.hpp"
 
 #ifdef DEBUG
-    const bool debug = true;
     #ifdef F_PRECISION
     const int f_precision = F_PRECISION;
     #else
@@ -14,19 +14,37 @@
     const bool debug = false;
 #endif
 
+//Start benchmarking session-------------------------
+TraceEventsSession tes = TraceEventsSession("Profile");
+int count_new = 0;
+
+// void* operator new(size_t size){
+//     void* ptr = malloc(size);
+//     if (!ptr){
+//         std::bad_alloc ba;
+//         std::cout<<"Memory allocation error\n";
+//         throw ba;
+//     }
+//     std::cout<<"Memory allocated "<<++count_new <<"\n";
+//     //InstantEvent::CreateInstantEvent(&tes,"Memory allocation: " + size);
+//     return ptr;
+// }
+
+// void operator delete(void* ptr){
+//     std::cout<<"Memory deallocated "<<--count_new <<"\n";
+//     free(ptr);
+// }
+
+// void operator delete[](void* ptr){
+//     std::cout<<"Memory deallocated "<<--count_new <<"\n";
+//     free(ptr);
+// }
+
 //Proccess basic input
 void processInput(GLFWwindow* window);
-void framebuffer_callback(Window* window, int width, int height){
-
-}
-
 //Set Consts
 const int SCR_WIDTH = 800;
 const int SCR_HEIGHT = 800;
-//global variable
-
-int fly_multiplier = 1;
-
 int main(int argc, char** argv){
     #ifdef DEBUG
         std::cout<<std::fixed;
@@ -34,15 +52,6 @@ int main(int argc, char** argv){
         std::cout<<"THIS IS DEBUG\n";
     #endif
     Debug::CleanErrorLog();
-    bool is_full_screen = false;
-    if(argc > 1){
-        for(int i = 1; i < argc; i++){
-            fly_multiplier = strcmp(argv[i],"FPS=true") == 0? 0 : fly_multiplier;
-            is_full_screen = strcmp(argv[i], "FullScreen=true") == 0? 1 : 0;
-        }
-    }
-    //Start benchmarking session-------------------------
-    TraceEventsSession tes = TraceEventsSession("Profile");
     //Benhmark windown init----------------------------------
     Timer window_time = Timer(&tes,"Window init");
     Window* a_window = new Window(SCR_WIDTH,SCR_HEIGHT,"Engine Thing");
@@ -63,7 +72,7 @@ int main(int argc, char** argv){
     Sprite floor_sprite = Sprite(&square_model,&sprite_atlas,0,0,&atlas_shader);
     Sprite rocky_sprite = Sprite (&square_model,&sprite_atlas,1,0,&atlas_shader);
     res_load_time.Stop();
-    //------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------
     Timer obj_loading = Timer(&tes, "Object loading");
     std::list<Object*>& o_list = a_window->object_list;
     GameObject* go = new GameObject();
@@ -103,15 +112,17 @@ int main(int argc, char** argv){
         }
     }
     tes.EndSession();
+    
     //Main loop----------------------------------
     //Shader and texture bindings should be done on a state manager
     atlas_shader.UseShader();
     std::string text1_str = "Texture1";
     sprite_atlas.texture->UseTexture(atlas_shader,text1_str,0);
     unsigned int frame_c = 0;
+    std::string frame_str = "frame update";
     while(!glfwWindowShouldClose(Window::main_window->window)){
-        std::string timer_str = "frame(" + std::to_string(++frame_c) + ")";
-        Timer timer = Timer(&tes, timer_str);
+        // std::string timer_str = "frame(" + std::to_string(++frame_c) + ")";
+        // Timer timer = Timer(&tes, frame_str);
         time.UpdateTime();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         Sprite::draw_count = 0;
@@ -123,6 +134,7 @@ int main(int argc, char** argv){
         processInput(Window::main_window->window);
         
     }
+    
     //-------------------------------------------
     glfwTerminate();
     return 0;

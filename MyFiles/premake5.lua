@@ -2,7 +2,6 @@ workspace "HelloWorld"
     configurations {"Debug", "Release", "Clang"}
 
 project "HelloWorld"
-    kind "WindowedApp"
     language "C++"
     targetdir "bin/%{cfg.buildcfg}"
     cppdialect "C++14"
@@ -17,6 +16,7 @@ project "HelloWorld"
         symbols "On"
         optimize "Off"
     filter "configurations:Release"
+        kind "WindowedApp"
         defines { "NDEBUG" }
         optimize "On"
     filter "configurations:Clang"

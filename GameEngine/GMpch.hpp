@@ -2,6 +2,7 @@
 //Input and output
 #include <iostream>
 #include <string>
+#include <string_view>
 #include <fstream>
 #include <iomanip> //std::set precision
 //Mathematics
