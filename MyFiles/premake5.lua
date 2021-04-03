@@ -1,5 +1,5 @@
 workspace "HelloWorld"
-    configurations {"Debug", "Release", "Clang"}
+    configurations {"Debug", "Release"}
 
 project "HelloWorld"
     language "C++"
@@ -19,10 +19,5 @@ project "HelloWorld"
         kind "WindowedApp"
         defines { "NDEBUG" }
         optimize "On"
-    filter "configurations:Clang"
-        defines {"DEBUG"}
-        symbols "On"
-        optimize "Off"
-        toolset "clang"
 
 include "../GameEngine"

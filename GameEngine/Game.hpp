@@ -6,7 +6,7 @@
 
 class Game {
     public:
-        Game(const std::string& game_name, int screen_width, int screen_height) : game_name(game_name){
+        Game(const std::string& game_name, int screen_width, int screen_height) : game_name(game_name), main_window(Window(screen_width,screen_height,game_name)){
             #ifdef DEBUG
                 std::cout<<std::fixed;
                 std::cout<<std::setprecision(4);
@@ -15,7 +15,6 @@ class Game {
             Debug::CleanErrorLog();
             //Benhmark windown init----------------------------------
             Timer window_time = Timer(&tes,"Window init");
-            Window* a_window = new Window(screen_width,screen_height,game_name);
             // glfwSetCursorPosCallback(window,mouse_callback);
             glfwSwapInterval(1);
             window_time.Stop();
@@ -44,6 +43,10 @@ class Game {
             if(is_ready){
                 Loop();
             }
+        }
+        //Terminate the process
+        void TerminateGame(){
+            glfwTerminate();
         }
 
     private:
@@ -98,9 +101,6 @@ class Game {
                 _go->Begin();
             }
 
-            //!!! Shader and texture bindings should be done on a state manager!!!
-            atlas_shader->UseShader();
-            sprite_atlas->texture->UseTexture(*atlas_shader,"Texture1",0);
             glClearColor(0.02f,0.05,0.12,1.0);
         }
         //Loops until the game ends
@@ -118,11 +118,6 @@ class Game {
                 glfwPollEvents();
                 
             }
-            TerminateGame();
-        }
-        //Terminate the process
-        void TerminateGame(){
-            glfwTerminate();
         }
         std::string game_name;
         TraceEventsSession tes = TraceEventsSession("Profile");
@@ -132,8 +127,10 @@ class Game {
         SpriteAtlas* sprite_atlas;
         Model* square_model;
         Texture* sprite_sheet;
-        //Time function
+        //Global funcs
         Time time;
+        StateManager state_man;
+        Window main_window;
         //flag that sets ready to start the game
         bool is_ready = false;
 };

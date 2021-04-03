@@ -45,7 +45,7 @@ GLuint Shader::LoadShader(GLenum shader_type,std::string& shader_path){
 }
 
 void Shader::UseShader(){
-    glUseProgram(program_id);
+    StateManager::state_manager->UseProgram(program_id);
 }
 
 void Shader::SetUniform3f(const std::string& uniform_name, float a, float b, float c){

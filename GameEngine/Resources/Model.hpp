@@ -2,6 +2,7 @@
 #include "GMpch.hpp"
 #include  "Vector.hpp"
 #include "Resources/Shader.hpp"
+#include "GLStateManager.hpp"
 
 struct VertexData{
     Vector3 pos;
@@ -28,6 +29,8 @@ class Model{
         void UpdateIndices();
         //Updates Vertex data with SubBufferData. However cannot increase its size.
         void UpdateVertices();
+        //Binds VAO 
+        void BindVAO();
     private:
         bool has_indices;
         //Method for glDrawArrays

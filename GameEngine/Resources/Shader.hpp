@@ -4,6 +4,7 @@
 #include <glad/glad.h>
 
 #include "FileIO.hpp"
+#include "GLStateManager.hpp"
 
 //Shader class to perform openGL shader operations
 class Shader{

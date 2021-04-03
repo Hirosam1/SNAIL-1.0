@@ -47,20 +47,15 @@ void Model::Draw(Shader& shader){
     }
 }
 
-
 void Model::DrawArrays(Shader& shader){
-    //Binds the VAO---------------------------------------------------
-    glBindVertexArray(VAO);
+    StateManager::state_manager->BindsVAO(VAO);
     glDrawArrays(GL_TRIANGLES,0,vertex_data.size());
-    //glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);
-    glBindVertexArray(0);
 }
 
 
 void Model::DrawElements(Shader& shader){
-    glBindVertexArray(VAO);
+    StateManager::state_manager->BindsVAO(VAO);
     glDrawElements(GL_TRIANGLES,indices.size(),GL_UNSIGNED_INT,0);
-    glBindVertexArray(0);
 }
 
 void Model::UpdateIndices(){
@@ -73,6 +68,10 @@ void Model::UpdateVertices(){
     glBindBuffer(GL_ARRAY_BUFFER,VBO);
     glBufferSubData(GL_ARRAY_BUFFER,0,sizeof(VertexData)*vertex_data.size(),&vertex_data[0]);
     glBindBuffer(GL_ARRAY_BUFFER,0);
+}
+
+void Model::BindVAO(){
+    glBindVertexArray(VAO);
 }
 
 //default shapes======================

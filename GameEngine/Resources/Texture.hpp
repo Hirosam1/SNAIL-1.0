@@ -5,6 +5,7 @@
 #include "Debug.hpp"
 #include "ImageLoading/stb_image.h"
 #include "Resources/Shader.hpp"
+#include "GLStateManager.hpp"
 
 
 namespace ImageIO{

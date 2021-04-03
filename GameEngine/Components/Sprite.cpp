@@ -18,13 +18,16 @@ void Sprite::Draw(Transform* transform){
     Transform trans = Transform(transform->Pos(),transform->Rot(),transform->Scale() * sprite_scale);
     Camera* main_camera = Window::main_window->main_camera;
     Matrix4 MVP = (main_camera->ViewProjection() * trans.ModelMat());
+    //Checks for frustum culling
     if(TestSphereAgainstFrustum(trans,MVP)){
         shader->SetUniformMatrix4f(model_str, trans.ModelMat().GetPtr());
         shader->SetUniform4f(atlas_str,tex_coord.x,tex_coord.y,tex_coord.z,tex_coord.w);
         shader->SetUniformMatrix4f(MVP_str, MVP.GetPtr());
         //Chooses the winding order based on the scale
         glFrontFace(trans.Scale().x * trans.Scale().y > 0 ? GL_CCW : GL_CW );
-        Sprite::draw_count++;
+        shader->UseShader();
+        //!!! I really shouldn't be setting the uniform name and position here gotta think of something better !!!!
+        sprite_texture->UseTexture(*shader,"Texture1",0);
         sprite_model->Draw(*shader);
     }
 
@@ -32,7 +35,6 @@ void Sprite::Draw(Transform* transform){
 }
 
 bool Sprite::TestSphereAgainstFrustum(const Transform& transform, const Matrix4& Model){
-    //!!! Getting the main camera like this might be a bad idea !!!!!
     Camera* main_camera = Window::main_window->main_camera;
     float diagonal = qsqrt(transform.Scale().x*transform.Scale().x + transform.Scale().y*transform.Scale().y);
     ImplicitVolumes::Sphere bounding_sphere =  ImplicitVolumes::Sphere{diagonal/2.0f,

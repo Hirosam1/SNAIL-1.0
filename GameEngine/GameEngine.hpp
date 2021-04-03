@@ -24,3 +24,4 @@
 #include "Components/Collider2D.hpp"
 #include "ImplicitObjects.hpp"
 #include "EventTracer.hpp"
+#include "GLStateManager.hpp"
