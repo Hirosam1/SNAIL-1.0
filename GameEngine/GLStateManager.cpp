@@ -11,6 +11,7 @@ StateManager::StateManager(){
 bool StateManager::BindsVAO(GLuint vao){
     if(current_VAO != vao){
         glBindVertexArray(vao);
+        current_VAO = vao;
         return true;
     }
     return false;
@@ -19,6 +20,7 @@ bool StateManager::BindsVAO(GLuint vao){
 bool StateManager::BindTexture(GLuint texture){
     if(current_texture != texture){
         glBindTexture(GL_TEXTURE_2D,texture);
+        current_texture = texture;
         return true;
     }
     return false;
@@ -27,6 +29,7 @@ bool StateManager::BindTexture(GLuint texture){
 bool StateManager::UseProgram(GLuint program){
     if(current_shaderProgram != program){
         glUseProgram(program);
+        current_shaderProgram = program;
         return true;
     }
     return false;
