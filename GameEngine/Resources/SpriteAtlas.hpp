@@ -8,7 +8,7 @@
 class SpriteAtlas{
     public:
         SpriteAtlas(Texture* texture,unsigned int vertical_count, unsigned int horizontal_count);
-        //Returns the beginning and end of the tex coordinates
+        //Returns the beginning and end of the tex coordinates in normalized coordinates
         Vector4 GetCoordinate(Vector2 tex);
         Texture* texture;
         //The vertical count of images in the image atlas

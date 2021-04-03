@@ -7,8 +7,8 @@ SpriteAtlas::SpriteAtlas(Texture* texture,unsigned int vertical_count, unsigned 
 vertical_count(vertical_count), horizontal_count(horizontal_count){
     vertical_step = texture->image_data.height/vertical_count;
     horizontal_step = texture->image_data.width/horizontal_count;
-    float aspec_ratio = (float)horizontal_step/(float)vertical_step;
-    sprite_scale = Vector3(1.0*aspec_ratio,1.0,1.0);
+    float aspect_ratio = (float)horizontal_step/(float)vertical_step;
+    sprite_scale = Vector3(aspect_ratio,1.0,1.0);
     vertical_step = vertical_step/texture->image_data.height;
     horizontal_step = horizontal_step/texture->image_data.width;
 }

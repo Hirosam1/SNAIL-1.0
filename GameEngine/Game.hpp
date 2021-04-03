@@ -54,12 +54,12 @@ class Game {
         void LoadResources(){
             
             //Creating models--------------------------------
-            square_model = new Model(DefaultShapes::SquareWithTex());
+            Model* square_model = new Model(DefaultShapes::SquareWithTex());
             //--------------------------------------------------------------------
-            sprite_sheet = new Texture("resources/images/sprite_sheet.png");
+            Texture* sprite_sheet = new Texture("resources/images/sprite_sheet.png");
             //--------------------------------------------------------------------
-            atlas_shader = new Shader("resources/shaders/vertex/atlas.vert", "resources/shaders/fragment/sprite.frag");
-            sprite_atlas = new SpriteAtlas(sprite_sheet,1,3);
+            Shader* atlas_shader = new Shader("resources/shaders/vertex/atlas.vert", "resources/shaders/fragment/sprite.frag");
+            SpriteAtlas* sprite_atlas = new SpriteAtlas(sprite_sheet,1,3);
             //Floor
             components_init[0] = new Sprite(square_model,sprite_atlas,0,0,atlas_shader);
             //Rocky
@@ -123,10 +123,10 @@ class Game {
         TraceEventsSession tes = TraceEventsSession("Profile");
         Component* components_init[2];
         //Resources !!Later Implement Resources abstract class!!----
-        Shader* atlas_shader;
-        SpriteAtlas* sprite_atlas;
-        Model* square_model;
-        Texture* sprite_sheet;
+        // Shader* atlas_shader;
+        // SpriteAtlas* sprite_atlas;
+        // Model* square_model;
+        // Texture* sprite_sheet;
         //Global funcs
         Time time;
         StateManager state_man;
