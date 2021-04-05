@@ -3,6 +3,7 @@
 #include  "Vector.hpp"
 #include "Resources/Shader.hpp"
 #include "GLStateManager.hpp"
+#include "Resources/Resource.hpp"
 
 struct VertexData{
     Vector3 pos;
@@ -16,7 +17,7 @@ struct ModelData
 };
 
 //Creates a model with vertex data to be sent to the GPU
-class Model{
+class Model : public Resource{
     public:
         Model();
         Model(std::vector<VertexData> vertex_data) : vertex_data(vertex_data){SetUpBuffer();};
@@ -31,6 +32,8 @@ class Model{
         void UpdateVertices();
         //Binds VAO 
         void BindVAO();
+        //Unloads the resourse from the openGL context
+        void UnloadResourse() override{glDeleteBuffers(1,&VBO); glDeleteBuffers(1,&EBO); glDeleteBuffers(1,&VAO);};
     private:
         bool has_indices;
         //Method for glDrawArrays
@@ -40,8 +43,8 @@ class Model{
         //Set up all buffer elemts such as VBO,VAO and EBO, also buffers data
         void SetUpBuffer();
         GLuint VBO = 0;
-        GLuint VAO = 0;
         GLuint EBO = 0;
+        GLuint VAO = 0;
 };
 //Default Shapes with vertex data
 namespace DefaultShapes{

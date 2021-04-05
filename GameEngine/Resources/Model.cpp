@@ -13,10 +13,10 @@ void Model::SetUpBuffer(){
     //Generate a buffer for the Vertex Array Object
     glGenVertexArrays(1,&VAO);
     //!!Remember!! we can bind the VBO BEFORE the binding of the VAO
-    glBindBuffer(GL_ARRAY_BUFFER,VBO);
-    glBindVertexArray(VAO); 
+    StateManager::state_manager->BindsVBO(VBO);
+    StateManager::state_manager->BindsVAO(VAO);
     //then we Bind the Element Buffer Object, this HAS to be after 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,EBO);      
+    StateManager::state_manager->BindsEBO(EBO);    
     // //now we buffer (store) the data for the elment and array buffers. It Copies the values to the buffer memory
     if(indices.size() > 1){
         glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(GLuint)*indices.size(),&indices[0],GL_STATIC_DRAW);
@@ -32,13 +32,14 @@ void Model::SetUpBuffer(){
     glEnableVertexAttribArray(1);
 
     //Unbind Thingss------------------------------------------------------
-    glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER,0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+    StateManager::state_manager->BindsVAO(0);
+    StateManager::state_manager->BindsVAO(0);
+    StateManager::state_manager->BindsEBO(0);  
 }
 
 void Model::Draw(Shader& shader){
     if(VAO){
+        StateManager::state_manager->BindsVAO(VAO);
         if(has_indices){
             DrawElements(shader);
         }else{
@@ -48,30 +49,28 @@ void Model::Draw(Shader& shader){
 }
 
 void Model::DrawArrays(Shader& shader){
-    StateManager::state_manager->BindsVAO(VAO);
     glDrawArrays(GL_TRIANGLES,0,vertex_data.size());
 }
 
 
 void Model::DrawElements(Shader& shader){
-    StateManager::state_manager->BindsVAO(VAO);
     glDrawElements(GL_TRIANGLES,indices.size(),GL_UNSIGNED_INT,0);
 }
 
 void Model::UpdateIndices(){
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,EBO);
+    StateManager::state_manager->BindsEBO(EBO);
     glBufferSubData(GL_ELEMENT_ARRAY_BUFFER,0,sizeof(GLuint)*indices.size(),&indices[0] );
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+    StateManager::state_manager->BindsEBO(0);
 }
 
 void Model::UpdateVertices(){
-    glBindBuffer(GL_ARRAY_BUFFER,VBO);
+    StateManager::state_manager->BindsVBO(VBO);
     glBufferSubData(GL_ARRAY_BUFFER,0,sizeof(VertexData)*vertex_data.size(),&vertex_data[0]);
-    glBindBuffer(GL_ARRAY_BUFFER,0);
+    StateManager::state_manager->BindsEBO(0);
 }
 
 void Model::BindVAO(){
-    glBindVertexArray(VAO);
+    StateManager::state_manager->BindsVAO(VAO);
 }
 
 //default shapes======================

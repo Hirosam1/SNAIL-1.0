@@ -17,6 +17,24 @@ bool StateManager::BindsVAO(GLuint vao){
     return false;
 }
 
+bool StateManager::BindsVBO(GLuint vbo){
+    if(current_VBO != vbo){
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        current_VBO = vbo;
+        return true;
+    }
+    return false;
+}
+
+bool StateManager::BindsEBO(GLuint ebo){
+    if(current_EBO != ebo){
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,ebo);
+        current_EBO = ebo;
+        return true;
+    }
+    return false;
+}
+
 bool StateManager::BindTexture(GLuint texture){
     if(current_texture != texture){
         glBindTexture(GL_TEXTURE_2D,texture);

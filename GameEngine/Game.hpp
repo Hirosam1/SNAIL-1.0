@@ -46,7 +46,16 @@ class Game {
         }
         //Terminate the process
         void TerminateGame(){
+            TraceEventsSession end_tes = TraceEventsSession("Terminating game");
+            Timer timer = Timer(&end_tes,"Unloading resources");
+            for(int i = 0; i < 4; i++){
+                res_init[i]->UnloadResourse();
+            }
+            timer.Stop();
+            Timer timer2 = Timer(&end_tes,"Terminating glfw window");
             glfwTerminate();
+            timer2.Stop();
+            end_tes.EndSession();
         }
 
     private:
@@ -55,11 +64,15 @@ class Game {
             
             //Creating models--------------------------------
             Model* square_model = new Model(DefaultShapes::SquareWithTex());
+            res_init[0] = dynamic_cast<Resource*>(square_model);
             //--------------------------------------------------------------------
             Texture* sprite_sheet = new Texture("resources/images/sprite_sheet.png");
+            res_init[1] = dynamic_cast<Resource*>(sprite_sheet);
             //--------------------------------------------------------------------
             Shader* atlas_shader = new Shader("resources/shaders/vertex/atlas.vert", "resources/shaders/fragment/sprite.frag");
+            res_init[2] = dynamic_cast<Resource*>(atlas_shader);
             SpriteAtlas* sprite_atlas = new SpriteAtlas(sprite_sheet,1,3);
+            res_init[3] = dynamic_cast<Resource*>(sprite_atlas);
             //Floor
             components_init[0] = new Sprite(square_model,sprite_atlas,0,0,atlas_shader);
             //Rocky
@@ -121,12 +134,9 @@ class Game {
         }
         std::string game_name;
         TraceEventsSession tes = TraceEventsSession("Profile");
+        //Pointers Holders
         Component* components_init[2];
-        //Resources !!Later Implement Resources abstract class!!----
-        // Shader* atlas_shader;
-        // SpriteAtlas* sprite_atlas;
-        // Model* square_model;
-        // Texture* sprite_sheet;
+        Resource* res_init[4];
         //Global funcs
         Time time;
         StateManager state_man;

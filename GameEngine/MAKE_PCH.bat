@@ -1,0 +1,1 @@
+g++ .\GMpch.hpp -I..\thirdparty

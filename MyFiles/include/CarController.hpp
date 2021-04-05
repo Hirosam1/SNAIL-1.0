@@ -1,6 +1,6 @@
 #pragma once
 #include "GameEngine.hpp"
-#include "math.h"
+#include "GMpch.hpp"
 //In this case it is not necessary to separate definition from 
 //declaration because there is no circular dependecy, but if it had
 //It would be necessary

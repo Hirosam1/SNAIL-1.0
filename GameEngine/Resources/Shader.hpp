@@ -5,9 +5,10 @@
 
 #include "FileIO.hpp"
 #include "GLStateManager.hpp"
+#include "Resources/Resource.hpp"
 
 //Shader class to perform openGL shader operations
-class Shader{
+class Shader : public Resource{
     public:
         Shader(std::string vertex_path, std::string fragment_path);
         //Uses the shader. Use this before any shader operations
@@ -22,6 +23,8 @@ class Shader{
         void SetUniform1f(const std::string& uniform_name, float a);
         //Set uniform for mat4
         void SetUniformMatrix4f(const std::string& uniform_name, const float* mat_ptr);
+        //Unloads the resourse from the openGL context
+        void UnloadResourse() override{glDeleteProgram(program_id);}
     private:
         GLuint program_id;  
         GLuint LoadShader(GLenum shader_type, std::string& shader_path);

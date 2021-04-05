@@ -4,8 +4,9 @@
 #include "GMpch.hpp"
 #include "Components/Transform.hpp"
 #include "Vector.hpp"
+#include "Resources/Resource.hpp"
 
-class SpriteAtlas{
+class SpriteAtlas : public Resource{
     public:
         SpriteAtlas(Texture* texture,unsigned int vertical_count, unsigned int horizontal_count);
         //Returns the beginning and end of the tex coordinates in normalized coordinates
@@ -17,6 +18,8 @@ class SpriteAtlas{
         unsigned int horizontal_count;
         //The scale of each image, used by the sprite
         Vector3 sprite_scale;
+        //Unloads the resourse from the openGL context
+        void UnloadResourse() override{};
     private:
         //Vertical and horizontal tex-coordindte step
         float vertical_step;

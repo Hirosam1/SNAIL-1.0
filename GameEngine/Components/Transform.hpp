@@ -41,4 +41,6 @@ class Transform : public Component{
         Vector3 position;
         Vector3 rotation;
         Vector3 scale;
+
+        Vector3 ExtractEulerFromMat(const Matrix4& mat){return Vector3(asin(mat.mat[4]),atan2(-mat.mat[8],mat.mat[0]),atan2(-mat.mat[6],mat.mat[5]));};
 };
