@@ -5,9 +5,10 @@
 #include "Math.hpp"
 #include "Matrix_Transform.hpp"
 #include "Window.hpp"
-#include "Object.hpp"
+#include "Components/Component.hpp"
 #include "ImplicitObjects.hpp"
 #include "Math.hpp"
+#include "GameObject.hpp"
 
 enum Camera_Projection{
     PERSPECTIVE_PROJECTION,
@@ -30,31 +31,27 @@ struct ViewFrustum{
     Plane3 bottom;
 };
 
-class Camera : public Object{
+class Camera : public Component{
     public:
         Camera(Camera_Projection camera_projection = Camera_Projection::ORTHOGRAPHIC_PROJECTION);
         //Sets the camera to desired position
-        const Matrix4& SetCameraPos(const Vector3& pos);
+        void SetCameraPos(const Vector3& pos);
         //Sets the camera direction (looking at) direction
-        const Matrix4& SetCameraDir(const Vector3& dir);
-        //Moves the camera from current position to the desired position
-        const Matrix4& MoveCameraPos(const Vector3& pos);
-        //Build the camera matrix given the position and front vectors
-        void BuildMat();
+        void SetCameraDir(const Vector3& dir);
+        //Looks at target with up vector
+        void LookAt(const Vector3& target, const Vector3& up);
         //Build the projection matrix
         void BuildProj();
         //Build view frustum info
         void BuildFrustum();
         //The update method for updating the matrix information
-        void Update() override;
+        void Update(GameObject* game_object) override;
         //Returns the view matrix
         const Matrix4& View() const;
         //Returns the projection matrix of the camera
         const Matrix4& Projection() const;
         //Returns the VP (View Projection) matrix already multiplied, to be used with a model matrix
         const Matrix4& ViewProjection() const;
-        //Returns the current position
-        const Vector3& Pos() const;
         //Returns the up vector of the camera
         const Vector3& Up() const;
         //Returns the front vector of the camera
@@ -67,12 +64,13 @@ class Camera : public Object{
         float far_plane;
         
     private:
+        //Build the camera matrix given the position and front vectors
+        void BuildMat();
         void NormalizeFrustum();
         ViewFrustum frustum;
         Matrix4 view;
         Matrix4 view_projection;
         ProjectionInfo proj_info;
-        Vector3 camera_pos;
         Vector3 camera_front;
         Vector3 camera_up;
 };

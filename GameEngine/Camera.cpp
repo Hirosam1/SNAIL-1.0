@@ -1,12 +1,10 @@
 #include "Camera.hpp"
 
-
-
 Camera::Camera(Camera_Projection camera_projection){
     Window* a_window = Window::main_window;
     camera_front = Vector3(0.0f,0.0f,-1.0f);
     camera_up = Vector3(0.0f,1.0f,0.0f);
-    view = Transformation::CamLookAt(camera_pos, camera_pos + camera_front, camera_up);
+    //view = Transformation::CamLookAt(Vector3(0.0,0.0,1.0), Vector3(0.0,0.0,1.0) + camera_front, camera_up);
     //Perspective Configuration---------------------------------------------
     near_plane = .15f;
     far_plane = 100.0f;
@@ -50,30 +48,35 @@ void Camera::NormalizeFrustum(){
     frustum.far = NormalizePlaneWithLength(frustum.far,n);
 }
 
-const Matrix4& Camera::SetCameraPos(const Vector3& pos){
-    camera_pos = pos;
-    //view = Transformation::CamLookAt(camera_pos, camera_pos + camera_front, camera_up);
-    return view;
-}
 
-const Matrix4& Camera::SetCameraDir(const Vector3& dir){
+
+void Camera::SetCameraDir(const Vector3& dir){
     camera_front = dir;
     //view = Transformation::CamLookAt(camera_pos, camera_pos + camera_front, camera_up);
-    return view;
 }
-
-const Matrix4& Camera::MoveCameraPos(const Vector3& pos){
-    camera_pos = camera_pos + pos;
-    //view = Transformation::CamLookAt(camera_pos, camera_pos + camera_front, camera_up);
-    return view;
+void Camera::LookAt(const Vector3& target, const Vector3& up){
+    if(game_object){
+        Transform* tranform = game_object->transform;
+        tranform->SetRot(Transformation::ExtractEulerFromMat(Transformation::CamLookAt(tranform->Pos(),tranform->Pos() + target,up)));
+    }
 }
 
 void Camera::BuildMat(){
-    view = Transformation::CamLookAt(camera_pos, camera_pos + camera_front, camera_up);
+    // view = Transformation::CamLookAt(camera_pos, camera_pos + camera_front, camera_up);
+    if(game_object){
+        Transform* tranform = game_object->transform;
+        view = Matrix4(1.0f);
+        view = Transformation::RotateX(view,tranform->Rot().x);
+        view = Transformation::RotateY(view,tranform->Rot().y);
+        view = Transformation::RotateZ(view,tranform->Rot().z);
+        view = Transformation::Translate(view, -tranform->Pos());
+        Vector4 column = tranform->ModelMat().Column(2);
+        camera_front = -Vector3(column.x,column.y,column.z);
+    }
     view_projection = proj_info.projection * view;
 }
 
-void Camera::Update(){
+void Camera::Update(GameObject* game_object){
     BuildMat();
     BuildFrustum();
     NormalizeFrustum();
@@ -89,10 +92,6 @@ const Matrix4& Camera::Projection() const{
 
 const Matrix4& Camera::ViewProjection() const{
     return view_projection;
-}
-
-const Vector3& Camera::Pos() const{
-    return camera_pos;
 }
 
 const Vector3& Camera::Front() const{

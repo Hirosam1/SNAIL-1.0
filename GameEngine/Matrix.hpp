@@ -19,7 +19,10 @@ struct Matrix4
     Matrix4 operator*(const Matrix4& mat )const;
     //Multiply element by element the two matrix
     Vector4 operator*(const Vector4& vec) const;
-
+    //Gets the n row
+    Vector4 Row(int n) const;
+    //Gets the n column
+    Vector4 Column(int n) const;
     GLfloat mat[16];
     const GLfloat* GetPtr() const;
 };

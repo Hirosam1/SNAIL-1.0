@@ -19,7 +19,7 @@ void Sprite::Draw(Transform* transform){
     Camera* main_camera = Window::main_window->main_camera;
     Matrix4 MVP = (main_camera->ViewProjection() * trans.ModelMat());
     //Checks for frustum culling
-    if(TestSphereAgainstFrustum(trans,MVP)){
+    if(/*TestSphereAgainstFrustum(trans,MVP)*/ true){
         shader->SetUniformMatrix4f(model_str, trans.ModelMat().GetPtr());
         shader->SetUniform4f(atlas_str,tex_coord.x,tex_coord.y,tex_coord.z,tex_coord.w);
         shader->SetUniformMatrix4f(MVP_str, MVP.GetPtr());

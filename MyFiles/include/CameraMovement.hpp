@@ -10,7 +10,7 @@ class CameraMovement : public Behaviour{
         MOVE_LEFT,
         MOVE_RIGHT
     };
-    Camera* main_camera;
+    Camera* main_camera = nullptr;
     float yawn = 90;
     float pitch = 0;
     const float sensitivity = 0.05f;
@@ -50,14 +50,14 @@ class CameraMovement : public Behaviour{
             ih.AddCommandBack(GLFW_KEY_D,GLFW_PRESS,MOVE_RIGHT);
             for(Object* obj : main_window->object_list){
                 if(obj->object_name == "Main Camera"){
-                    main_camera = dynamic_cast<Camera*>(obj);
+                    main_camera = dynamic_cast<GameObject*>(obj)->GetComponent<Camera>();
                 }
             }
             yawn *= main_camera->Front().z;
+
         }
-        void Update() override{
-            CalculateYawnPitch();
-            ih.HandleInput();
+        void UpdateCamera(){
+                        ih.HandleInput();
             Vector3 direction(cos(ToRadians(pitch))*cos(ToRadians(yawn)),sin(ToRadians(pitch)),cos(ToRadians(pitch))*sin(ToRadians(yawn)));
             Vector3 move_pos;
             if(ih.GetInputInfo(MOVE_FORWARDS).was_activated){
@@ -78,10 +78,16 @@ class CameraMovement : public Behaviour{
             if(ih.GetInputInfo(MOVE_DOWNWARDS).was_activated){
                 move_pos -= main_camera->Up();
             }
+            main_camera->game_object->transform->MovePos(Normalize(move_pos) * Time::deltaTime * velocity);
+            main_camera->LookAt(direction, Vector3(0.0,1.0,0.0));
+        }
+        void Update() override{
+            CalculateYawnPitch();
+            if(main_camera != nullptr){
+                UpdateCamera();
+            }
             if(glfwGetKey(Window::main_window->window,GLFW_KEY_ESCAPE) == GLFW_PRESS){
                 glfwSetWindowShouldClose(Window::main_window->window,true);
             }
-            main_camera->MoveCameraPos(Normalize(move_pos) * Time::deltaTime * velocity);
-            main_camera->SetCameraDir(direction);
         }
 };

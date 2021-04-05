@@ -5,6 +5,38 @@
 #include "Math.hpp"
 
 namespace Transformation{
+    // //Extracts euler rotation from matrix, matrix must be not scaled
+    inline Vector3 ExtractEulerFromMat(const Matrix4& mat){
+        float x,y,z;
+        x = atan2(-mat.mat[9],mat.mat[10]);
+        float cosY = sqrt(mat.mat[0]*mat.mat[0] + mat.mat[4]*mat.mat[4]);
+        y = atan2(mat.mat[8],cosY);
+        float cosX = cos(x);
+        float sinX = sin(x);
+        float sinZ = cosX * mat.mat[1] + sinX * mat.mat[2];
+        float cosZ = cosX * mat.mat[5] + sinX * mat.mat[6];
+        z = atan2(sinZ,cosZ);
+        return Vector3(x,y,z);
+        }
+
+    // inline Vector3 ExtractEulerFromMat(const Matrix4& mat){
+    //     float x,y,z;
+    //     if(mat.mat[0] == 1.0f){
+    //         y = atan2(mat.mat[8],mat.mat[14]);
+    //         x = 0.0;
+    //         z = 0.0;
+    //     }else if(mat.mat[0] == -1.0f){
+    //         y = atan2(mat.mat[8],mat.mat[14]);
+    //         x = 0.0;
+    //         z = 0.0;
+    //     }else{
+    //         y = atan2(-mat.mat[2],mat.mat[0]);
+    //         x = asin(mat.mat[1]);
+    //         z = atan2(-mat.mat[9],mat.mat[5]);
+    //     }
+    //     return Vector3(x,y,z);
+    // }
+    
     //Translates the matrix given position, will apply transformation before given matrix
     inline Matrix4 Translate(const Matrix4& mat, const Vector3& trans_pos){
         Matrix4 translation = Matrix4(1.0);
@@ -40,6 +72,7 @@ namespace Transformation{
         rotation.mat[10] = cos_rot+(rot_axis.z*rot_axis.z)*(1-cos_rot);
         return mat * rotation;
     }
+
     //Rotates the matrix in the X vector, will apply transformation before given matrix
     inline Matrix4 RotateX(const Matrix4& mat, float rot_rad){
         Matrix4 rotation = Matrix4(1.0f);
@@ -51,17 +84,41 @@ namespace Transformation{
         rotation.mat[10] = cos_rot;
         return mat * rotation;
     }
+    //Inverse of rotateX
+    inline Matrix4 RotateXInv(const Matrix4& mat, float rot_rad){
+        Matrix4 rotation = Matrix4(1.0f);
+        float cos_rot = cos(rot_rad);
+        float sin_rot = sin(rot_rad);
+        rotation.mat[5] = cos_rot;
+        rotation.mat[6] = -sin_rot;
+        rotation.mat[9] = sin_rot;
+        rotation.mat[10] = cos_rot;
+        return mat * rotation;
+    }
+
     //Rotates the matrix in the Y vector, will apply transformation before given matrix
     inline Matrix4 RotateY(const Matrix4& mat, float rot_rad){
         Matrix4 rotation = Matrix4(1.0f);
         float cos_rot = cos(rot_rad);
         float sin_rot = sin(rot_rad);
         rotation.mat[0] = cos_rot;
-        rotation.mat[8] = -sin_rot;
-        rotation.mat[2] = sin_rot;
+        rotation.mat[8] = sin_rot;
+        rotation.mat[2] = -sin_rot;
         rotation.mat[10]= cos_rot;
         return mat * rotation;
     }
+    //Inverse of rotate Y
+    inline Matrix4 RotateYInv(const Matrix4& mat, float rot_rad){
+        Matrix4 rotation = Matrix4(1.0f);
+        float cos_rot = cos(rot_rad);
+        float sin_rot = sin(rot_rad);
+        rotation.mat[0] = cos_rot;
+        rotation.mat[2] = sin_rot;
+        rotation.mat[8] = -sin_rot;
+        rotation.mat[10]= cos_rot;
+        return mat * rotation;
+    }
+
     //Rotates the matrix in the Z vector, will apply transformation before given matrix
     inline Matrix4 RotateZ(const Matrix4& mat, float rot_rad){
         Matrix4 rotation = Matrix4(1.0f);
@@ -74,6 +131,18 @@ namespace Transformation{
         return mat * rotation;
 
     }
+    //Inverse of rotateZ
+    inline Matrix4 RotateZInv(const Matrix4& mat, float rot_rad){
+        Matrix4 rotation = Matrix4(1.0f);
+        float cos_rot = cos(rot_rad);
+        float sin_rot = sin(rot_rad);
+        rotation.mat[0] = cos_rot;
+        rotation.mat[1] = -sin_rot;
+        rotation.mat[4] = sin_rot;
+        rotation.mat[5] = cos_rot;
+        return mat * rotation;
+    }
+
     //Creates a matrix transformation that is the inverse of look at, usefull for camera look at
     inline Matrix4 CamLookAt(Vector3 pos, Vector3 target, Vector3 up){
         Matrix4 look(1.0);

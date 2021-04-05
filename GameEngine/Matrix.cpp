@@ -123,6 +123,20 @@ Vector4 Matrix4::Dot(const Vector4& vec) const{
     return vec_c;
 }
 
+Vector4 Matrix4::Row(int n) const{
+    return Vector4(mat[n*4],
+                    mat[n*4 + 1],
+                    mat[n*4 + 2],
+                    mat[n*4 + 3]);
+}
+
+Vector4 Matrix4::Column(int n) const{
+    return Vector4(mat[n],
+                    mat[n + 4],
+                    mat[n + 8],
+                    mat[n + 12]);
+}
+
 Vector4 Matrix4::operator*(const Vector4& vec)const{
     return Dot(vec);
 }

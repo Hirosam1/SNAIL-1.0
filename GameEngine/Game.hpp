@@ -82,7 +82,6 @@ class Game {
         }
         //Initiate the games objects with the components previously loaded
         void LoadGameObjects(){
-            
             std::list<Object*>& o_list = Window::main_window->object_list;
             GameObject* go = new GameObject();
             go->PushComponentBack(new CameraMovement());
@@ -95,7 +94,7 @@ class Game {
             go = new GameObject();
             go->PushComponentBack(components_init[1]);
             go->PushComponentBack(new MovingObject());
-            go->transform = new Transform(Vector3(-1.5,0.0,0.5),Vector3(0.0,-ToRadians(90),0.0),Vector3(1.0,1.0,1.0));
+            go->transform = new Transform(Vector3(-1.5,0.0,0.5),Vector3(0.0,ToRadians(90),0.0),Vector3(1.0,1.0,1.0));
             o_list.push_back(dynamic_cast<Object*>(go));
             go = new GameObject();
             go->PushComponentBack(components_init[0]);
@@ -103,10 +102,12 @@ class Game {
             o_list.push_back(dynamic_cast<Object*>(go));
             //Creates a camera and sets up projection configuration
             Camera* a_camera = new Camera(Camera_Projection::PERSPECTIVE_PROJECTION);
-            a_camera->SetCameraPos(Vector3(0.0,0.0,1.0));
-            o_list.push_back(dynamic_cast<Object*>(a_camera));
-            a_camera->object_name = "Main Camera";
-            Window::main_window->main_camera = a_camera;       
+            go = new GameObject();
+            go->PushComponentBack(a_camera);
+            a_camera->game_object->transform->SetPos(Vector3(0.0,0.0,1.0));
+            Window::main_window->main_camera = a_camera; 
+            o_list.push_back(dynamic_cast<Object*>(go));
+            a_camera->game_object->object_name = "Main Camera";
         }
         //Initiate the game objects created
         void ObjectsInitialization(){

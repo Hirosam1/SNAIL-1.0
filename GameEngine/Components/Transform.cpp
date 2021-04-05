@@ -14,10 +14,15 @@ Transform::Transform(const Vector3& pos, const Vector3& rot, const Vector3& scal
 
 void Transform::BuildMat(){
     model_mat = Transformation::Translate( Matrix4(1.0f),position);
-    model_mat = Transformation::RotateZ(model_mat,rotation.z);
-    model_mat = Transformation::RotateY(model_mat,rotation.y);
     model_mat = Transformation::RotateX(model_mat,rotation.x);
+    model_mat = Transformation::RotateY(model_mat,rotation.y);
+    model_mat = Transformation::RotateZ(model_mat,rotation.z);
     model_mat = Transformation::Scale(model_mat,scale);
+}
+
+Vector3 Transform::Front() const{
+    Vector4 front_4 = model_mat.Row(2);
+    return Vector3(front_4.x,front_4.y,front_4.z);
 }
 
 void Transform::Update(GameObject* game_object){

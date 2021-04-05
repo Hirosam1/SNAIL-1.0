@@ -22,7 +22,7 @@ class Transform : public Component{
         void SetRot(const Vector3& rot);
         //Sets the scale of the transform
         void SetScale(const Vector3& pos);
-        //Adds rotation to the current rotation
+        //Adds rotation to the current rotation, carefull with gimbal lock!!
         void AddRot(const Vector3& rot);
         //Returns the current position
         const Vector3& Pos() const;
@@ -32,15 +32,15 @@ class Transform : public Component{
         const Vector3& Scale() const;
         //Returns the model matrix
         const Matrix4& ModelMat() const;
+        void Update(GameObject* game_object) override;
+        //Gets the front position vector
+        Vector3 Front() const;
+    private:
         //Updates the matrix values, based on scale, rotation and translation in the correct order
         void BuildMat();
-        void Update(GameObject* game_object) override;
-    private:
         Matrix4 model_mat;
-        
         Vector3 position;
         Vector3 rotation;
         Vector3 scale;
 
-        Vector3 ExtractEulerFromMat(const Matrix4& mat){return Vector3(asin(mat.mat[4]),atan2(-mat.mat[8],mat.mat[0]),atan2(-mat.mat[6],mat.mat[5]));};
 };

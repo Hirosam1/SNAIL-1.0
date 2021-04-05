@@ -22,11 +22,12 @@ class GameObject : public Object{
             std::cout<<"Could not find operator \""<< typeid(T).name() <<"\" For the game object: "<<object_name<<"\n";
             return nullptr;
         };
-        //Safely pushes back a component !!(MAYBE??)IMPLEMENT CHECK FOR UNIQUE COMPOENT!!
+        //Safely pushes back a component !!(MAYBE??)IMPLEMENT CHECK FOR UNIQUE COMPONENT!!
         template <class T>
         void PushComponentBack(T* component){
             Component* component_add = dynamic_cast<Component*>(component);
             if(component_add){
+                component_add->game_object = this;
                 components.push_back(component_add);
             }
         };
