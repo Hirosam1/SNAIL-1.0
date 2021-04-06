@@ -13,9 +13,8 @@ class Game {
                 std::cout<<"THIS IS DEBUG\n";
             #endif
             Debug::CleanErrorLog();
-            //Benhmark windown init----------------------------------
+            //Benchmark windown init----------------------------------
             Timer window_time = Timer(&tes,"Window init");
-            // glfwSetCursorPosCallback(window,mouse_callback);
             glfwSwapInterval(1);
             window_time.Stop();
             //-------------------------------------------------------- 
@@ -118,8 +117,7 @@ class Game {
             glClearColor(0.02f,0.05,0.12,1.0);
         }
         //Loops until the game ends
-        void Loop(){
-            
+        void Loop(){   
             //Main loop----------------------------------
             while(!glfwWindowShouldClose(Window::main_window->window)){
                 time.UpdateTime();
@@ -127,10 +125,9 @@ class Game {
                 for(Object* _go : Window::main_window->object_list){
                     _go->Update();
                 }
-                
+                Sprite::draw_count = 0;
                 glfwSwapBuffers(Window::main_window->window);
                 glfwPollEvents();
-                
             }
         }
         std::string game_name;

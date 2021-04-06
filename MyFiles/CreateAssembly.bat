@@ -1,1 +1,0 @@
-clang -g -o .\bin\main.S -S .\src\main.cpp -I..\GameEngine\ -I..\thirdparty\ -I.\include\
