@@ -5,19 +5,6 @@
 #include "Math.hpp"
 
 namespace Transformation{
-    // //Extracts euler rotation from matrix, matrix must be not scaled
-    // inline Vector3 ExtractEulerFromMat(const Matrix4& mat){
-    //     float x,y,z;
-    //     x = atan2(-mat.mat[9],mat.mat[10]);
-    //     float cosY = sqrt(mat.mat[0]*mat.mat[0] + mat.mat[4]*mat.mat[4]);
-    //     y = atan2(mat.mat[8],cosY);
-    //     float cosX = cos(x);
-    //     float sinX = sin(x);
-    //     float sinZ = cosX * mat.mat[1] + sinX * mat.mat[2];
-    //     float cosZ = cosX * mat.mat[5] + sinX * mat.mat[6];
-    //     z = atan2(sinZ,cosZ);
-    //     return Vector3(x,y,z);
-    // }
     //Extracts euler rotation from matrix, matrix must be not scaled
     inline Vector3 ExtractEulerFromMat(const Matrix4& mat){
         float x,y,z;

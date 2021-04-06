@@ -17,7 +17,6 @@ class ObjectFollower : public Behaviour{
             if(to_follow){
                 Vector3 target = Normalize(to_follow->transform->Pos() - transform->Pos());
                 transform->LookAt(target);
-                //transform->AddRot(Vector3(0.0,2.0 * Time::deltaTime,0.0));
                 transform->MovePos(target * speed * Time::deltaTime);
             }
         }

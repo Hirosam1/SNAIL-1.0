@@ -61,7 +61,6 @@ class Game {
     private:
         //Loads all the initial resources, and components
         void LoadResources(){
-            
             //Creating models--------------------------------
             Model* square_model = new Model(DefaultShapes::SquareWithTex());
             Model* cube_model = new Model(DefaultShapes::CubeWithTex());
@@ -75,38 +74,33 @@ class Game {
             //--------------------------------------------------------------------
             Shader* atlas_shader = new Shader("resources/shaders/vertex/atlas.vert", "resources/shaders/fragment/sprite.frag");
             Shader* mesh_shader = new Shader ("resources/shaders/vertex/basic.vert","resources/shaders/fragment/sprite.frag");
-            res_init[2] = dynamic_cast<Resource*>(atlas_shader);
+            res_init[4] = dynamic_cast<Resource*>(atlas_shader);
+            res_init[6] = dynamic_cast<Resource*>(mesh_shader);
             SpriteAtlas* sprite_atlas = new SpriteAtlas(sprite_sheet,1,3);
-            res_init[3] = dynamic_cast<Resource*>(sprite_atlas);
-            //Floor
-            components_init[0] = new Sprite(square_model,sprite_atlas,0,0,atlas_shader);
-            //Rocky
-            components_init[1] = new Sprite (square_model,sprite_atlas,1,0,atlas_shader);
-            //Cube
-            components_init[2] = new MeshRenderer(cube_model,mesh_shader,spooky_sprite);
+            res_init[7] = dynamic_cast<Resource*>(sprite_atlas);
             //--------------------------------------------------------------------
         }
         //Initiate the games objects with the components previously loaded
         void LoadGameObjects(){
             std::list<Object*>& o_list = Window::main_window->object_list;
             GameObject* go = new GameObject();
-            go->PushComponentBack(components_init[0]);
+            go->PushComponentBack(new Sprite(dynamic_cast<Model*>(res_init[0]), dynamic_cast<SpriteAtlas*>(res_init[7]),0,0, dynamic_cast<Shader*>(res_init[4])));
             go->object_name = "first tile floor";
             o_list.push_back(dynamic_cast<Object*>(go));
 
             go = new GameObject();
-            go->PushComponentBack(components_init[1]);
+            go->PushComponentBack(new Sprite(dynamic_cast<Model*>(res_init[0]), dynamic_cast<SpriteAtlas*>(res_init[7]),1,0, dynamic_cast<Shader*>(res_init[4])));
             go->PushComponentBack(new MovingObject());
             go->transform = new Transform(Vector3(-1.5,0.0,0.5),Vector3(0.0,ToRadians(90),0.0),Vector3(1.0,1.0,1.0));
             o_list.push_back(dynamic_cast<Object*>(go));
 
             go = new GameObject();
-            go->PushComponentBack(components_init[0]);
+            go->PushComponentBack(new Sprite(dynamic_cast<Model*>(res_init[0]), dynamic_cast<SpriteAtlas*>(res_init[7]),0,0, dynamic_cast<Shader*>(res_init[4])));
             go->transform->SetPos(Vector3(1.0,0.0,0.0));
             o_list.push_back(dynamic_cast<Object*>(go));
 
             go = new GameObject();
-            go->PushComponentBack(components_init[2]);
+            go->PushComponentBack(new MeshRenderer(dynamic_cast<Model*>(res_init[1]),dynamic_cast<Shader*>(res_init[6]),dynamic_cast<Texture*>(res_init[3])));
             go->PushComponentBack(new ObjectFollower());
             o_list.push_back(dynamic_cast<Object*>(go));
 
@@ -140,7 +134,7 @@ class Game {
                 for(Object* _go : Window::main_window->object_list){
                     _go->Update();
                 }
-                
+
                 Sprite::draw_count = 0;
                 MeshRenderer::draw_count = 0;
 
@@ -151,7 +145,6 @@ class Game {
         std::string game_name;
         TraceEventsSession tes = TraceEventsSession("Profile");
         //Pointers Holders
-        Component* components_init[20];
         Resource* res_init[10];
         //Global funcs
         Time time;

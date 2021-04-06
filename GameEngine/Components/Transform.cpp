@@ -31,23 +31,19 @@ void Transform::Update(GameObject* game_object){
 
 void Transform::SetPos(const Vector3& pos){
     position = pos;
-    //BuildMat();
 }
 
 Vector3 Transform::MovePos(const Vector3& move_pos){
     position += move_pos;
-    //BuildMat();
     return position;
 }
 
 void Transform::SetScale(const Vector3& scale){
     this->scale = scale;
-    //BuildMat();
 }
 
 void Transform::SetRot(const Vector3& rot){
     rotation = rot;
-    //BuildMat();
 }
 
 void Transform::AddRot(const Vector3& rot){
