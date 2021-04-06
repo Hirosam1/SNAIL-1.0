@@ -15,6 +15,7 @@ class MeshRenderer : public Component{
         MeshRenderer(Model* model, Shader* shader, Texture* texture = nullptr);
         void Update(GameObject* game_object) override;
         void Draw(Transform* transform);
+        static int draw_count;
     private:
         Shader* shader;
         Texture* texture;

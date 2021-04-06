@@ -29,6 +29,7 @@ namespace Transformation{
         float sinZ = sinX * mat.Row(0).z - cosX * mat.Row(0).y;
         float cosZ = cosX * mat.Row(1).y - sinX * mat.Row(1).z;
         z = atan2(sinZ,cosZ);
+        //Invert values, it seems to be clockwise instead of counter clockwise
         return Vector3(-x,-y,-z);
     }
     

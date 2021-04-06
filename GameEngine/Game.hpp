@@ -140,7 +140,10 @@ class Game {
                 for(Object* _go : Window::main_window->object_list){
                     _go->Update();
                 }
+                
                 Sprite::draw_count = 0;
+                MeshRenderer::draw_count = 0;
+
                 glfwSwapBuffers(Window::main_window->window);
                 glfwPollEvents();
             }

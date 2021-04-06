@@ -9,6 +9,8 @@ void MeshRenderer::Update(GameObject* game_obj){
     Draw(game_obj->transform);
 }
 
+int MeshRenderer::draw_count = 0;
+
 void MeshRenderer::Draw(Transform* transform){
     Camera* main_camera = Window::main_window->main_camera;
     Matrix4 MVP = (main_camera->ViewProjection() * transform->ModelMat());
@@ -17,6 +19,7 @@ void MeshRenderer::Draw(Transform* transform){
         if(texture){
             texture->UseTexture(*shader,"Texture1",0);
         }
+        MeshRenderer::draw_count++;
         model->Draw(shader,MVP);
     }
 }
