@@ -6,17 +6,30 @@
 
 namespace Transformation{
     // //Extracts euler rotation from matrix, matrix must be not scaled
+    // inline Vector3 ExtractEulerFromMat(const Matrix4& mat){
+    //     float x,y,z;
+    //     x = atan2(-mat.mat[9],mat.mat[10]);
+    //     float cosY = sqrt(mat.mat[0]*mat.mat[0] + mat.mat[4]*mat.mat[4]);
+    //     y = atan2(mat.mat[8],cosY);
+    //     float cosX = cos(x);
+    //     float sinX = sin(x);
+    //     float sinZ = cosX * mat.mat[1] + sinX * mat.mat[2];
+    //     float cosZ = cosX * mat.mat[5] + sinX * mat.mat[6];
+    //     z = atan2(sinZ,cosZ);
+    //     return Vector3(x,y,z);
+    // }
+    //Extracts euler rotation from matrix, matrix must be not scaled
     inline Vector3 ExtractEulerFromMat(const Matrix4& mat){
         float x,y,z;
-        x = atan2(-mat.mat[9],mat.mat[10]);
-        float cosY = sqrt(mat.mat[0]*mat.mat[0] + mat.mat[4]*mat.mat[4]);
-        y = atan2(mat.mat[8],cosY);
+        x = atan2(mat.Row(2).y,mat.Row(2).z);
+        float cosY = sqrt(mat.Row(0).x*mat.Row(0).x + mat.Row(1).x *mat.Row(1).x);
+        y = atan2(-mat.Row(2).x,cosY);
         float cosX = cos(x);
         float sinX = sin(x);
-        float sinZ = cosX * mat.mat[1] + sinX * mat.mat[2];
-        float cosZ = cosX * mat.mat[5] + sinX * mat.mat[6];
+        float sinZ = sinX * mat.Row(0).z - cosX * mat.Row(0).y;
+        float cosZ = cosX * mat.Row(1).y - sinX * mat.Row(1).z;
         z = atan2(sinZ,cosZ);
-        return Vector3(x,y,z);
+        return Vector3(-x,-y,-z);
     }
     
     //Translates the matrix given position, will apply transformation before given matrix

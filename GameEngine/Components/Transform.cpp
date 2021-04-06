@@ -54,6 +54,10 @@ void Transform::AddRot(const Vector3& rot){
     rotation = rotation + rot;
 }
 
+void Transform::LookAt(const Vector3& target){
+    rotation = Transformation::ExtractEulerFromMat(Transformation::LookAt(position,target + position,Vector3(0.0,1.0,0.0f)));
+}
+
 const Matrix4& Transform::ModelMat() const{
     return model_mat;
 }

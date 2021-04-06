@@ -16,7 +16,7 @@
 class Sprite : public Component{
     public:
         //I really dont think I should be passing the model in the sprite constructor! Neighther the Texture! or maaybe yes?
-        Sprite(Model* model, Texture* texture, Shader* a_shader = nullptr);
+        Sprite(Model* model, Shader* a_shader, Texture* texture);
         Sprite(Model* model, SpriteAtlas* sprite_atlas, unsigned int x_coord, unsigned int y_coord, Shader* a_shader = nullptr);
         //Sets the coordinates of the atlas, "x" sets the horizontal element, "y" selects the vertical element. If you have given the sprite a Sprite Atlas it will set up the normalized coordinates to send to the shader
         void SetAtlasCoordinate(const Vector2& coords);

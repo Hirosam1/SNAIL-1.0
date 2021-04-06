@@ -1,3 +1,4 @@
+#pragma once
 #include "GameEngine.hpp"
 
 class MovingObject : public Behaviour{

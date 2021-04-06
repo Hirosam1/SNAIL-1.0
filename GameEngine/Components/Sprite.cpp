@@ -1,6 +1,6 @@
 #include "Components/Sprite.hpp"
 
-Sprite::Sprite(Model* model, Texture* texture, Shader* a_shader): sprite_model(model), sprite_texture(texture), shader(a_shader){  
+Sprite::Sprite(Model* model, Shader* a_shader,Texture* texture): sprite_model(model), sprite_texture(texture), shader(a_shader){  
     float aspec_ratio = sprite_texture->image_data.width/(float)sprite_texture->image_data.height;
     sprite_scale = Vector3(1.0*aspec_ratio,1.0,1.0);
 }
@@ -27,6 +27,7 @@ void Sprite::Draw(Transform* transform){
         sprite_texture->UseTexture(*shader,"Texture1",0);
         Sprite::draw_count++;
         sprite_model->Draw(shader,MVP);
+        glFrontFace(GL_CCW);
     }
 
     

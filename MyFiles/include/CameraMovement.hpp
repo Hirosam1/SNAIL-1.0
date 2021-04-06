@@ -1,3 +1,4 @@
+#pragma once
 #include "GameEngine.hpp"
 
 class CameraMovement : public Behaviour{
@@ -48,16 +49,12 @@ class CameraMovement : public Behaviour{
             ih.AddCommandBack(GLFW_KEY_E,GLFW_PRESS,MOVE_DOWNWARDS);
             ih.AddCommandBack(GLFW_KEY_A,GLFW_PRESS,MOVE_LEFT);
             ih.AddCommandBack(GLFW_KEY_D,GLFW_PRESS,MOVE_RIGHT);
-            for(Object* obj : main_window->object_list){
-                if(obj->object_name == "Main Camera"){
-                    main_camera = dynamic_cast<GameObject*>(obj)->GetComponent<Camera>();
-                }
-            }
+            main_camera = game_object->GetComponent<Camera>();
             yawn *= main_camera->Front().z;
 
         }
         void UpdateCamera(){
-                        ih.HandleInput();
+            ih.HandleInput();
             Vector3 direction(cos(ToRadians(pitch))*cos(ToRadians(yawn)),sin(ToRadians(pitch)),cos(ToRadians(pitch))*sin(ToRadians(yawn)));
             Vector3 move_pos;
             if(ih.GetInputInfo(MOVE_FORWARDS).was_activated){

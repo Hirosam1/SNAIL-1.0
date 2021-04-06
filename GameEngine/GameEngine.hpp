@@ -14,6 +14,7 @@
 #include "Components/RigidBody2D.hpp"
 #include "Components/Collider2D.hpp"
 #include "Components/Sprite.hpp"
+#include "Components/MeshRenderer.hpp"
 
 #include "Camera.hpp"
 #include "FileIO.hpp"

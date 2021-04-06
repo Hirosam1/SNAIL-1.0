@@ -24,6 +24,8 @@ class Transform : public Component{
         void SetScale(const Vector3& pos);
         //Adds rotation to the current rotation, carefull with gimbal lock!!
         void AddRot(const Vector3& rot);
+        //updates rotation looking at target
+        void LookAt(const Vector3& target);
         //Returns the current position
         const Vector3& Pos() const;
         //Returns the current rotation

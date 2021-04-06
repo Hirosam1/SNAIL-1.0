@@ -3,6 +3,7 @@
 #include "GameEngine.hpp"
 #include "CameraMovement.hpp"
 #include "MovingObject.hpp"
+#include "ObjectFollower.hpp"
 
 class Game {
     public:
@@ -63,12 +64,17 @@ class Game {
             
             //Creating models--------------------------------
             Model* square_model = new Model(DefaultShapes::SquareWithTex());
+            Model* cube_model = new Model(DefaultShapes::CubeWithTex());
             res_init[0] = dynamic_cast<Resource*>(square_model);
+            res_init[1] = dynamic_cast<Resource*>(cube_model);
             //--------------------------------------------------------------------
             Texture* sprite_sheet = new Texture("resources/images/sprite_sheet.png");
-            res_init[1] = dynamic_cast<Resource*>(sprite_sheet);
+            Texture* spooky_sprite = new Texture("resources/images/spooky.png");
+            res_init[2] = dynamic_cast<Resource*>(sprite_sheet);
+            res_init[3] = dynamic_cast<Resource*>(spooky_sprite);
             //--------------------------------------------------------------------
             Shader* atlas_shader = new Shader("resources/shaders/vertex/atlas.vert", "resources/shaders/fragment/sprite.frag");
+            Shader* mesh_shader = new Shader ("resources/shaders/vertex/basic.vert","resources/shaders/fragment/sprite.frag");
             res_init[2] = dynamic_cast<Resource*>(atlas_shader);
             SpriteAtlas* sprite_atlas = new SpriteAtlas(sprite_sheet,1,3);
             res_init[3] = dynamic_cast<Resource*>(sprite_atlas);
@@ -76,37 +82,46 @@ class Game {
             components_init[0] = new Sprite(square_model,sprite_atlas,0,0,atlas_shader);
             //Rocky
             components_init[1] = new Sprite (square_model,sprite_atlas,1,0,atlas_shader);
-            
+            //Cube
+            components_init[2] = new MeshRenderer(cube_model,mesh_shader,spooky_sprite);
             //--------------------------------------------------------------------
         }
         //Initiate the games objects with the components previously loaded
         void LoadGameObjects(){
             std::list<Object*>& o_list = Window::main_window->object_list;
             GameObject* go = new GameObject();
-            go->PushComponentBack(new CameraMovement());
-            go->object_name = "Camera movement";
-            o_list.push_back(dynamic_cast<Object*>(go));
-            go = new GameObject();
             go->PushComponentBack(components_init[0]);
             go->object_name = "first tile floor";
             o_list.push_back(dynamic_cast<Object*>(go));
+
             go = new GameObject();
             go->PushComponentBack(components_init[1]);
             go->PushComponentBack(new MovingObject());
             go->transform = new Transform(Vector3(-1.5,0.0,0.5),Vector3(0.0,ToRadians(90),0.0),Vector3(1.0,1.0,1.0));
             o_list.push_back(dynamic_cast<Object*>(go));
+
             go = new GameObject();
             go->PushComponentBack(components_init[0]);
             go->transform->SetPos(Vector3(1.0,0.0,0.0));
             o_list.push_back(dynamic_cast<Object*>(go));
+
+            go = new GameObject();
+            go->PushComponentBack(components_init[2]);
+            go->PushComponentBack(new ObjectFollower());
+            o_list.push_back(dynamic_cast<Object*>(go));
+
+            //Camera has to be added last to avoid weird de-sync rendering
+            go = new GameObject();
             //Creates a camera and sets up projection configuration
             Camera* a_camera = new Camera(Camera_Projection::PERSPECTIVE_PROJECTION);
-            go = new GameObject();
             go->PushComponentBack(a_camera);
             a_camera->game_object->transform->SetPos(Vector3(0.0,0.0,1.0));
+            go->PushComponentBack(new CameraMovement());
+            go->object_name = "Camera movement"; 
             Window::main_window->main_camera = a_camera; 
             o_list.push_back(dynamic_cast<Object*>(go));
             a_camera->game_object->object_name = "Main Camera";
+
         }
         //Initiate the game objects created
         void ObjectsInitialization(){
@@ -133,8 +148,8 @@ class Game {
         std::string game_name;
         TraceEventsSession tes = TraceEventsSession("Profile");
         //Pointers Holders
-        Component* components_init[2];
-        Resource* res_init[4];
+        Component* components_init[20];
+        Resource* res_init[10];
         //Global funcs
         Time time;
         StateManager state_man;
