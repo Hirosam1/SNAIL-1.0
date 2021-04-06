@@ -26,29 +26,6 @@ Matrix4::Matrix4(const Matrix4& mat_c){
     memcpy(mat,mat_c.mat, sizeof(GLfloat)*16);
 }
 
-// void Matrix4::operator=(const Matrix4& mat){
-//     Matrix4 mat_c = Matrix4(mat);
-//     this->mat[0] = mat_c.mat[0];
-//     this->mat[1] = mat_c.mat[1];
-//     this->mat[2] = mat_c.mat[2];
-//     this->mat[3] = mat_c.mat[3];
-
-//     this->mat[4] = mat_c.mat[4];
-//     this->mat[5] = mat_c.mat[5];
-//     this->mat[6] = mat_c.mat[6];
-//     this->mat[7] = mat_c.mat[7];
-    
-//     this->mat[8] = mat_c.mat[8];
-//     this->mat[9] = mat_c.mat[9];
-//     this->mat[10] = mat_c.mat[10];
-//     this->mat[11] = mat_c.mat[11];
-
-//     this->mat[12] = mat_c.mat[12];
-//     this->mat[13] = mat_c.mat[13];
-//     this->mat[14] = mat_c.mat[14];
-//     this->mat[15] = mat_c.mat[15];
-// }
-
 const GLfloat* Matrix4::GetPtr() const{
     return &mat[0];
 }
@@ -124,14 +101,14 @@ Vector4 Matrix4::Dot(const Vector4& vec) const{
 }
 
 Vector4 Matrix4::Row(int n) const{
-    return Vector4(mat[n*4],
+    return Vector4( mat[n*4],
                     mat[n*4 + 1],
                     mat[n*4 + 2],
                     mat[n*4 + 3]);
 }
 
 Vector4 Matrix4::Column(int n) const{
-    return Vector4(mat[n],
+    return Vector4( mat[n],
                     mat[n + 4],
                     mat[n + 8],
                     mat[n + 12]);

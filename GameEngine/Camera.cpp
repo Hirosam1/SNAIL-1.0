@@ -62,7 +62,6 @@ void Camera::LookAt(const Vector3& target, const Vector3& up){
 }
 
 void Camera::BuildMat(){
-    // view = Transformation::CamLookAt(camera_pos, camera_pos + camera_front, camera_up);
     if(game_object){
         Transform* tranform = game_object->transform;
         view = Matrix4(1.0f);

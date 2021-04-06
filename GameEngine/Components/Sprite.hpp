@@ -32,10 +32,7 @@ class Sprite : public Component{
         SpriteAtlas* sprite_atlas = nullptr;
         //Shader to use
         Shader* shader;
-        std::string tex1_str = "Texture1";
-        std::string model_str = "model";
-        std::string atlas_str = "altas_coord";
-        std::string MVP_str = "MVP";
+        //Total sprite draws per frame
         static int draw_count;
     private:
         //The scale format of the sprite so it does not deform when dealing with non square sprites
@@ -45,5 +42,8 @@ class Sprite : public Component{
         //Texture Coordinate to the sprite atlas
         Vector4 tex_coord;
         //!!!!!! I don't think frustum culling belongs to the Sprite renderer class !!!!!
-        bool TestSphereAgainstFrustum(const Transform& tranform, const Matrix4& Model);
+        bool TestSphereAgainstFrustum(const Transform& tranform) const;
+
+        //Atlas uniform string
+        const std::string atlas_str = "altas_coord";
 };

@@ -90,6 +90,12 @@ std::ostream& operator<<(std::ostream& stream, const Vector4& other){
 Vector4 operator*(float a, const Vector4& vec){
     return vec.Multiply(a);
 }
+
+
+Vector4 operator-(const Vector4& vec){
+    return Vector4(-vec.x,-vec.y,-vec.z,-vec.w);
+}
+
 #pragma endregion
 
 /*========================Vector 3====================================*/

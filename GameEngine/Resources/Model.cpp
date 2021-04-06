@@ -37,23 +37,24 @@ void Model::SetUpBuffer(){
     StateManager::state_manager->BindsEBO(0);  
 }
 
-void Model::Draw(Shader& shader){
+void Model::Draw(const Shader* shader, const Matrix4& MVP_mat){
     if(VAO){
+        shader->SetUniformMatrix4f(MVP_str, MVP_mat.GetPtr());
         StateManager::state_manager->BindsVAO(VAO);
         if(has_indices){
-            DrawElements(shader);
+            DrawElements();
         }else{
-            DrawArrays(shader);
+            DrawArrays();
         }
     }
 }
 
-void Model::DrawArrays(Shader& shader){
+void Model::DrawArrays(){
     glDrawArrays(GL_TRIANGLES,0,vertex_data.size());
 }
 
 
-void Model::DrawElements(Shader& shader){
+void Model::DrawElements(){
     glDrawElements(GL_TRIANGLES,indices.size(),GL_UNSIGNED_INT,0);
 }
 

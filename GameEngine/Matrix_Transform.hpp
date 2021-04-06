@@ -17,25 +17,7 @@ namespace Transformation{
         float cosZ = cosX * mat.mat[5] + sinX * mat.mat[6];
         z = atan2(sinZ,cosZ);
         return Vector3(x,y,z);
-        }
-
-    // inline Vector3 ExtractEulerFromMat(const Matrix4& mat){
-    //     float x,y,z;
-    //     if(mat.mat[0] == 1.0f){
-    //         y = atan2(mat.mat[8],mat.mat[14]);
-    //         x = 0.0;
-    //         z = 0.0;
-    //     }else if(mat.mat[0] == -1.0f){
-    //         y = atan2(mat.mat[8],mat.mat[14]);
-    //         x = 0.0;
-    //         z = 0.0;
-    //     }else{
-    //         y = atan2(-mat.mat[2],mat.mat[0]);
-    //         x = asin(mat.mat[1]);
-    //         z = atan2(-mat.mat[9],mat.mat[5]);
-    //     }
-    //     return Vector3(x,y,z);
-    // }
+    }
     
     //Translates the matrix given position, will apply transformation before given matrix
     inline Matrix4 Translate(const Matrix4& mat, const Vector3& trans_pos){
@@ -44,7 +26,6 @@ namespace Transformation{
         translation.mat[13] = trans_pos.y;
         translation.mat[14] = trans_pos.z;
         return mat * translation;
-
     }
     //Scale the matrix given scale, will apply transformation before given matrix
     inline Matrix4 Scale(const Matrix4& mat, const Vector3& scale){

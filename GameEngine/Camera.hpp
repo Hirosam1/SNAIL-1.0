@@ -58,6 +58,7 @@ class Camera : public Component{
         const Vector3& Front() const;
         //Returns the projection info of the camera
         const ProjectionInfo& ProjInfo() const;
+        //Returns the view frustum of the camera
         const ViewFrustum& Frustum() const;
 
         float near_plane;

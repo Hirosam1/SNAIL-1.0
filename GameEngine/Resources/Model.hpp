@@ -4,6 +4,8 @@
 #include "Resources/Shader.hpp"
 #include "GLStateManager.hpp"
 #include "Resources/Resource.hpp"
+#include "Shader.hpp"
+#include "Matrix.hpp"
 
 struct VertexData{
     Vector3 pos;
@@ -25,7 +27,7 @@ class Model : public Resource{
         std::vector<VertexData> vertex_data;
         std::vector<GLuint> indices;
         //Draws the model using arrays or elements depending of model parameters
-        void Draw(Shader& shader);
+        void Draw(const Shader* shader,const Matrix4& MVP_mat);
         //Updates index data with SubBufferData. However cannot increase its size.
         void UpdateIndices();
         //Updates Vertex data with SubBufferData. However cannot increase its size.
@@ -37,14 +39,16 @@ class Model : public Resource{
     private:
         bool has_indices;
         //Method for glDrawArrays
-        void DrawArrays(Shader& shader);
+        void DrawArrays();
         //Method for glDrawElements
-        void DrawElements(Shader& shader);
-        //Set up all buffer elemts such as VBO,VAO and EBO, also buffers data
+        void DrawElements();
+        //Set up all buffer elements such as VBO,VAO and EBO, also buffers data
         void SetUpBuffer();
         GLuint VBO = 0;
         GLuint EBO = 0;
         GLuint VAO = 0;
+        //MVP uniform string
+        const std::string MVP_str = "MVP";
 };
 //Default Shapes with vertex data
 namespace DefaultShapes{

@@ -126,12 +126,13 @@ struct Vector2{
     std::ostream& operator<<(std::ostream& stream, const Vector3& other);
     std::ostream& operator<<(std::ostream& stream, const Vector2& other);
 
+    //!!implement others!!
     Vector2 operator*(float a, const Vector2& vec);
-    Vector3 operator*(float a, const Vector3& vec);
-    Vector4 operator*(float a, const Vector4& vec);
-
-    //**implemented others**
+    //!!implement others!!
     Vector3 operator-(float a, const Vector3& vec);
-
-    //**implemented others**
+    Vector3 operator*(float a, const Vector3& vec);
     Vector3 operator-(const Vector3& vec);
+    //!!implement others!!
+    Vector4 operator*(float a, const Vector4& vec);
+    Vector4 operator-(const Vector4& vec);
+    

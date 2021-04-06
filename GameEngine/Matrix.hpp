@@ -6,7 +6,6 @@ struct Matrix4
 {
     Matrix4(float identity = 0.0f);
     Matrix4(const Matrix4& mat_c);
-    //void operator=(const Matrix4& mat);
     //Multiply element by value the matrix
     Matrix4 Multiply(float a);
     //Multiply element by value the matrix
