@@ -2,23 +2,26 @@
 #include "GMpch.hpp"
 #include "Resources/Texture.hpp"
 #include "Resources/Model.hpp"
+#include "Resources/Mesh.hpp"
+
 #include "Components/Component.hpp"
 #include "Components/Transform.hpp"
+#include "Components/Renderer.hpp"
+
 #include "ImplicitObjects.hpp"
 #include "Camera.hpp"
 #include "GameObject.hpp"
 #include "Vector.hpp"
 #include "Window.hpp"
+#include "GameObject.hpp"
+#include "Matrix.hpp"
 
-class MeshRenderer : public Component{
+//Prepare mesh to be renderer, useing its shaders and textures, culling faces, and frustum culling
+//Needs mesh to render
+class MeshRenderer : public Renderer{
     public:
-        MeshRenderer(Model* model, Shader* shader, Texture* texture = nullptr);
-        void Update(GameObject* game_object) override;
-        void Draw(Transform* transform);
+        MeshRenderer(Mesh* mesh, Shader* shader) : Renderer(mesh,shader){}
+        void Draw(const Matrix4& MVP, const Shader& shader) override;
         static int draw_count;
     private:
-        Shader* shader;
-        Texture* texture;
-        Model* model;
-        bool TestSphereAgainstFrustum(const Transform& transform) const;
 };

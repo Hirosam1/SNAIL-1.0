@@ -27,7 +27,7 @@ namespace ImageIO{
 class Texture : public Resource{
     public:
         Texture(std::string texture_path, bool repeat = true);
-        void UseTexture(Shader& shader,const std::string& uniform_name, int tex_num);
+        void UseTexture(const Shader& shader,const std::string& uniform_name, int tex_num) const;
         ImageIO::ImageData image_data;
         //Unloads the resourse from the openGL context
         void UnloadResourse() override{glDeleteTextures(1,&texture_id);}

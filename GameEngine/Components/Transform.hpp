@@ -12,6 +12,10 @@ class Transform : public Component{
     public:
         //Creates a transform with the default parameters
         Transform();
+        //Copy transform
+        Transform(const Transform& transform) : position(Vector3(transform.Pos())),
+                                                rotation(Vector3(transform.Rot())),
+                                                scale(Vector3(transform.Scale())){BuildMat();}
         //Create a transform with the given paramters
         Transform(const Vector3& pos, const Vector3& rot, const Vector3& scale);
         //Sets the transform position

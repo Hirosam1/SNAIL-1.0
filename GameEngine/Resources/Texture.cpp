@@ -41,7 +41,7 @@ Texture::Texture(std::string texture_path, bool repeat){
     glBindTexture(GL_TEXTURE_2D,0);
 }
 
-void Texture::UseTexture(Shader& shader,const std::string& uniform_name, int tex_num){
+void Texture::UseTexture(const Shader& shader,const std::string& uniform_name, int tex_num) const{
     shader.SetUniform1i(uniform_name,tex_num);
     //Any bindTexture calls after activate will affect the texture unit
     glActiveTexture(GL_TEXTURE0+ tex_num);
