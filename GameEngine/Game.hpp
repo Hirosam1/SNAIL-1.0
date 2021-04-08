@@ -1,9 +1,7 @@
 #pragma once
 #include "GMpch.hpp"
 #include "GameEngine.hpp"
-#include "CameraMovement.hpp"
-#include "MovingObject.hpp"
-#include "ObjectFollower.hpp"
+#include "Behaviours.hpp"
 
 class Game {
     public:
@@ -68,7 +66,7 @@ class Game {
             res_init[1] = dynamic_cast<Resource*>(cube_model);
             //--------------------------------------------------------------------
             Texture* sprite_sheet = new Texture("resources/images/sprite_sheet.png");
-            Texture* spooky_sprite = new Texture("resources/images/spooky.png");
+            Texture* spooky_sprite = new Texture("resources/images/good_starb.jpg");
             res_init[2] = dynamic_cast<Resource*>(sprite_sheet);
             res_init[3] = dynamic_cast<Resource*>(spooky_sprite);
             //--------------------------------------------------------------------
@@ -80,7 +78,7 @@ class Game {
             res_init[6] = dynamic_cast<Resource*>(sprite_atlas);
             //--------------------------------------------------------------------
             res_init[7] = dynamic_cast<Resource*>(new Mesh(square_model,sprite_sheet));
-            res_init[8] = dynamic_cast<Resource*>(new Mesh(cube_model,spooky_sprite));
+            res_init[8] = dynamic_cast<Resource*>(new Mesh(square_model,spooky_sprite));
         }
         //Initiate the games objects with the components previously loaded
         void LoadGameObjects(){
@@ -101,11 +99,11 @@ class Game {
             go->transform = new Transform(Vector3(-1.5,0.0,0.5),Vector3(0.0,ToRadians(90),0.0),Vector3(1.0,1.0,1.0));
             o_list.push_back(dynamic_cast<Object*>(go));
 
-
             go = new GameObject();
             go->object_name = "Creepy Follower";
             go->PushComponentBack(new MeshRenderer(dynamic_cast<Mesh*>(res_init[8]),dynamic_cast<Shader*>(res_init[5])));
             go->PushComponentBack(new ObjectFollower());
+            go->transform->SetPos(Vector3(0.0,1.0,0.0));
             o_list.push_back(dynamic_cast<Object*>(go));
 
             //Camera has to be added last to avoid weird de-sync rendering

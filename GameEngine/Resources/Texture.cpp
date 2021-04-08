@@ -13,6 +13,9 @@ inline void ImageIO::FreeImageData(ImageData& img_data){
 }
 
 Texture::Texture(std::string texture_path, bool repeat){
+    if(texture_path.substr(texture_path.length()-4,4)==".jpg"){
+        glPixelStorei(GL_UNPACK_ALIGNMENT,1);
+    }
     stbi_set_flip_vertically_on_load(true);
     image_data = LoadImage(texture_path);
     glGenTextures(1,&texture_id);
@@ -38,6 +41,7 @@ Texture::Texture(std::string texture_path, bool repeat){
         Debug::WriteErrorLog("ERROR::Texture","Failed to load the "+texture_path+" texture. Check file name/extension.");
     }
     FreeImageData(image_data);
+    glPixelStorei(GL_UNPACK_ALIGNMENT,4);
     glBindTexture(GL_TEXTURE_2D,0);
 }
 

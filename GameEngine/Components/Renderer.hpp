@@ -17,6 +17,9 @@ class Renderer : public Component{
         Renderer(Mesh* mesh, Shader* shader) : mesh(mesh),
                                                shader(shader){}
         void Update(GameObject* game_object) override;
+        // !!! Probably have many meshes each one with its shaders and textures !!!
+        Mesh* mesh;
+        Shader* shader;
     private:
         //Build new Tranform for specific operations, like sprite renderer
         virtual Transform BuildTransform(const Transform& transform) const;
@@ -24,7 +27,4 @@ class Renderer : public Component{
         virtual void Draw(const Matrix4& transform, const Shader& shader) = 0;
         //test a sphere in the transform coordinates against the view frustum, returns true if visible
         bool TestSphereAgainstFrustum(const Transform& transform) const;
-        // !!! Probably have many meshes each one with its shaders and textures !!!
-        Mesh* mesh;
-        Shader* shader;
 };
