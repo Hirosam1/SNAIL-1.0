@@ -41,12 +41,15 @@ class Transform : public Component{
         void Update(GameObject* game_object) override;
         //Gets the front position vector
         Vector3 Front() const;
+        //transform position
+        Vector3 position;
+        //transform rotation
+        Vector3 rotation;
+        //transform scale
+        Vector3 scale;
     private:
         //Updates the matrix values, based on scale, rotation and translation in the correct order
         void BuildMat();
         Matrix4 model_mat;
-        Vector3 position;
-        Vector3 rotation;
-        Vector3 scale;
 
 };

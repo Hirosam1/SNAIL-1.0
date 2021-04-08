@@ -20,9 +20,12 @@ class ObjectFollower : public Behaviour{
 
         void Update() override{
             if(to_follow){
-                Vector3 target = Normalize(to_follow->transform->Pos() - transform->Pos());
-                transform->LookAt(target);
-                transform->MovePos(target * speed * Time::deltaTime);
+                Vector3 target = to_follow->transform->Pos() - transform->Pos();
+                if(Length(target) > 0.5f){
+                    target = Normalize(target);
+                    transform->LookAt(target);
+                    transform->MovePos(target * speed * Time::deltaTime);
+                }
             }
         }
 }; 
