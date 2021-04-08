@@ -17,8 +17,8 @@
 #include "Components/Renderer.hpp"
 #include "Components/SpriteRenderer.hpp"
 #include "Components/MeshRenderer.hpp"
+#include "Components/Camera.hpp"
 
-#include "Camera.hpp"
 #include "FileIO.hpp"
 #include "Math.hpp"
 #include "Matrix_Transform.hpp"

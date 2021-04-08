@@ -2,14 +2,16 @@
 #include "Components/Component.hpp"
 
 #include "Resources/Shader.hpp"
-#include "Resources/Texture.hpp"
-#include  "Resources/Shader.hpp"
 #include "Resources/Mesh.hpp"
+
+#include "Components/Camera.hpp"
 
 #include "GameObject.hpp"
 #include "Window.hpp"
-#include "Camera.hpp"
 #include "Matrix.hpp"
+#include "ImplicitObjects.hpp"
+
+class Texture;
 
 //Basic abstract renderer, checks for frustum and face culling, then calls the pure virtual function that others renderers implement
 class Renderer : public Component{

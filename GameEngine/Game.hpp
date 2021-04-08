@@ -66,7 +66,7 @@ class Game {
             res_init[1] = dynamic_cast<Resource*>(cube_model);
             //--------------------------------------------------------------------
             Texture* sprite_sheet = new Texture("resources/images/sprite_sheet.png");
-            Texture* spooky_sprite = new Texture("resources/images/good_starb.jpg");
+            Texture* spooky_sprite = new Texture("resources/images/spooky.png");
             res_init[2] = dynamic_cast<Resource*>(sprite_sheet);
             res_init[3] = dynamic_cast<Resource*>(spooky_sprite);
             //--------------------------------------------------------------------

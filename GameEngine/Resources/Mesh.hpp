@@ -1,15 +1,12 @@
 #pragma once
-#include "Components/Component.hpp"
-#include "Components/Transform.hpp"
 
+#include "Resources/Resource.hpp"
 #include "Resources/Model.hpp"
 #include "Resources/Texture.hpp"
+#include "Components/Transform.hpp"
 
-#include "Camera.hpp"
-#include "Matrix.hpp"
-#include "GameObject.hpp"
-
-//This class cannot know about the mesh renderer
+class Texture;
+class Shader;
 
 //This has geometrical and texture information about a mesh
 class Mesh : public Resource{

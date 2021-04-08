@@ -4,7 +4,7 @@
 #include "Matrix_Transform.hpp"
 #include "Vector.hpp"
 #include "Math.hpp"
-#include "Component.hpp"
+#include "Components/Component.hpp"
 
 class GameObject;
 

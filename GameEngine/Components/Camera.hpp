@@ -1,13 +1,13 @@
 #pragma once
 #include "GMpch.hpp"
+#include "Components/Component.hpp"
+
 #include "Matrix.hpp"
 #include "Vector.hpp"
 #include "Math.hpp"
 #include "Matrix_Transform.hpp"
 #include "Window.hpp"
-#include "Components/Component.hpp"
 #include "ImplicitObjects.hpp"
-#include "Math.hpp"
 #include "GameObject.hpp"
 
 enum Camera_Projection{

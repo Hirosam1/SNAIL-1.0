@@ -1,20 +1,15 @@
 #pragma once
 #include "GMpch.hpp"
-#include "Resources/Texture.hpp"
-#include "Resources/Model.hpp"
 #include "Resources/Shader.hpp"
 #include "Resources/SpriteAtlas.hpp"
-#include "Resources/Mesh.hpp"
 
-#include "Components/Component.hpp"
 #include "Components/Transform.hpp"
 #include "Components/Renderer.hpp"
 
 #include "Vector.hpp"
 #include "GameObject.hpp"
-#include "Window.hpp"
-#include "Camera.hpp"
-#include "ImplicitObjects.hpp"
+
+class MEsh;
 
 //!!!  Might consider changing this to SpriteRenderer?? !!!!
 class SpriteRenderer : public Renderer{

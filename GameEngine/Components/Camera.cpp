@@ -1,4 +1,4 @@
-#include "Camera.hpp"
+#include "Components/Camera.hpp"
 
 Camera::Camera(Camera_Projection camera_projection){
     Window* a_window = Window::main_window;

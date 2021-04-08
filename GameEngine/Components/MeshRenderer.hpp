@@ -1,20 +1,12 @@
 #pragma once
 #include "GMpch.hpp"
-#include "Resources/Texture.hpp"
-#include "Resources/Model.hpp"
 #include "Resources/Mesh.hpp"
 
-#include "Components/Component.hpp"
-#include "Components/Transform.hpp"
 #include "Components/Renderer.hpp"
 
-#include "ImplicitObjects.hpp"
-#include "Camera.hpp"
-#include "GameObject.hpp"
-#include "Vector.hpp"
-#include "Window.hpp"
-#include "GameObject.hpp"
-#include "Matrix.hpp"
+class Mesh;
+class Shader;
+class Matrix4;
 
 //Prepare mesh to be renderer, useing its shaders and textures, culling faces, and frustum culling
 //Needs mesh to render

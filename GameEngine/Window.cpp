@@ -1,5 +1,5 @@
 #include "Window.hpp"
-#include "Camera.hpp"
+#include "Components/Camera.hpp"
 Window* Window::main_window = nullptr;
 
 Window::Window(unsigned int width, unsigned int height, std::string game_name){

@@ -23,7 +23,9 @@ class ObjectFollower : public Behaviour{
                 Vector3 target = to_follow->transform->Pos() - transform->Pos();
                 if(Length(target) > 0.5f){
                     target = Normalize(target);
-                    transform->LookAt(target);
+                    //transform->LookAt(target);
+                    //Rotates only in the y axis
+                    transform->rotation.y = atan2(target.x,target.z);
                     transform->MovePos(target * speed * Time::deltaTime);
                 }
             }
