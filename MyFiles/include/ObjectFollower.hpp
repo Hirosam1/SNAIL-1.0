@@ -22,13 +22,13 @@ class ObjectFollower : public Behaviour{
         void Update() override{
             if(to_follow){
                 Vector3 target = to_follow->transform->Pos() - transform->Pos();
-                if(Length(target) > 0.5f){
+                if(Length(target) > 0.25f){
                     target = Normalize(target);
-                    //transform->LookAt(target);
+                    // transform->LookAt(to_follow->transform->position);
                     //Rotates only in the y axis
                     transform->rotation.y = atan2(target.x,target.z);
-                    //Limit how far it can go down based on height
                     transform->Translate(target * speed * Time::deltaTime);
+                    //Limit how far it can go down based on height
                     transform->position.y = Clamp(transform->position.y,obj_h_height,transform->position.y);
                 }
             }

@@ -46,7 +46,7 @@ class Game {
         void TerminateGame(){
             TraceEventsSession end_tes = TraceEventsSession("Terminating game");
             Timer _timer = Timer(&end_tes,"Unloading resources");
-            for(int i = 0; i < 7; i++){
+            for(int i = 0; i < 10; i++){
                 res_init[i]->UnloadResourse();
             }
             _timer.Stop();
@@ -66,9 +66,10 @@ class Game {
             res_init[1] = dynamic_cast<Resource*>(cube_model);
             //--------------------------------------------------------------------
             Texture* sprite_sheet = new Texture("resources/images/sprite_sheet.png");
-            Texture* follow_sprite = new Texture("resources/images/omnipothead.png");
+            Texture* omni_sprite = new Texture("resources/images/omnipothead.png");
+            Texture* follow_sprite = new Texture("resources/images/spooky.png");
             res_init[2] = dynamic_cast<Resource*>(sprite_sheet);
-            res_init[3] = dynamic_cast<Resource*>(follow_sprite);
+            res_init[3] = dynamic_cast<Resource*>(omni_sprite);
             //--------------------------------------------------------------------
             Shader* atlas_shader = new Shader("resources/shaders/vertex/atlas.vert", "resources/shaders/fragment/sprite.frag");
             Shader* mesh_shader = new Shader ("resources/shaders/vertex/basic.vert","resources/shaders/fragment/sprite.frag");
@@ -78,7 +79,8 @@ class Game {
             res_init[6] = dynamic_cast<Resource*>(sprite_atlas);
             //--------------------------------------------------------------------
             res_init[7] = dynamic_cast<Resource*>(new Mesh(square_model,sprite_sheet));
-            res_init[8] = dynamic_cast<Resource*>(new Mesh(square_model,follow_sprite));
+            res_init[8] = dynamic_cast<Resource*>(new Mesh(square_model,omni_sprite));
+            res_init[9] = dynamic_cast<Resource*>(new Mesh(cube_model,follow_sprite));
         }
         //Initiate the games objects with the components previously loaded
         void LoadGameObjects(){
@@ -101,12 +103,17 @@ class Game {
             o_list.push_back(dynamic_cast<Object*>(go));
 
             go = new GameObject();
-            go->object_name = "Creepy Follower";
+            go->object_name = "Camera Follower";
             go->PushComponentBack(new MeshRenderer(dynamic_cast<Mesh*>(res_init[8]),dynamic_cast<Shader*>(res_init[5])));
             go->PushComponentBack(new ObjectFollower());
-            go->transform->SetPos(Vector3(0.0,1.0,0.0));
+            go->transform->SetPos(Vector3(0.0,1.5,0.5));
             o_list.push_back(dynamic_cast<Object*>(go));
 
+            go = new GameObject();
+            go->PushComponentBack(new MeshRenderer(dynamic_cast<Mesh*>(res_init[9]),dynamic_cast<Shader*>(res_init[5])));
+            go->PushComponentBack(new HeadFollower());
+            go->transform->position = Vector3(0.0,1.5,0.5);
+            o_list.push_back(dynamic_cast<Object*>(go));
             //Camera has to be added last to avoid weird de-sync rendering
             go = new GameObject();
             go->object_name = "Main Camera";
