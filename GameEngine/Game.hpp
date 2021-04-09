@@ -66,9 +66,9 @@ class Game {
             res_init[1] = dynamic_cast<Resource*>(cube_model);
             //--------------------------------------------------------------------
             Texture* sprite_sheet = new Texture("resources/images/sprite_sheet.png");
-            Texture* spooky_sprite = new Texture("resources/images/spooky.png");
+            Texture* follow_sprite = new Texture("resources/images/omnipothead.png");
             res_init[2] = dynamic_cast<Resource*>(sprite_sheet);
-            res_init[3] = dynamic_cast<Resource*>(spooky_sprite);
+            res_init[3] = dynamic_cast<Resource*>(follow_sprite);
             //--------------------------------------------------------------------
             Shader* atlas_shader = new Shader("resources/shaders/vertex/atlas.vert", "resources/shaders/fragment/sprite.frag");
             Shader* mesh_shader = new Shader ("resources/shaders/vertex/basic.vert","resources/shaders/fragment/sprite.frag");
@@ -78,7 +78,7 @@ class Game {
             res_init[6] = dynamic_cast<Resource*>(sprite_atlas);
             //--------------------------------------------------------------------
             res_init[7] = dynamic_cast<Resource*>(new Mesh(square_model,sprite_sheet));
-            res_init[8] = dynamic_cast<Resource*>(new Mesh(square_model,spooky_sprite));
+            res_init[8] = dynamic_cast<Resource*>(new Mesh(square_model,follow_sprite));
         }
         //Initiate the games objects with the components previously loaded
         void LoadGameObjects(){
@@ -86,17 +86,18 @@ class Game {
             GameObject* go = new GameObject();
             go->PushComponentBack(new SpriteRenderer(dynamic_cast<Mesh*>(res_init[7]), dynamic_cast<Shader*>(res_init[4]),dynamic_cast<SpriteAtlas*>(res_init[6]),0,0));
             go->object_name = "first tile floor";
+            go->transform->SetPos(Vector3(0.0,0.5,0.0));
             o_list.push_back(dynamic_cast<Object*>(go));
 
             go = new GameObject();
             go->PushComponentBack(new SpriteRenderer(dynamic_cast<Mesh*>(res_init[7]), dynamic_cast<Shader*>(res_init[4]),dynamic_cast<SpriteAtlas*>(res_init[6]),0,0));
-            go->transform->SetPos(Vector3(1.0,0.0,0.0));
+            go->transform->SetPos(Vector3(1.0,0.5,0.0));
             o_list.push_back(dynamic_cast<Object*>(go));
 
             go = new GameObject();
             go->PushComponentBack(new SpriteRenderer(dynamic_cast<Mesh*>(res_init[7]), dynamic_cast<Shader*>(res_init[4]),dynamic_cast<SpriteAtlas*>(res_init[6]),1,0));
             go->PushComponentBack(new MovingObject());
-            go->transform = new Transform(Vector3(-1.5,0.0,0.5),Vector3(0.0,ToRadians(90),0.0),Vector3(1.0,1.0,1.0));
+            go->transform = new Transform(Vector3(-1.5,0.5,0.5),Vector3(0.0,ToRadians(90),0.0),Vector3(1.0,1.0,1.0));
             o_list.push_back(dynamic_cast<Object*>(go));
 
             go = new GameObject();
@@ -108,15 +109,14 @@ class Game {
 
             //Camera has to be added last to avoid weird de-sync rendering
             go = new GameObject();
+            go->object_name = "Main Camera";
+            go->transform->SetPos(Vector3(0.0,0.4,1.0));
             //Creates a camera and sets up projection configuration
             Camera* a_camera = new Camera(Camera_Projection::PERSPECTIVE_PROJECTION);
             go->PushComponentBack(a_camera);
-            a_camera->game_object->transform->SetPos(Vector3(0.0,0.0,1.0));
             go->PushComponentBack(new CameraMovement());
-            go->object_name = "Camera movement"; 
             Window::main_window->main_camera = a_camera; 
             o_list.push_back(dynamic_cast<Object*>(go));
-            a_camera->game_object->object_name = "Main Camera";
 
         }
         //Initiate the game objects created

@@ -75,7 +75,8 @@ class CameraMovement : public Behaviour{
             if(ih.GetInputInfo(MOVE_DOWNWARDS).was_activated){
                 move_pos -= main_camera->Up();
             }
-            main_camera->game_object->transform->MovePos(Normalize(move_pos) * Time::deltaTime * velocity);
+            main_camera->game_object->transform->Translate(Normalize(Vector3(move_pos.x,0.0, move_pos.z)) * Time::deltaTime * velocity);
+            //main_camera->game_object->transform->Translate(Normalize(move_pos) * Time::deltaTime * velocity);
             main_camera->LookAt(direction, Vector3(0.0,1.0,0.0));
         }
         void Update() override{

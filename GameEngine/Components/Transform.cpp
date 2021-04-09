@@ -33,7 +33,7 @@ void Transform::SetPos(const Vector3& pos){
     position = pos;
 }
 
-Vector3 Transform::MovePos(const Vector3& move_pos){
+Vector3 Transform::Translate(const Vector3& move_pos){
     position += move_pos;
     return position;
 }

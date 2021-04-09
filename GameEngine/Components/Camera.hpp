@@ -17,7 +17,7 @@ enum Camera_Projection{
 
 struct ProjectionInfo{
     Matrix4 projection;
-    float FOV = ToRadians(60.0f);
+    float FOV = ToRadians(50.0f);
     float ortho_size = 3.0;
     Matrix4(*projection_function)(float,float ,float ,float, float);
 };

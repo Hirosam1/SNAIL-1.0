@@ -16,6 +16,7 @@ class ObjectFollower : public Behaviour{
                                 Vector3(renderer->mesh->texture->image_data.width/(float)renderer->mesh->texture->image_data.height,1.0,1.0) :
                                 Vector3(1.0,renderer->mesh->texture->image_data.height/(float) renderer->mesh->texture->image_data.width,1.0);
             transform->SetScale(new_scale);
+            obj_h_height = (float)transform->scale.y/2.0f;
         }
 
         void Update() override{
@@ -26,8 +27,12 @@ class ObjectFollower : public Behaviour{
                     //transform->LookAt(target);
                     //Rotates only in the y axis
                     transform->rotation.y = atan2(target.x,target.z);
-                    transform->MovePos(target * speed * Time::deltaTime);
+                    //Limit how far it can go down based on height
+                    transform->Translate(target * speed * Time::deltaTime);
+                    transform->position.y = Clamp(transform->position.y,obj_h_height,transform->position.y);
                 }
             }
         }
+        private:
+            float obj_h_height;
 }; 

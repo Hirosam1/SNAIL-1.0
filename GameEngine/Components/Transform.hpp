@@ -21,7 +21,7 @@ class Transform : public Component{
         //Sets the transform position
         void SetPos(const Vector3& pos);
         //Moves from current position to the move position
-        Vector3 MovePos(const Vector3& move_pos);
+        Vector3 Translate(const Vector3& move_pos);
         //Sets the rotation of the transform
         void SetRot(const Vector3& rot);
         //Sets the scale of the transform
