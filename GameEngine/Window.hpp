@@ -5,7 +5,7 @@
 #include "Math.hpp"
 #include "Matrix.hpp"
 
-class Object;
+class GameObject;
 class Camera;
 
 struct CursorInfo{
@@ -22,7 +22,7 @@ class Window{
         int width;
         int height;
         //Scene stuff--------
-        std::list<Object*> object_list;
+        std::list<GameObject*> object_list;
         Camera* main_camera;
         //-------------------
         //Input stuff--------

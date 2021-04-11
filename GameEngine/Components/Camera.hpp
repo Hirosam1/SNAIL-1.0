@@ -42,8 +42,6 @@ class Camera : public Component{
         void LookAt(const Vector3& target, const Vector3& up);
         //Build the projection matrix
         void BuildProj();
-        //Build view frustum info
-        void BuildFrustum();
         //The update method for updating the matrix information
         void Update(GameObject* game_object) override;
         //Returns the view matrix
@@ -68,9 +66,15 @@ class Camera : public Component{
         //Build the camera matrix given the position and front vectors
         void BuildMat();
         void NormalizeFrustum();
+        //Build view frustum info
+        void BuildFrustum();
+        //Frustum planes 
         ViewFrustum frustum;
+        //View matrix
         Matrix4 view;
+        // View * projection matrix
         Matrix4 view_projection;
+        //Projection propierties
         ProjectionInfo proj_info;
         Vector3 camera_front;
         Vector3 camera_up;

@@ -8,7 +8,7 @@ Window::Window(unsigned int width, unsigned int height, std::string game_name){
         cursor_info.y_pos = -1.0;
         this->width = width;
         this->height = height;
-        object_list = std::list<Object*>();
+        object_list = std::list<GameObject*>();
         glfwInit();
         //Set upo version of openGL
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,3);

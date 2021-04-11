@@ -4,6 +4,4 @@
 class Object {
     public:
         std::string object_name = "new object";
-        virtual void Begin(){};
-        virtual void Update(){};
 };

@@ -6,7 +6,7 @@ class ObjectFollower : public Behaviour{
         float speed = .35f;
         GameObject* to_follow = nullptr;
         void Begin() override{
-            for(Object* obj : Window::main_window->object_list){
+            for(GameObject* obj : Window::main_window->object_list){
                 if(obj->object_name == "Main Camera"){
                     to_follow = dynamic_cast<GameObject*>(obj);
                 }
