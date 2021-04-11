@@ -2,7 +2,8 @@
 #include "Components/Component.hpp"
 #include "Window.hpp"
 
-class GameObject;
+#include "Objects/GameObject.hpp"
+
 //Maybe make a LuaBehaviour later :)
 class Behaviour : public Component{
     public:

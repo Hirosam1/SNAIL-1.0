@@ -6,7 +6,9 @@
 
 #include "Components/Camera.hpp"
 
-#include "GameObject.hpp"
+#include "Objects/GameObject.hpp"
+#include "Objects/Scene.hpp"
+
 #include "Window.hpp"
 #include "Matrix.hpp"
 #include "ImplicitObjects.hpp"

@@ -8,7 +8,6 @@ Window::Window(unsigned int width, unsigned int height, std::string game_name){
         cursor_info.y_pos = -1.0;
         this->width = width;
         this->height = height;
-        object_list = std::list<GameObject*>();
         glfwInit();
         //Set upo version of openGL
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,3);
@@ -38,7 +37,6 @@ void Window::FrameBufferCallBack(GLFWwindow* window,int width,int height){
     Window* _window =  static_cast<Window*>(glfwGetWindowUserPointer(window));
     _window->width = width;
     _window->height = height;
-    _window->main_camera->BuildProj();
     glViewport(0,0,width,height);
 }
 

@@ -1,6 +1,5 @@
 #pragma once
 #include "Components/Component.hpp"
-#include "GameObject.hpp"
 #include "Vector.hpp"
 #include "Transform.hpp"
 

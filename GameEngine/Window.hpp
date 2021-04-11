@@ -5,8 +5,10 @@
 #include "Math.hpp"
 #include "Matrix.hpp"
 
+
 class GameObject;
 class Camera;
+class Scene;
 
 struct CursorInfo{
     int x_pos;
@@ -21,9 +23,6 @@ class Window{
         GLFWwindow* window;
         int width;
         int height;
-        //Scene stuff--------
-        std::list<GameObject*> object_list;
-        Camera* main_camera;
         //-------------------
         //Input stuff--------
         CursorInfo cursor_info;

@@ -6,11 +6,8 @@ class ObjectFollower : public Behaviour{
         float speed = .35f;
         GameObject* to_follow = nullptr;
         void Begin() override{
-            for(GameObject* obj : Window::main_window->object_list){
-                if(obj->object_name == "Main Camera"){
-                    to_follow = dynamic_cast<GameObject*>(obj);
-                }
-            }
+            to_follow = Scene::active_scene->FindGameObject("Main Camera");
+
             Renderer* renderer = game_object->GetComponent<Renderer>();
             Vector3 new_scale = renderer->mesh->texture->image_data.width > renderer->mesh->texture->image_data.height?
                                 Vector3(renderer->mesh->texture->image_data.width/(float)renderer->mesh->texture->image_data.height,1.0,1.0) :

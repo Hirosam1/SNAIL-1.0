@@ -5,6 +5,7 @@
 #include <string_view>
 #include <fstream>
 #include <iomanip> //std::set precision
+#include <cstring>
 //Mathematics
 #include <math.h>
 #include <random>

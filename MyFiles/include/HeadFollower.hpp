@@ -7,11 +7,7 @@ class HeadFollower : public Behaviour{
         GameObject* object_to_follow = nullptr;
 
         void Begin() override{
-            for(GameObject* obj : Window::main_window->object_list){
-                if(obj->object_name == "Camera Follower"){
-                    object_to_follow = dynamic_cast<GameObject*>(obj);
-                }
-            }
+            object_to_follow = Scene::active_scene->FindGameObject("Camera Follower");
         }
 
         void Update() override{

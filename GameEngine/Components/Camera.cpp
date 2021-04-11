@@ -76,6 +76,7 @@ void Camera::BuildMat(){
 }
 
 void Camera::Update(GameObject* game_object){
+    BuildProj();
     BuildMat();
     BuildFrustum();
     NormalizeFrustum();

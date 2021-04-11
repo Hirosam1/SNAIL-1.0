@@ -84,36 +84,36 @@ class Game {
         }
         //Initiate the games objects with the components previously loaded
         void LoadGameObjects(){
-            std::list<GameObject*>& o_list = Window::main_window->object_list;
+            Scene* init_scene = new Scene();
             GameObject* go = new GameObject();
             go->PushComponentBack(new SpriteRenderer(dynamic_cast<Mesh*>(res_init[7]), dynamic_cast<Shader*>(res_init[4]),dynamic_cast<SpriteAtlas*>(res_init[6]),0,0));
             go->object_name = "first tile floor";
             go->transform->SetPos(Vector3(0.0,0.5,0.0));
-            o_list.push_back(go);
+            init_scene->AddGameObject(go);
 
             go = new GameObject();
             go->PushComponentBack(new SpriteRenderer(dynamic_cast<Mesh*>(res_init[7]), dynamic_cast<Shader*>(res_init[4]),dynamic_cast<SpriteAtlas*>(res_init[6]),0,0));
             go->transform->SetPos(Vector3(1.0,0.5,0.0));
-            o_list.push_back(go);
+            init_scene->AddGameObject(go);
 
             go = new GameObject();
             go->PushComponentBack(new SpriteRenderer(dynamic_cast<Mesh*>(res_init[7]), dynamic_cast<Shader*>(res_init[4]),dynamic_cast<SpriteAtlas*>(res_init[6]),1,0));
             go->PushComponentBack(new MovingObject());
             go->transform = new Transform(Vector3(-1.5,0.5,0.5),Vector3(0.0,ToRadians(90),0.0),Vector3(1.0,1.0,1.0));
-            o_list.push_back(go);
+            init_scene->AddGameObject(go);
 
             go = new GameObject();
             go->object_name = "Camera Follower";
             go->PushComponentBack(new MeshRenderer(dynamic_cast<Mesh*>(res_init[8]),dynamic_cast<Shader*>(res_init[5])));
             go->PushComponentBack(new ObjectFollower());
             go->transform->SetPos(Vector3(0.0,1.5,0.5));
-            o_list.push_back(go);
+            init_scene->AddGameObject(go);
 
             go = new GameObject();
             go->PushComponentBack(new MeshRenderer(dynamic_cast<Mesh*>(res_init[9]),dynamic_cast<Shader*>(res_init[5])));
             go->PushComponentBack(new HeadFollower());
             go->transform->position = Vector3(0.0,1.5,0.5);
-            o_list.push_back(go);
+            init_scene->AddGameObject(go);
             //Camera has to be added last to avoid weird de-sync rendering
             go = new GameObject();
             go->object_name = "Main Camera";
@@ -122,16 +122,15 @@ class Game {
             Camera* a_camera = new Camera(Camera_Projection::PERSPECTIVE_PROJECTION);
             go->PushComponentBack(a_camera);
             go->PushComponentBack(new CameraMovement());
-            Window::main_window->main_camera = a_camera; 
-            o_list.push_back(go);
+            init_scene->main_camera = a_camera; 
+            init_scene->AddGameObject(go);
+
+            Scene::active_scene = init_scene;
 
         }
         //Initiate the game objects created
         void ObjectsInitialization(){
-            for(GameObject* _go :  Window::main_window->object_list){
-                _go->Begin();
-            }
-
+            Scene::active_scene->BeginScene();
             glClearColor(0.02f,0.05,0.12,1.0);
         }
         //Loops until the game ends
@@ -140,9 +139,8 @@ class Game {
             while(!glfwWindowShouldClose(Window::main_window->window)){
                 time.UpdateTime();
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-                for(GameObject* _go : Window::main_window->object_list){
-                    _go->Update();
-                }
+                
+                Scene::active_scene->UpdateScene();
 
                 SpriteRenderer::draw_count = 0;
                 MeshRenderer::draw_count = 0;

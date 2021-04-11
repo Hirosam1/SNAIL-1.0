@@ -7,7 +7,7 @@ Transform Renderer::BuildTransform(const Transform& transform) const{
 void Renderer::Update(GameObject* game_object){
     Transform new_transform = BuildTransform(*game_object->transform);
     if(TestSphereAgainstFrustum(new_transform)){
-        Camera* main_camera = Window::main_window->main_camera;
+        Camera* main_camera = Scene::active_scene->main_camera;
         Matrix4 MVP = (main_camera->ViewProjection() * new_transform.ModelMat());
         shader->UseShader();
         //Chooses the winding order based on the scale
@@ -20,7 +20,7 @@ void Renderer::Update(GameObject* game_object){
 }
 
 bool Renderer::TestSphereAgainstFrustum(const Transform& transform) const{
-    Camera* main_camera = Window::main_window->main_camera;
+    Camera* main_camera = Scene::active_scene->main_camera;
     float diagonal = qsqrt(transform.Scale().x*transform.Scale().x + transform.Scale().y*transform.Scale().y);
     ImplicitVolumes::Sphere bounding_sphere =  ImplicitVolumes::Sphere{diagonal/2.0f,
                                                                         transform.Pos()};

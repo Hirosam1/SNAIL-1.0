@@ -1,6 +1,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "GameObject.hpp"
+
 
 #include "Resources/Model.hpp"
 #include "Resources/Shader.hpp"
@@ -18,6 +18,10 @@
 #include "Components/SpriteRenderer.hpp"
 #include "Components/MeshRenderer.hpp"
 #include "Components/Camera.hpp"
+
+#include "Objects/Scene.hpp"
+#include "Objects/GameObject.hpp"
+#include "Objects/Scene.hpp"
 
 #include "FileIO.hpp"
 #include "Math.hpp"

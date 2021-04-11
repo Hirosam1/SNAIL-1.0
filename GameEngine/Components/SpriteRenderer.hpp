@@ -7,7 +7,7 @@
 #include "Components/Renderer.hpp"
 
 #include "Vector.hpp"
-#include "GameObject.hpp"
+#include "Objects/GameObject.hpp"
 
 class MEsh;
 

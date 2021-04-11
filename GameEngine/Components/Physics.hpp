@@ -2,7 +2,7 @@
 #include "GMpch.hpp"
 #include "Components/Component.hpp"
 #include "Vector.hpp"
-#include "GameObject.hpp"
+#include "Objects/GameObject.hpp"
 #include "Time.hpp"
 
 class Physics : public Component{

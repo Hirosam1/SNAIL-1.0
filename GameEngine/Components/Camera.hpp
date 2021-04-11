@@ -8,7 +8,7 @@
 #include "Matrix_Transform.hpp"
 #include "Window.hpp"
 #include "ImplicitObjects.hpp"
-#include "GameObject.hpp"
+#include "Objects/GameObject.hpp"
 
 enum Camera_Projection{
     PERSPECTIVE_PROJECTION,
