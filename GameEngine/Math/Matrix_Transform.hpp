@@ -4,7 +4,7 @@
 #include "DataStructures/Matrix.hpp"
 #include "DataStructures/Vector.hpp"
 
-#include "Math.hpp"
+#include "Math/Math.hpp"
 
 namespace Transformation{
     //Extracts euler rotation from matrix, matrix must be not scaled

@@ -1,8 +1,11 @@
 #pragma once
 #include "Components/Component.hpp"
+
 #include "DataStructures/Vector.hpp"
+
 #include "Transform.hpp"
-#include "Math.hpp"
+
+#include "Math/Math.hpp"
 
 struct Intersect2DInfo{
         Intersect2DInfo(bool _intersect, float distance): did_intersect(_intersect), distance(distance){};

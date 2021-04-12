@@ -3,8 +3,8 @@
 #include "DataStructures/Matrix.hpp" 
 #include "DataStructures/Vector.hpp"
 
-#include "Matrix_Transform.hpp"
-#include "Math.hpp"
+#include "Math/Matrix_Transform.hpp"
+#include "Math/Math.hpp"
 
 #include "Components/Component.hpp"
 

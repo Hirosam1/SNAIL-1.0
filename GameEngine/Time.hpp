@@ -1,6 +1,7 @@
 #pragma once
 #include "GMpch.hpp"
 #include <GLFW/glfw3.h>
+
 //Keep track of game time
 class Time{
     public:

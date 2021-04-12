@@ -3,11 +3,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "Math.hpp"
-
-#include "DataStructures/Matrix.hpp"
-
-
 class GameObject;
 class Camera;
 class Scene;

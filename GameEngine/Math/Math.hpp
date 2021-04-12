@@ -1,8 +1,8 @@
 #pragma once
+#include "GMpch.hpp"
 #include "DataStructures/Matrix.hpp"
 #include "DataStructures/Vector.hpp"
 
-#include "GMpch.hpp"
 #include <algorithm>
 
 const float RADIANS = 0.017453292f;

@@ -1,7 +1,8 @@
 #pragma once
 #include "Components/Component.hpp"
-#include "GMpch.hpp"
 #include "Components/Transform.hpp"
+
+#include "GMpch.hpp"
 #include "Object.hpp"
 
 class GameObject : public Object{

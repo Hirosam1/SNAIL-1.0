@@ -26,9 +26,10 @@
 #include "DataStructures/Matrix.hpp"
 #include "DataStructures/Vector.hpp"
 
+#include "Math/Math.hpp"
+#include "Math/Matrix_Transform.hpp"
+
 #include "FileIO.hpp"
-#include "Math.hpp"
-#include "Matrix_Transform.hpp"
 #include "Time.hpp"
 #include "InputHandler.hpp"
 #include "Window.hpp"

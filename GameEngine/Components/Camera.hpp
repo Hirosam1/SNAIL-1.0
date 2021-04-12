@@ -6,8 +6,9 @@
 #include "DataStructures/Vector.hpp"
 #include "DataStructures/ImplicitObjects.hpp"
 
-#include "Math.hpp"
-#include "Matrix_Transform.hpp"
+#include "Math/Math.hpp"
+#include "Math/Matrix_Transform.hpp"
+
 #include "Window.hpp"
 
 #include "Objects/GameObject.hpp"

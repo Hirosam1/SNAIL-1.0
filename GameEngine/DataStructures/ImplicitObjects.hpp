@@ -1,7 +1,7 @@
 #pragma once
 #include "DataStructures/Vector.hpp"
 
-#include "Math.hpp"
+#include "Math/Math.hpp"
 
 namespace ImplicitVolumes{
     struct AABB{
