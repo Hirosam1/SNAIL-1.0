@@ -1,12 +1,15 @@
 #pragma once
 #include "GMpch.hpp"
-#include "Resources/Texture.hpp"
-#include "GMpch.hpp"
-#include "Components/Transform.hpp"
-#include "Vector.hpp"
-#include "Resources/Resource.hpp"
 
-class SpriteAtlas : public Resource{
+#include "Resources/Texture.hpp"
+
+#include "Components/Transform.hpp"
+
+#include "Objects/Object.hpp"
+
+#include "Vector.hpp"
+
+class SpriteAtlas : public Object{
     public:
         SpriteAtlas(Texture* texture,unsigned int vertical_count, unsigned int horizontal_count);
         //Returns the beginning and end of the tex coordinates in normalized coordinates
@@ -18,10 +21,8 @@ class SpriteAtlas : public Resource{
         unsigned int horizontal_count;
         //The scale of each image, used by the sprite
         Vector3 sprite_scale;
-        //Unloads the resourse from the openGL context
-        void UnloadResourse() override{};
     private:
-        //Vertical and horizontal tex-coordindte step
+        //Vertical and horizontal tex-coordinate step
         float vertical_step;
         float horizontal_step;
 };

@@ -48,7 +48,9 @@ class Game {
             TraceEventsSession end_tes = TraceEventsSession("Terminating game");
             Timer _timer = Timer(&end_tes,"Unloading resources");
             for(int i = 0; i < 10; i++){
-                res_init[i]->UnloadResourse();
+                if(res_init[i]){
+                    res_init[i]->UnloadResourse();
+                }
             }
             _timer.Stop();
             Timer timer2 = Timer(&end_tes,"Terminating glfw window");
@@ -60,7 +62,7 @@ class Game {
     private:
         //Loads all the initial resources
         void LoadResources(){
-            //Creating models--------------------------------
+            //Creating models-----------------------------------------------------
             Model* square_model = new Model(DefaultShapes::SquareWithTex());
             Model* cube_model = new Model(DefaultShapes::CubeWithTex());
             res_init[0] = dynamic_cast<Resource*>(square_model);
@@ -77,41 +79,41 @@ class Game {
             res_init[4] = dynamic_cast<Resource*>(atlas_shader);
             res_init[5] = dynamic_cast<Resource*>(mesh_shader);
             SpriteAtlas* sprite_atlas = new SpriteAtlas(sprite_sheet,1,3);
-            res_init[6] = dynamic_cast<Resource*>(sprite_atlas);
+            objs_init[0] = dynamic_cast<Object*>(sprite_atlas);
             //--------------------------------------------------------------------
-            res_init[7] = dynamic_cast<Resource*>(new Mesh(square_model,sprite_sheet));
-            res_init[8] = dynamic_cast<Resource*>(new Mesh(square_model,omni_sprite));
-            res_init[9] = dynamic_cast<Resource*>(new Mesh(cube_model,follow_sprite));
+            objs_init[1] = dynamic_cast<Object*>(new Mesh(square_model,sprite_sheet));
+            objs_init[2] = dynamic_cast<Object*>(new Mesh(square_model,omni_sprite));
+            objs_init[3] = dynamic_cast<Object*>(new Mesh(cube_model,follow_sprite));
         }
         //Initiate the games objects with the components previously loaded
         void LoadGameObjects(){
             Scene* init_scene = new Scene();
             GameObject* go = new GameObject();
-            go->PushComponentBack(new SpriteRenderer(dynamic_cast<Mesh*>(res_init[7]), dynamic_cast<Shader*>(res_init[4]),dynamic_cast<SpriteAtlas*>(res_init[6]),0,0));
+            go->PushComponentBack(new SpriteRenderer(dynamic_cast<Mesh*>(objs_init[1]), dynamic_cast<Shader*>(res_init[4]),dynamic_cast<SpriteAtlas*>(objs_init[0] ),0,0));
             go->object_name = "first tile floor";
             go->transform->SetPos(Vector3(0.0,0.5,0.0));
             init_scene->AddGameObject(go);
 
             go = new GameObject();
-            go->PushComponentBack(new SpriteRenderer(dynamic_cast<Mesh*>(res_init[7]), dynamic_cast<Shader*>(res_init[4]),dynamic_cast<SpriteAtlas*>(res_init[6]),0,0));
+            go->PushComponentBack(new SpriteRenderer(dynamic_cast<Mesh*>(objs_init[1]), dynamic_cast<Shader*>(res_init[4]),dynamic_cast<SpriteAtlas*>(objs_init[0] ),0,0));
             go->transform->SetPos(Vector3(1.0,0.5,0.0));
             init_scene->AddGameObject(go);
 
             go = new GameObject();
-            go->PushComponentBack(new SpriteRenderer(dynamic_cast<Mesh*>(res_init[7]), dynamic_cast<Shader*>(res_init[4]),dynamic_cast<SpriteAtlas*>(res_init[6]),1,0));
+            go->PushComponentBack(new SpriteRenderer(dynamic_cast<Mesh*>(objs_init[1]), dynamic_cast<Shader*>(res_init[4]),dynamic_cast<SpriteAtlas*>(objs_init[0]),1,0));
             go->PushComponentBack(new MovingObject());
             go->transform = new Transform(Vector3(-1.5,0.5,0.5),Vector3(0.0,ToRadians(90),0.0),Vector3(1.0,1.0,1.0));
             init_scene->AddGameObject(go);
 
             go = new GameObject();
             go->object_name = "Camera Follower";
-            go->PushComponentBack(new MeshRenderer(dynamic_cast<Mesh*>(res_init[8]),dynamic_cast<Shader*>(res_init[5])));
+            go->PushComponentBack(new MeshRenderer(dynamic_cast<Mesh*>(objs_init[2]),dynamic_cast<Shader*>(res_init[5])));
             go->PushComponentBack(new ObjectFollower());
             go->transform->SetPos(Vector3(0.0,1.5,0.5));
             init_scene->AddGameObject(go);
 
             go = new GameObject();
-            go->PushComponentBack(new MeshRenderer(dynamic_cast<Mesh*>(res_init[9]),dynamic_cast<Shader*>(res_init[5])));
+            go->PushComponentBack(new MeshRenderer(dynamic_cast<Mesh*>(objs_init[3]),dynamic_cast<Shader*>(res_init[5])));
             go->PushComponentBack(new HeadFollower());
             go->transform->position = Vector3(0.0,1.5,0.5);
             init_scene->AddGameObject(go);
@@ -152,7 +154,8 @@ class Game {
         std::string game_name;
         TraceEventsSession tes = TraceEventsSession("Profile");
         //Pointers Holders
-        Resource* res_init[10];
+        Resource* res_init[10] = {nullptr};
+        Object* objs_init[10] = {nullptr};
         //Global funcs
         Time time;
         StateManager state_man;

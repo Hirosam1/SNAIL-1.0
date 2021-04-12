@@ -6,8 +6,8 @@ class Resource{
         std::string resource_name = "Resource Object";
         //Unloads the resourse from the openGL context
         virtual void UnloadResourse(){
-        #ifdef DEBUG 
-        std::cout<<"IMPLEMENT UNLOADER!!!\n"; 
-        #endif
+            #ifdef DEBUG 
+            std::cout<<"IMPLEMENT UNLOADER!!!\n"; 
+            #endif
         }
 };

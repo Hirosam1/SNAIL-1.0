@@ -1,7 +1,7 @@
 #pragma once
 #include "GMpch.hpp"
 #include "Resources/Shader.hpp"
-#include "Resources/SpriteAtlas.hpp"
+#include "Objects/SpriteAtlas.hpp"
 
 #include "Components/Transform.hpp"
 #include "Components/Renderer.hpp"

@@ -1,4 +1,4 @@
-#include "Mesh.hpp"
+#include "Objects/Mesh.hpp"
 
 Mesh::Mesh(Model* model, Texture* texture) : model(model),
                                              texture(texture){

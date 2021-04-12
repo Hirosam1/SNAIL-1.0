@@ -1,4 +1,4 @@
-#include "Resources/SpriteAtlas.hpp"
+#include "Objects/SpriteAtlas.hpp"
 
 //This is a small value that determine the border (skin) of the texture coordinates to avoid clipping into the next texture
 const float skin_thickness = 0.001;

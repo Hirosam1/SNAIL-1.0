@@ -2,12 +2,12 @@
 #include "Components/Component.hpp"
 
 #include "Resources/Shader.hpp"
-#include "Resources/Mesh.hpp"
 
 #include "Components/Camera.hpp"
 
 #include "Objects/GameObject.hpp"
 #include "Objects/Scene.hpp"
+#include "Objects/Mesh.hpp"
 
 #include "Window.hpp"
 #include "Matrix.hpp"

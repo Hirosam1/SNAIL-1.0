@@ -1,7 +1,7 @@
 #pragma once
 #include "GMpch.hpp"
 #include "Object.hpp"
-#include "GameObject.hpp"
+#include "Objects/GameObject.hpp"
 
 class Camera;
 
