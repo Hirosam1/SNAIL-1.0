@@ -5,7 +5,7 @@
 
 class Game {
     public:
-        Game(const std::string& game_name, int screen_width, int screen_height) : game_name(game_name), main_window(Window(screen_width,screen_height,game_name)){
+        Game(const std::string& game_name, int screen_width, int screen_height) : game_name(game_name){
             #ifdef DEBUG
                 std::cout<<std::fixed;
                 std::cout<<std::setprecision(4);
@@ -14,7 +14,8 @@ class Game {
             Debug::CleanErrorLog();
             //Benchmark windown init----------------------------------
             Timer window_time = Timer(&tes,"Window init");
-            glfwSwapInterval(1);
+            Window* window = new Window(screen_width,screen_height,game_name);
+            glfwSwapInterval(0);
             window_time.Stop();
             //-------------------------------------------------------- 
         }
@@ -126,7 +127,6 @@ class Game {
             init_scene->AddGameObject(go);
 
             Scene::active_scene = init_scene;
-
         }
         //Initiate the game objects created
         void ObjectsInitialization(){
@@ -144,7 +144,7 @@ class Game {
 
                 SpriteRenderer::draw_count = 0;
                 MeshRenderer::draw_count = 0;
-
+                
                 glfwSwapBuffers(Window::main_window->window);
                 glfwPollEvents();
             }
@@ -156,7 +156,6 @@ class Game {
         //Global funcs
         Time time;
         StateManager state_man;
-        Window main_window;
         //flag that sets ready to start the game
         bool is_ready = false;
 };
