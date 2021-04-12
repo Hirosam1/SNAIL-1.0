@@ -1,7 +1,7 @@
-workspace "HelloWorld"
+workspace "SnailEngine"
     configurations {"Debug", "Release"}
 
-project "HelloWorld"
+project "ExecutableGame"
     language "C++"
     targetdir "bin/%{cfg.buildcfg}"
     cppdialect "C++14"

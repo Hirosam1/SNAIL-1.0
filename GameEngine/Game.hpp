@@ -13,6 +13,7 @@ class Game {
             #endif
             Debug::CleanErrorLog();
             //Benchmark windown init----------------------------------
+            std::cout<<"Initializing Window\n";
             Timer window_time = Timer(&tes,"Window init");
             Window* window = new Window(screen_width,screen_height,game_name);
             glfwSwapInterval(0);
@@ -20,21 +21,27 @@ class Game {
             //-------------------------------------------------------- 
         }
         void InitGame(){
+            #ifdef DEBUG
+            std::cout<<"Loading Resources\n";
+            #endif
             Timer res_load_time = Timer(&tes, "Resource loading");
             LoadResources();
             res_load_time.Stop();
 
             Timer res_obj_all_time = Timer(&tes, "Object and resource management");
             Timer obj_loading = Timer(&tes, "Object loading");
-
+            #ifdef DEBUG
+            std::cout<<"Loading GameObjects\n";
+            #endif
             LoadGameObjects();
 
             obj_loading.Stop();
-
+            #ifdef DEBUG
+            std::cout<<"Initializing Scene\n";
+            #endif
             ObjectsInitialization();
 
             res_obj_all_time.Stop();
-
             tes.EndSession(); 
             is_ready = true;
         }
@@ -45,6 +52,9 @@ class Game {
         }
         //Terminate the process
         void TerminateGame(){
+            #ifdef DEBUG
+            std::cout<<"Terminating game\n";
+            #endif
             TraceEventsSession end_tes = TraceEventsSession("Terminating game");
             Timer _timer = Timer(&end_tes,"Unloading resources");
             for(int i = 0; i < 10; i++){
