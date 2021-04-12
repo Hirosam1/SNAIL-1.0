@@ -1,4 +1,4 @@
-#include "ImplicitObjects.hpp"
+#include "DataStructures/ImplicitObjects.hpp"
 
 Vector3 IntersectionPoint(Line3 a, Line3 b){
     //get the parametric form of te line

@@ -1,11 +1,13 @@
 #pragma once
 #include "GMpch.hpp"
-#include  "Vector.hpp"
 #include "Resources/Shader.hpp"
-#include "GLStateManager.hpp"
 #include "Resources/Resource.hpp"
+
+#include "GLStateManager.hpp"
 #include "Shader.hpp"
-#include "Matrix.hpp"
+
+#include  "DataStructures/Vector.hpp"
+#include "DataStructures/Matrix.hpp"
 
 struct VertexData{
     Vector3 pos;

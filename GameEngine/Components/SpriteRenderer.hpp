@@ -1,13 +1,15 @@
 #pragma once
 #include "GMpch.hpp"
+
 #include "Resources/Shader.hpp"
+
 #include "Objects/SpriteAtlas.hpp"
+#include "Objects/GameObject.hpp"
 
 #include "Components/Transform.hpp"
 #include "Components/Renderer.hpp"
 
-#include "Vector.hpp"
-#include "Objects/GameObject.hpp"
+#include "DataStructures/Vector.hpp"
 
 class MEsh;
 

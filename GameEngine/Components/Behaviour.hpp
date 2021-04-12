@@ -1,5 +1,6 @@
 #pragma once
 #include "Components/Component.hpp"
+
 #include "Window.hpp"
 
 #include "Objects/GameObject.hpp"

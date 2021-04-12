@@ -1,6 +1,7 @@
 #pragma once
-#include "Matrix.hpp"
-#include "Vector.hpp"
+#include "DataStructures/Matrix.hpp"
+#include "DataStructures/Vector.hpp"
+
 #include "GMpch.hpp"
 #include <algorithm>
 

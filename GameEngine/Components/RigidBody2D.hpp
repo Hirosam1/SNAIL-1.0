@@ -1,6 +1,8 @@
 #pragma once
 #include "Components/Component.hpp"
-#include "Vector.hpp"
+
+#include "DataStructures/Vector.hpp"
+
 #include "Transform.hpp"
 
 class Collider2D;

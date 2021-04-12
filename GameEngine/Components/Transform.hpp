@@ -1,9 +1,11 @@
 #pragma once
 #include "GMpch.hpp"
-#include "Matrix.hpp" 
+#include "DataStructures/Matrix.hpp" 
+#include "DataStructures/Vector.hpp"
+
 #include "Matrix_Transform.hpp"
-#include "Vector.hpp"
 #include "Math.hpp"
+
 #include "Components/Component.hpp"
 
 class GameObject;

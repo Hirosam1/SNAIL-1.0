@@ -1,4 +1,4 @@
-#include "Matrix.hpp"
+#include "DataStructures/Matrix.hpp"
 
 Matrix4::Matrix4(float identity){
     mat[0] = identity;

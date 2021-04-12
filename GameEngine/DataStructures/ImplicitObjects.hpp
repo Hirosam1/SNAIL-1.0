@@ -1,5 +1,6 @@
 #pragma once
-#include "Vector.hpp"
+#include "DataStructures/Vector.hpp"
+
 #include "Math.hpp"
 
 namespace ImplicitVolumes{

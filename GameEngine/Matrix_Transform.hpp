@@ -1,7 +1,9 @@
 #pragma once
 #include "GMpch.hpp"
-#include "Matrix.hpp"
-#include "Vector.hpp"
+
+#include "DataStructures/Matrix.hpp"
+#include "DataStructures/Vector.hpp"
+
 #include "Math.hpp"
 
 namespace Transformation{

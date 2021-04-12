@@ -10,8 +10,9 @@
 #include "Objects/Mesh.hpp"
 
 #include "Window.hpp"
-#include "Matrix.hpp"
-#include "ImplicitObjects.hpp"
+
+#include "DataStructures/Matrix.hpp"
+#include "DataStructures/ImplicitObjects.hpp"
 
 class Texture;
 

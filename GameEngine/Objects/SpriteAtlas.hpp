@@ -7,7 +7,7 @@
 
 #include "Objects/Object.hpp"
 
-#include "Vector.hpp"
+#include "DataStructures/Vector.hpp"
 
 class SpriteAtlas : public Object{
     public:

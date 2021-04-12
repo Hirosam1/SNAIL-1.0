@@ -2,12 +2,14 @@
 #include "GMpch.hpp"
 #include "Components/Component.hpp"
 
-#include "Matrix.hpp"
-#include "Vector.hpp"
+#include "DataStructures/Matrix.hpp"
+#include "DataStructures/Vector.hpp"
+#include "DataStructures/ImplicitObjects.hpp"
+
 #include "Math.hpp"
 #include "Matrix_Transform.hpp"
 #include "Window.hpp"
-#include "ImplicitObjects.hpp"
+
 #include "Objects/GameObject.hpp"
 
 enum Camera_Projection{

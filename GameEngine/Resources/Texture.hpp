@@ -1,9 +1,10 @@
 #pragma once
 #include "GMpch.hpp"
-
 #include<glad/glad.h>
+
 #include "Debug.hpp"
 #include "ImageLoading/stb_image.h"
+
 #include "Resources/Shader.hpp"
 #include "Resources/Resource.hpp"
 

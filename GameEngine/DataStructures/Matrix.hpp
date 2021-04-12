@@ -1,5 +1,6 @@
 #pragma once
-#include "Vector.hpp"
+#include "DataStructures/Vector.hpp"
+
 #include "GMpch.hpp"
 //Matrix 4x4
 struct Matrix4

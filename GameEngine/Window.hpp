@@ -2,8 +2,10 @@
 #include "GMpch.hpp"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
 #include "Math.hpp"
-#include "Matrix.hpp"
+
+#include "DataStructures/Matrix.hpp"
 
 
 class GameObject;
