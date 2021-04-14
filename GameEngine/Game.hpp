@@ -3,6 +3,7 @@
 #include "GameEngine.hpp"
 #include "Behaviours.hpp"
 
+//Controlls general flow and management of the whole game
 class Game {
     public:
         Game(const std::string& game_name, int screen_width, int screen_height) : game_name(game_name){
@@ -13,10 +14,12 @@ class Game {
             #endif
             Debug::CleanErrorLog();
             //Benchmark windown init----------------------------------
+            #ifdef DEBUG
             std::cout<<"Initializing Window\n";
+            #endif
             Timer window_time = Timer(&tes,"Window init");
             Window* window = new Window(screen_width,screen_height,game_name);
-            glfwSwapInterval(0);
+            glfwSwapInterval(1);
             window_time.Stop();
             //-------------------------------------------------------- 
         }
@@ -33,15 +36,17 @@ class Game {
             #ifdef DEBUG
             std::cout<<"Loading GameObjects\n";
             #endif
+
             LoadGameObjects();
 
             obj_loading.Stop();
+            res_obj_all_time.Stop();
             #ifdef DEBUG
             std::cout<<"Initializing Scene\n";
             #endif
+            
             ObjectsInitialization();
 
-            res_obj_all_time.Stop();
             tes.EndSession(); 
             is_ready = true;
         }

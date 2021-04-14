@@ -37,7 +37,7 @@ struct Vector4{
         Vector4 Divide(const float val) const;
         Vector4 operator/(const float val) const;
 
-        inline float Dot(const Vector4& other);
+        float Dot(const Vector4& other);
         //friend std::ostream& operator<<(std::ostream&, const MathS::Vector4&);
 
     };

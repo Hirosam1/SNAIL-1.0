@@ -46,6 +46,10 @@ void Transform::SetRot(const Vector3& rot){
     rotation = rot;
 }
 
+void Transform::SetRot(const Quaternion& quat){
+    rotation = Transformation::ExtractEulerFromMat(quat.BuildRotMat());
+}
+
 void Transform::AddRot(const Vector3& rot){
     rotation = rotation + rot;
 }

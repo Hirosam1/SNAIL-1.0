@@ -4,6 +4,7 @@
 #include "Math/Math.hpp"
 
 namespace ImplicitVolumes{
+    //Axis Aligned Bounding Box
     struct AABB{
         Vector3 min;
         Vector3 max;
