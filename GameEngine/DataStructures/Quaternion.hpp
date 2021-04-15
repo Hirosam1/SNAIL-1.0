@@ -24,20 +24,24 @@ class Quaternion {
         //Returns the inverse of a quaternion, usefull for "undoing" quaternions
         Quaternion Inverse() const;
         //Power of the quaternion, meaning a percentage of a rotation
-        Quaternion Pow(float t);
+        Quaternion Pow(float t) const;
         // Quaternion Multiply(const Vector3& vec3) const;
         float Length() const;
         Quaternion Normalize() const;
         //Convert quaternions to Rodriguez axis angle rotation
-        AxisAngle QuaternionToAxisAngle();
+        AxisAngle QuaternionToAxisAngle() const;
         //Convert Rodriguez angle axis rotation back to quaternions
         Quaternion AxisAngleToQuaternion(const AxisAngle& axis_angle) const;
+        Matrix4 BuildRotMat() const;
         //Spherical interpolation
-        Quaternion Slerp(const Quaternion& end, float t);
+        Quaternion Slerp(const Quaternion& end, float t) const;
+        //returns the imaginary part of the quaternion
+        Vector3 Vec() const;
+        //Operators overloading
+        Quaternion operator*(const Quaternion& quad) const;
 
-
-        // Matrix4 BuildRotMat() const;
         float x,y,z,w;
+       
 };
 
 std::ostream& operator<<(std::ostream& stream, const Quaternion& other);

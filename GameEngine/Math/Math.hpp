@@ -11,7 +11,7 @@
 
 namespace Math {
     const float RADIANS = 0.017453292f;
-
+    const float pi = 3.1415926535;
     inline float ToRadians(const float a){
         return a * RADIANS;
     }

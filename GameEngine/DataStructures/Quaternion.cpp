@@ -14,6 +14,7 @@ Quaternion::Quaternion(float x, float y, float z, float w){
 Quaternion::Quaternion(const Vector3& axis, float rad_angle){
     w = cos(rad_angle/2.0f);
     float sin_a = sin(rad_angle/2.0f);
+    axis = Math::Normalize(axis);
     x = sin_a * axis.x;
     y = sin_a * axis.y;
     z = sin_a * axis.z;
@@ -46,21 +47,22 @@ Quaternion Quaternion::Multiply(const Quaternion& quat) const{
     return Quaternion(v.x,v.y,v.z,v_w);
 }
 
-Quaternion Quaternion::Pow(float p){
+Quaternion Quaternion::Pow(float p) const{
     AxisAngle a_a = this->QuaternionToAxisAngle();
-    a_a.angle *= p;
+    a_a.angle *= abs(p);
     return Quaternion(a_a.axis,a_a.angle); 
 }
 
 Quaternion Quaternion::Inverse() const{
-    float q_sqr = w + Math::Length(Vector3(x,y,z));
+    float length =  Math::Length(Vector3(x,y,z));
+    float q_sqr = w*w + length*length;
     float _w = w/q_sqr;
     Vector3 v = -Vector3(x,y,z)/q_sqr;
     return Quaternion(v.x,v.y,v.z,_w);
 }
 
 
-AxisAngle Quaternion::QuaternionToAxisAngle(){
+AxisAngle Quaternion::QuaternionToAxisAngle() const{
     Vector3 axis = Math::Normalize(Vector3(x,y,z));
     float angle = acos(w) * 2.0f;
     return AxisAngle{axis,angle};
@@ -71,46 +73,61 @@ Quaternion Quaternion::AxisAngleToQuaternion(const AxisAngle& a_a) const{
     return Quaternion(a_a.axis,a_a.angle);
 }
 
-Quaternion Quaternion::Slerp(const Quaternion& end, float t){
+Quaternion Quaternion::Slerp(const Quaternion& end, float t) const{
     //a -> start
     //b -> end
     //t -> percentage 
     //reads from right to left
     //(b - a)*t + a
 
-    return (end.Multiply(this->Inverse())).Pow(t).Multiply(*this);
+    return (end * this->Inverse()).Pow(t) * *this;
 }
 
-// Matrix4 Quaternion::BuildRotMat() const{
-//     Quaternion quat = this->Normalize();
-//     float qx = quat.x;
-//     float qy = quat.y;
-//     float qz = quat.z;
-//     float qw = quat.w;
+Vector3 Quaternion::Vec() const{
+    return Vector3(x,y,z);
+}
 
-//     Matrix4 mat = Matrix4(1.0);
-//     //When converting needs to negate some of the values to the system be right handed
-//     mat.mat[0] = 1.0 - 2.0*qy*qy - 2.0*qz*qz;
-//     mat.mat[1] = -(2.0f*qx*qy + 2.0f*qz*qw);
-//     mat.mat[2] = -(2.0f*qx*qz - 2.0f*qy*qw);
+Quaternion Quaternion::operator*(const Quaternion& quad) const{
+    return this->Multiply(quad);
+}
 
-//     mat.mat[4] = -(2.0f*qx*qy - 2.0f*qz*qw);
-//     mat.mat[5] = 1.0f - 2.0f*qx*qx - 2.0f*qz*qz;
-//     mat.mat[6] = -(2.0f*qy*qz + 2.0f*qx*qw);
 
-//     mat.mat[8] = -(2.0f*qx*qz - 2.0f*qy*qw);
-//     mat.mat[9] = -(2.0f*qy*qz - 2.0f*qx*qw);
-//     mat.mat[10]= 1.0f - 2.0f*qx*qx - 2.0f*qy*qy;
+Matrix4 Quaternion::BuildRotMat() const{
+    Quaternion quat = this->Normalize();
+    float qx = quat.x;
+    float qy = quat.y;
+    float qz = quat.z;
+    float qw = quat.w;
 
-//     return mat;
-// }
+    Matrix4 mat = Matrix4(1.0);
+    //When converting needs to negate some of the values to the system be right handed
+    mat.mat[0] = 1.0 - 2.0 * (qy*qy + qz*qz);
+    mat.mat[1] = 2.0 * (qx*qy - qw*qz);
+    mat.mat[2] = 2.0 * (qx*qz + qw*qy);
 
-/*
-    <T>
-    1.0f - 2.0f*qy*qy - 2.0f*qz*qz,  2.0f*qx*qy - 2.0f*qz*qw,        2.0f*qx*qz + 2.0f*qy*qw,        0.0f,
-    2.0f*qx*qy + 2.0f*qz*qw,         1.0f - 2.0f*qx*qx - 2.0f*qz*qz, 2.0f*qy*qz - 2.0f*qx*qw,        0.0f,
-    2.0f*qx*qz - 2.0f*qy*qw,         2.0f*qy*qz + 2.0f*qx*qw,        1.0f - 2.0f*qx*qx - 2.0f*qy*qy, 0.0f,
-    0.0f,                            0.0f,                           0.0f,                           1.0f);
+    mat.mat[4] = 2.0 * (qx*qy + qw*qz);
+    mat.mat[5] = 1.0 - 2.0 * (qx*qx + qz*qz);
+    mat.mat[6] = 2.0 * (qy*qz - qw*qx);
+
+    mat.mat[8] = 2.0 * (qx*qz - qw*qy);
+    mat.mat[9] = 2.0 * (qy*qz + qw*qx);
+    mat.mat[10]= 1.0 - 2.0 * (qx*qx + qy*qy);
+
+    return mat;
+}
+
+/* GLM
+		Result[0][0] = T(1) - T(2) * (qyy +  qzz);
+		Result[0][1] = T(2) * (qxy + qwz);
+		Result[0][2] = T(2) * (qxz - qwy);
+
+		Result[1][0] = T(2) * (qxy - qwz);
+		Result[1][1] = T(1) - T(2) * (qxx +  qzz);
+		Result[1][2] = T(2) * (qyz + qwx);
+
+		Result[2][0] = T(2) * (qxz + qwy);
+		Result[2][1] = T(2) * (qyz - qwx);
+		Result[2][2] = T(1) - T(2) * (qxx +  qyy);
 */
 
 std::ostream& operator<<(std::ostream& stream, const Quaternion& other){
