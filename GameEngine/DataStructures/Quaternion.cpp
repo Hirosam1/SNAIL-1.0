@@ -1,7 +1,7 @@
 #include "DataStructures/Quaternion.hpp"
 
 
-Quaternion::Quaternion(): x(0.0f), y(0.0f), z(0.0f), w(0.0f){
+Quaternion::Quaternion(): x(0.0f), y(0.0f), z(0.0f), w(1.0f){
 }
 
 Quaternion::Quaternion(float x, float y, float z, float w){
@@ -46,14 +46,40 @@ Quaternion Quaternion::Multiply(const Quaternion& quat) const{
     return Quaternion(v.x,v.y,v.z,v_w);
 }
 
-// Quaternion Quaternion::Multiply(const Vector3& vec) const{
-//     float _w = -x * vec.x - y * vec.y - z * vec.z;
-//     float _x =  w * vec.x + y * vec.z - z * vec.y;
-//     float _y =  w * vec.y + z * vec.x - x * vec.z;
-//     float _z =  w * vec.z + x * vec.y - y * vec.x;
+Quaternion Quaternion::Pow(float p){
+    AxisAngle a_a = this->QuaternionToAxisAngle();
+    a_a.angle *= p;
+    return Quaternion(a_a.axis,a_a.angle); 
+}
 
-//     return Quaternion(_x,_y,_z,_w);
-// }
+Quaternion Quaternion::Inverse() const{
+    float q_sqr = w + Math::Length(Vector3(x,y,z));
+    float _w = w/q_sqr;
+    Vector3 v = -Vector3(x,y,z)/q_sqr;
+    return Quaternion(v.x,v.y,v.z,_w);
+}
+
+
+AxisAngle Quaternion::QuaternionToAxisAngle(){
+    Vector3 axis = Math::Normalize(Vector3(x,y,z));
+    float angle = acos(w) * 2.0f;
+    return AxisAngle{axis,angle};
+    
+}
+
+Quaternion Quaternion::AxisAngleToQuaternion(const AxisAngle& a_a) const{
+    return Quaternion(a_a.axis,a_a.angle);
+}
+
+Quaternion Quaternion::Slerp(const Quaternion& end, float t){
+    //a -> start
+    //b -> end
+    //t -> percentage 
+    //reads from right to left
+    //(b - a)*t + a
+
+    return (end.Multiply(this->Inverse())).Pow(t).Multiply(*this);
+}
 
 // Matrix4 Quaternion::BuildRotMat() const{
 //     Quaternion quat = this->Normalize();

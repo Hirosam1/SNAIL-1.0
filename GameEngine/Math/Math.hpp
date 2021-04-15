@@ -1,7 +1,10 @@
 #pragma once
 #include "GMpch.hpp"
+
 #include "DataStructures/Matrix.hpp"
 #include "DataStructures/Vector.hpp"
+
+#include "DataStructures/Quaternion.hpp"
 
 #include <algorithm>
 
@@ -43,12 +46,16 @@ namespace Math {
         return start + t*(end-start);
     }
 
-    inline Vector3 Lerp(Vector3 start, Vector3 end, float t){
+    inline Vector3 Lerp(const Vector3& start, const Vector3& end, float t){
         return start + t*(end - start);
     }
 
-    inline Vector4 Lerp(Vector4 start, Vector4 end, float t){
+    inline Vector4 Lerp(const Vector4& start,const Vector4& end, float t){
         return start + t*(end - start);
     }
+    
+    // inline Quaternion Lerp(const Quaternion& start, const Quaternion& end,float t){
+        
+    // }
 
 }

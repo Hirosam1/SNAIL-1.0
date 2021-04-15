@@ -2,7 +2,7 @@
 #include "DataStructures/Vector.hpp"
 #include "DataStructures/Quaternion.hpp"
 
-namespace Transformation{
+namespace Transformation{    
     inline Vector3 QuaternionToEuler(const Quaternion& quat){
         //Convert back to euler
         float x = quat.x;
@@ -37,7 +37,6 @@ namespace Transformation{
 
         return Quaternion(_x,_y,_z,_w);
     }
-
 }
 
 //
