@@ -117,7 +117,7 @@ class Game {
             go = new GameObject();
             go->PushComponentBack(new SpriteRenderer(dynamic_cast<Mesh*>(objs_init[1]), dynamic_cast<Shader*>(res_init[4]),dynamic_cast<SpriteAtlas*>(objs_init[0]),1,0));
             go->PushComponentBack(new MovingObject());
-            go->transform = new Transform(Vector3(-1.5,0.5,0.5),Vector3(0.0,ToRadians(90),0.0),Vector3(1.0,1.0,1.0));
+            go->transform = new Transform(Vector3(-1.5,0.5,0.5),Vector3(0.0,Math::ToRadians(90),0.0),Vector3(1.0,1.0,1.0));
             init_scene->AddGameObject(go);
 
             go = new GameObject();

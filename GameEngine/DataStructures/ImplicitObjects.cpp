@@ -24,7 +24,7 @@ Vector3 VectorProjection(Vector3 surface, Vector3 original){
 
 Plane3 NormalizePlane(Plane3 plane, float* n){
     float _n;
-    _n = qsqrt(plane.normal.x*plane.normal.x + plane.normal.y*plane.normal.y + plane.normal.z*plane.normal.z);
+    _n = Math::qsqrt(plane.normal.x*plane.normal.x + plane.normal.y*plane.normal.y + plane.normal.z*plane.normal.z);
     plane.normal = plane.normal/_n;
     plane.d = plane.d/_n;
     if(n != nullptr){

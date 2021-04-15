@@ -55,7 +55,7 @@ class CameraMovement : public Behaviour{
         }
         void UpdateCamera(){
             ih.HandleInput();
-            Vector3 direction(cos(ToRadians(pitch))*cos(ToRadians(yawn)),sin(ToRadians(pitch)),cos(ToRadians(pitch))*sin(ToRadians(yawn)));
+            Vector3 direction(cos(Math::ToRadians(pitch))*cos(Math::ToRadians(yawn)),sin(Math::ToRadians(pitch)),cos(Math::ToRadians(pitch))*sin(Math::ToRadians(yawn)));
             Vector3 move_pos;
             if(ih.GetInputInfo(MOVE_FORWARDS).was_activated){
                 move_pos += main_camera->Front();
@@ -64,10 +64,10 @@ class CameraMovement : public Behaviour{
                 move_pos -= main_camera->Front();
             }
             if(ih.GetInputInfo(MOVE_LEFT).was_activated){
-                move_pos -= Normalize(main_camera->Front().Cross(main_camera->Up()));
+                move_pos -= Math::Normalize(main_camera->Front().Cross(main_camera->Up()));
             }
             if(ih.GetInputInfo(MOVE_RIGHT).was_activated){
-                move_pos += Normalize(main_camera->Front().Cross(main_camera->Up()));
+                move_pos += Math::Normalize(main_camera->Front().Cross(main_camera->Up()));
             }
             if(ih.GetInputInfo(MOVE_UPWARDS).was_activated){
                 move_pos += main_camera->Up();
@@ -75,7 +75,7 @@ class CameraMovement : public Behaviour{
             if(ih.GetInputInfo(MOVE_DOWNWARDS).was_activated){
                 move_pos -= main_camera->Up();
             }
-            main_camera->game_object->transform->Translate(Normalize(Vector3(move_pos.x,0.0, move_pos.z)) * Time::deltaTime * velocity);
+            main_camera->game_object->transform->Translate(Math::Normalize(Vector3(move_pos.x,0.0, move_pos.z)) * Time::deltaTime * velocity);
             //main_camera->game_object->transform->Translate(Normalize(move_pos) * Time::deltaTime * velocity);
             main_camera->LookAt(direction, Vector3(0.0,1.0,0.0));
         }

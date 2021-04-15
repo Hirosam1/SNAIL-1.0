@@ -21,7 +21,7 @@ void Renderer::Update(GameObject* game_object){
 
 bool Renderer::TestSphereAgainstFrustum(const Transform& transform) const{
     Camera* main_camera = Scene::active_scene->main_camera;
-    float diagonal = qsqrt(transform.Scale().x*transform.Scale().x + transform.Scale().y*transform.Scale().y);
+    float diagonal = Math::qsqrt(transform.Scale().x*transform.Scale().x + transform.Scale().y*transform.Scale().y);
     ImplicitVolumes::Sphere bounding_sphere =  ImplicitVolumes::Sphere{diagonal/2.0f,
                                                                         transform.Pos()};
     ViewFrustum frustum = main_camera->Frustum();

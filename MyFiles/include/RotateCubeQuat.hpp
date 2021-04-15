@@ -3,12 +3,8 @@
 
 class RotateCubeQuat : public Behaviour{
     public:
-        float rot_speed = 5.0;
-        //This should be quat identity
-        Quaternion quat = Quaternion(0.0,0.0,0.0,1.0);
-
-
+        float rot_speed = 1.0;
         void Update() override{
-            transform->Rotate(Quaternion(Vector3(0.0,0.0,1.0),rot_speed* Time::deltaTime));
+            transform->Rotate(Quaternion(Vector3(0.0,1.0,0.0),rot_speed* Time::deltaTime));
         }
 };

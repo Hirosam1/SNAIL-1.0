@@ -21,7 +21,7 @@ Quaternion::Quaternion(const Vector3& axis, float rad_angle){
 }
 
 float Quaternion::Length() const{
-    return qsqrt(x*x+y*y+z*z+w*w);
+    return Math::qsqrt(x*x+y*y+z*z+w*w);
 }
 
 Quaternion Quaternion::Normalize() const{
@@ -41,15 +41,9 @@ Quaternion Quaternion::Conjugate() const{
 Quaternion Quaternion::Multiply(const Quaternion& quat) const{
     Vector3 v_r = Vector3(x,y,z);
     Vector3 v_s = Vector3(quat.x,quat.y,quat.z);
-
-    // float _w = w * quat.w - x * quat.x - y * quat.y - z * quat.z;
-    // float _x = x * quat.w + w * quat.x + y * quat.z - z * quat.y;
-    // float _y = y * quat.w + w * quat.y + z * quat.x - x * quat.z;
-    // float _z = z * quat.w + w * quat.z + x * quat.y - y * quat.x;
     float v_w = quat.w*w - v_s.Dot(v_r);
     Vector3 v = quat.w * v_r + w * v_s + v_r.Cross(v_s);
     return Quaternion(v.x,v.y,v.z,v_w);
-    // return Quaternion(_x,_y,_z,_w);
 }
 
 // Quaternion Quaternion::Multiply(const Vector3& vec) const{

@@ -19,14 +19,14 @@ class ObjectFollower : public Behaviour{
         void Update() override{
             if(to_follow){
                 Vector3 target = to_follow->transform->Pos() - transform->Pos();
-                if(Length(target) > 0.25f){
-                    target = Normalize(target);
+                if(Math::Length(target) > 0.25f){
+                    target = Math::Normalize(target);
                     // transform->LookAt(to_follow->transform->position);
                     //Rotates only in the y axis
                     transform->rotation.y = atan2(target.x,target.z);
                     transform->Translate(target * speed * Time::deltaTime);
                     //Limit how far it can go down based on height
-                    transform->position.y = Clamp(transform->position.y,obj_h_height,transform->position.y);
+                    transform->position.y = Math::Clamp(transform->position.y,obj_h_height,transform->position.y);
                 }
             }
         }
