@@ -20,7 +20,8 @@ struct InputConfig{
 
 class InputHandler{
     public:
-        
+        //checks if at least one key was activated
+        bool activated = false;
         InputHandler(unsigned int commands_amount){
             window = Window::main_window->window;
             input_mapping = std::map<int,int>();
@@ -35,6 +36,7 @@ class InputHandler{
             ResetInputInfo();
             for(int i = 0; i < inputs_config.size(); i++){
                 if(glfwGetKey(window,inputs_config[i].glfw_Key) == inputs_config[i].glfw_press_type){
+                    activated = true;
                     inputs_info[i].was_activated = true;
                 }
             }
@@ -58,6 +60,7 @@ class InputHandler{
             for(int i = 0; i < inputs_info.size(); i++){
                 inputs_info[i].was_activated = false;
             }
+            activated = false;
         }
     private:
         int command_position = 0;
