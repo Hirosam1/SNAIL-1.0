@@ -8,6 +8,7 @@
 
 class Quaternion {
     public:
+        Quaternion();
         Quaternion(float x, float y, float z, float w);
         Quaternion(const Vector3& axis, float rad_angle);
         Quaternion Conjugate() const;
