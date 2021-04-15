@@ -10,6 +10,8 @@
 
 #include "DataStructures/Quaternion.hpp"
 
+#include "Math/Quternion_Transform.hpp"
+
 class GameObject;
 
 class Transform : public Component{
@@ -28,12 +30,14 @@ class Transform : public Component{
         Vector3 Translate(const Vector3& move_pos);
         //Sets the rotation of the transform
         void SetRot(const Vector3& rot);
+        //Set rotation in Quaternions
+        void SetRot(const Quaternion& quat);
         //Sets the scale of the transform
         void SetScale(const Vector3& pos);
         //Adds rotation to the current rotation, carefull with gimbal lock!!
-        void AddRot(const Vector3& rot);
-        //Set rotation in Quaternions
-        void SetRot(const Quaternion& quat);
+        void Rotate(const Vector3& rot);
+        //Adds rotation to the current rotation, using quaternions
+        void Rotate(const Quaternion& quat);
         //updates rotation looking at target
         void LookAt(const Vector3& target);
         //Returns the current position

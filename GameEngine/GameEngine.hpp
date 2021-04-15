@@ -28,6 +28,7 @@
 
 #include "Math/Math.hpp"
 #include "Math/Matrix_Transform.hpp"
+#include "Math/Quternion_Transform.hpp"
 
 #include "FileIO.hpp"
 #include "Time.hpp"

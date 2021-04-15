@@ -129,9 +129,12 @@ class Game {
 
             go = new GameObject();
             go->PushComponentBack(new MeshRenderer(dynamic_cast<Mesh*>(objs_init[3]),dynamic_cast<Shader*>(res_init[5])));
-            go->PushComponentBack(new HeadFollower());
+            //go->PushComponentBack(new HeadFollower());
+            go->PushComponentBack(new RotateCubeQuat());
             go->transform->position = Vector3(0.0,1.5,0.5);
             init_scene->AddGameObject(go);
+
+
             //Camera has to be added last to avoid weird de-sync rendering
             go = new GameObject();
             go->object_name = "Main Camera";

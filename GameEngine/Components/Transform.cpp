@@ -47,12 +47,17 @@ void Transform::SetRot(const Vector3& rot){
 }
 
 void Transform::SetRot(const Quaternion& quat){
-    rotation = Transformation::ExtractEulerFromMat(quat.BuildRotMat());
+    rotation = Transformation::QuaternionToEuler(quat);
 }
 
-void Transform::AddRot(const Vector3& rot){
+void Transform::Rotate(const Vector3& rot){
     rotation = rotation + rot;
 }
+
+void Transform::Rotate(const Quaternion& quad){
+    rotation = Transformation::QuaternionToEuler(Transformation::EulerToQuaternion(rotation).Multiply(quad));
+}
+
 
 void Transform::LookAt(const Vector3& target){
     rotation = Transformation::ExtractEulerFromMat(Transformation::LookAt(position,target,Vector3(0.0,1.0,0.0f)));

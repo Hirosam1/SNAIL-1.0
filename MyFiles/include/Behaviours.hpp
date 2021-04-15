@@ -4,3 +4,4 @@
 #include "MovingObject.hpp"
 #include "ObjectFollower.hpp"
 #include "HeadFollower.hpp"
+#include "RotateCubeQuat.hpp"

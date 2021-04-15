@@ -11,7 +11,7 @@
 
 #include "DataStructures/Vector.hpp"
 
-class MEsh;
+class Mesh;
 
 //!!!  Might consider changing this to SpriteRenderer?? !!!!
 class SpriteRenderer : public Renderer{
