@@ -9,8 +9,8 @@ class RotateCubeQuat : public Behaviour{
         Vector3 current_pos;
         Vector3 pos_target = Vector3(3.0,-1.5,1.0);
         void Begin() override{
-            rot_target = Quaternion(Vector3(0.0,1.0,0.0),Math::ToRadians(90));
-            rot_target = rot_target * Quaternion(Vector3(1.0,0.0,0.0),Math::ToRadians(90));
+            rot_target = Quaternion(Vector3(0.0,1.0,0.0),Math::ToRadians(20));
+            //rot_target = rot_target * Quaternion(Vector3(1.0,0.0,0.0),Math::ToRadians(20));
             std::cout<<"Quaternion-> "<<rot_target<<"\n";
             std::cout<<"Euler     -> "<<Transformation::QuaternionToEuler(rot_target)<<"\n";
             current_pos = transform->position;

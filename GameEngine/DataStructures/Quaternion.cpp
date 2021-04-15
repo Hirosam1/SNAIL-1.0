@@ -102,15 +102,15 @@ Matrix4 Quaternion::BuildRotMat() const{
     Matrix4 mat = Matrix4(1.0);
     //When converting needs to negate some of the values to the system be right handed
     mat.mat[0] = 1.0 - 2.0 * (qy*qy + qz*qz);
-    mat.mat[1] = 2.0 * (qx*qy - qw*qz);
-    mat.mat[2] = 2.0 * (qx*qz + qw*qy);
+    mat.mat[1] = 2.0 * -(qx*qy - qw*qz);
+    mat.mat[2] = 2.0 * -(qx*qz + qw*qy);
 
-    mat.mat[4] = 2.0 * (qx*qy + qw*qz);
+    mat.mat[4] = 2.0 * -(qx*qy + qw*qz);
     mat.mat[5] = 1.0 - 2.0 * (qx*qx + qz*qz);
-    mat.mat[6] = 2.0 * (qy*qz - qw*qx);
+    mat.mat[6] = 2.0 * -(qy*qz - qw*qx);
 
-    mat.mat[8] = 2.0 * (qx*qz - qw*qy);
-    mat.mat[9] = 2.0 * (qy*qz + qw*qx);
+    mat.mat[8] = 2.0 * -(qx*qz - qw*qy);
+    mat.mat[9] = 2.0 * -(qy*qz + qw*qx);
     mat.mat[10]= 1.0 - 2.0 * (qx*qx + qy*qy);
 
     return mat;
