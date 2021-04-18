@@ -10,7 +10,7 @@ struct Vector4{
             Vector4(){x = 0.0f; y = 0.0f; z = 0.0f; a=0; if(!std::is_standard_layout<Vector4>()){std::cout<<"WARNING!! Vector 3 is not standard layout form!!!";}};
             Vector4(float x,float y,float z, float w) : x (x), y(y),z(z),w(w){if(!std::is_standard_layout<Vector4>()){std::cout<<"WARNING!! Vector 3 is not standard layout form!!!";}};
             void SetValues(float x,float y,float z,float w);
-            // Vector4(const Vector4& other) : x(other.x), y(other.y), z(other.z), w(other.w){};
+            Vector4(const Vector4& other) : x(other.x), y(other.y), z(other.z), w(other.w){};
             void operator=(const Vector4 other){this->x = other.x;this->y = other.y;this->z = other.z; this->w=other.w;};
             union{
                 struct{GLfloat x,y,z,w;};
@@ -54,7 +54,7 @@ struct Vector3{
                 struct{GLfloat r,g,b;};
             };
 
-        // Vector3(const Vector3& other) : x(other.x), y(other.y), z(other.z){};
+        Vector3(const Vector3& other) : x(other.x), y(other.y), z(other.z){};
         void operator=(const Vector3& other){this->x = other.x;this->y = other.y;this->z = other.z;};
 
         Vector3 Add(const Vector3& other)const;

@@ -9,7 +9,7 @@ class Game {
         Game(const std::string& game_name, int screen_width, int screen_height) : game_name(game_name){
             #ifdef DEBUG
                 std::cout<<std::fixed;
-                std::cout<<std::setprecision(4);
+                // std::cout<<std::setprecision(4);
                 std::cout<<"THIS IS DEBUG\n";
             #endif
             Debug::CleanErrorLog();
@@ -120,12 +120,12 @@ class Game {
             go->transform = new Transform(Vector3(-1.5,0.5,0.5),Vector3(0.0,Math::ToRadians(90),0.0),Vector3(1.0,1.0,1.0));
             init_scene->AddGameObject(go);
 
-            go = new GameObject();
-            go->object_name = "Camera Follower";
-            go->PushComponentBack(new MeshRenderer(dynamic_cast<Mesh*>(objs_init[2]),dynamic_cast<Shader*>(res_init[5])));
-            go->PushComponentBack(new ObjectFollower());
-            go->transform->SetPos(Vector3(0.0,1.5,0.5));
-            init_scene->AddGameObject(go);
+            // go = new GameObject();
+            // go->object_name = "Camera Follower";
+            // go->PushComponentBack(new MeshRenderer(dynamic_cast<Mesh*>(objs_init[2]),dynamic_cast<Shader*>(res_init[5])));
+            // go->PushComponentBack(new ObjectFollower());
+            // go->transform->SetPos(Vector3(0.0,1.5,0.5));
+            // init_scene->AddGameObject(go);
 
             go = new GameObject();
             go->PushComponentBack(new MeshRenderer(dynamic_cast<Mesh*>(objs_init[3]),dynamic_cast<Shader*>(res_init[5])));

@@ -19,12 +19,15 @@ struct Matrix4
     Matrix4 operator*(const Matrix4& mat )const;
     //Multiply element by element the two matrix
     Vector4 operator*(const Vector4& vec) const;
+    //Returns the row by overloading operator []
+    float* const operator[](unsigned int i) const;
     //Gets the n row
     Vector4 Row(int n) const;
     //Gets the n column
     Vector4 Column(int n) const;
     GLfloat mat[16];
     const GLfloat* GetPtr() const;
+
 };
 
 std::ostream& operator<<(std::ostream& stream, const Matrix4& mat);

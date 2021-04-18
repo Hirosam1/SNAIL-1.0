@@ -4,6 +4,10 @@
 Quaternion::Quaternion(): x(0.0f), y(0.0f), z(0.0f), w(1.0f){
 }
 
+Quaternion::Quaternion(const Vector4& vec) : x(vec.x), y(vec.y), z(vec.z), w(vec.w){
+    
+}
+
 Quaternion::Quaternion(float x, float y, float z, float w){
     this->x = x;
     this->y = y;
@@ -42,9 +46,9 @@ Quaternion Quaternion::Conjugate() const{
 Quaternion Quaternion::Multiply(const Quaternion& quat) const{
     Vector3 v_r = Vector3(x,y,z);
     Vector3 v_s = Vector3(quat.x,quat.y,quat.z);
-    float v_w = quat.w*w - v_s.Dot(v_r);
+    float _w = quat.w*w - v_s.Dot(v_r);
     Vector3 v = quat.w * v_r + w * v_s + v_r.Cross(v_s);
-    return Quaternion(v.x,v.y,v.z,v_w);
+    return Quaternion(v.x,v.y,v.z,_w);
 }
 
 Quaternion Quaternion::Pow(float p) const{
@@ -79,8 +83,8 @@ Quaternion Quaternion::Slerp(const Quaternion& end, float t) const{
     //t -> percentage 
     //reads from right to left
     //(b - a)*t + a
-
     return (end * this->Inverse()).Pow(t) * *this;
+
 }
 
 Vector3 Quaternion::Vec() const{
@@ -100,18 +104,17 @@ Matrix4 Quaternion::BuildRotMat() const{
     float qw = quat.w;
 
     Matrix4 mat = Matrix4(1.0);
-    //When converting needs to negate some of the values to the system be right handed
-    mat.mat[0] = 1.0 - 2.0 * (qy*qy + qz*qz);
-    mat.mat[1] = 2.0 * -(qx*qy - qw*qz);
-    mat.mat[2] = 2.0 * -(qx*qz + qw*qy);
+    mat[0][0] = 1.0f - 2.0 * (qy * qy + qz * qz);
+    mat[0][1] = 2.0 * (qx*qy + qw*qz);
+    mat[0][2] = 2.0 * (qx*qz - qw*qy);
 
-    mat.mat[4] = 2.0 * -(qx*qy + qw*qz);
-    mat.mat[5] = 1.0 - 2.0 * (qx*qx + qz*qz);
-    mat.mat[6] = 2.0 * -(qy*qz - qw*qx);
+    mat[1][0] = 2.0 * (qx*qy - qw*qz);
+    mat[1][1] = 1.0 - 2.0 * (qx*qx + qz*qz);
+    mat[1][2] = 2.0 * (qy*qz + qw*qx);
 
-    mat.mat[8] = 2.0 * -(qx*qz - qw*qy);
-    mat.mat[9] = 2.0 * -(qy*qz + qw*qx);
-    mat.mat[10]= 1.0 - 2.0 * (qx*qx + qy*qy);
+    mat[2][0] = 2.0 * (qx*qz + qw*qy);
+    mat[2][1] = 2.0 * (qy*qz - qw*qx);
+    mat[2][2] = 1.0 - 2.0 * (qx*qx + qy*qy);
 
     return mat;
 }

@@ -18,6 +18,7 @@ class Quaternion {
         Quaternion();
         Quaternion(float x, float y, float z, float w);
         Quaternion(const Vector3& axis, float rad_angle);
+        Quaternion(const Vector4& vec);
         Quaternion Conjugate() const;
         //Multiply by "adding" two quaternions together
         Quaternion Multiply(const Quaternion& quat) const;

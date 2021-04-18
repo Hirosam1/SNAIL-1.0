@@ -118,6 +118,10 @@ Vector4 Matrix4::operator*(const Vector4& vec)const{
     return Dot(vec);
 }
 
+float* const Matrix4::operator[](unsigned int i) const{
+    return (float* const) &mat[i*4];
+}
+
 std::ostream& operator<<(std::ostream& stream, const Matrix4& mat){
 
     const float* mat_f = (const float*) mat.mat;

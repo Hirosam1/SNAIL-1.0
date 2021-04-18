@@ -55,7 +55,7 @@ void Transform::Rotate(const Vector3& rot){
 }
 
 void Transform::Rotate(const Quaternion& quad){
-    rotation = Transformation::QuaternionToEuler(Transformation::EulerToQuaternion(rotation).Multiply(quad));
+    rotation = Transformation::QuaternionToEuler(Transformation::EulerToQuaternion(rotation) * (quad));
 }
 
 

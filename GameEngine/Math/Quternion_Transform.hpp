@@ -4,7 +4,13 @@
 
 namespace Transformation{    
     inline Vector3 QuaternionToEuler(const Quaternion& quat){
-        return Transformation::ExtractEulerFromMat(quat.BuildRotMat());     
+        Vector3 euler = Transformation::ExtractEulerFromMat(quat.BuildRotMat());
+        //Limits rotation to -2pi to 2pi
+        // euler.x = Math::Clamp(euler.x,-2.0*Math::pi,2.0*Math::pi);
+        // euler.y = Math::Clamp(euler.y,-2.0*Math::pi,2.0*Math::pi);
+        // euler.z = Math::Clamp(euler.z,-2.0*Math::pi,2.0*Math::pi);
+        
+        return euler;     
     }
 
     inline Quaternion EulerToQuaternion(const Vector3& vec){
@@ -16,24 +22,90 @@ namespace Transformation{
 
         float sin_z = sin(vec.z/2.0f);
         float cos_z = cos(vec.z/2.0f);
-        //convert this rotation to quaternion
-        float _x = sin_x * cos_y * cos_z - cos_x * sin_y * sin_z;
-        float _y = cos_x * sin_y * cos_z + sin_x * cos_y * sin_z;
-        float _z = cos_x * cos_y * sin_z - sin_x * sin_y * cos_z;
-        float _w = cos_x * cos_y * cos_z + sin_x * sin_y * sin_z;
 
-        return Quaternion(_x,_y,_z,_w);
+        return Quaternion(
+            sin_x*cos_y*cos_z - cos_x*sin_y*sin_z,
+            cos_x*sin_y*cos_z + sin_x*cos_y*sin_z,
+            cos_x*cos_y*sin_z - sin_x*sin_y*cos_z,
+            cos_x*cos_y*cos_z + sin_x*sin_y*sin_z);
+        //--------------------------------------------------------------------------------
+
+
     }
-}
-/*
-    
-    this->x = s.x * c.y * c.z - c.x * s.y * s.z;
-    this->y = c.x * s.y * c.z + s.x * c.y * s.z;
-    this->z = c.x * c.y * s.z - s.x * s.y * c.z; 
-    this->w = c.x * c.y * c.z + s.x * s.y * s.z;
-*/
 
-//
-//x = z
-//y = x
-//z = y
+    inline Quaternion Matrix4ToQuaternion(const Matrix4& rot_mat){
+        float fourXSquaredMinus1 = rot_mat[0][0] - rot_mat[1][1] - rot_mat[2][2];
+        float fourYSquaredMinus1 = rot_mat[1][1] - rot_mat[0][0] - rot_mat[2][2];
+        float fourZSquaredMinus1 = rot_mat[2][2] - rot_mat[0][0] - rot_mat[1][1];
+        float fourWSquaredMinus1 = rot_mat[0][0] + rot_mat[1][1] + rot_mat[2][2];
+
+        int biggestIndex = 0;
+        float fourBiggestSquaredMinus1 = fourWSquaredMinus1;
+        if(fourXSquaredMinus1 > fourBiggestSquaredMinus1){
+            fourBiggestSquaredMinus1 = fourXSquaredMinus1;
+            biggestIndex = 1;
+        }
+        if(fourYSquaredMinus1 > fourBiggestSquaredMinus1){
+            fourBiggestSquaredMinus1 = fourYSquaredMinus1;
+            biggestIndex = 2;
+        }
+        if(fourZSquaredMinus1 > fourBiggestSquaredMinus1){
+            fourBiggestSquaredMinus1 = fourZSquaredMinus1;
+            biggestIndex = 3;
+        }
+
+        float biggestVal = Math::qsqrt(fourBiggestSquaredMinus1 + 1.0f) * 0.5f;
+        float mult = 0.25f/ biggestVal;
+
+        switch (biggestIndex)
+        {
+            case 0:
+                return Quaternion((rot_mat[1][2] - rot_mat[2][1]) * mult,
+                                (rot_mat[2][0] - rot_mat[0][2]) * mult,
+                                (rot_mat[0][1] - rot_mat[1][0]) *  mult,
+                                biggestVal);
+            case 1:
+                return Quaternion(biggestVal, 
+                                (rot_mat[0][1] + rot_mat[1][0]) * mult, 
+                                (rot_mat[2][0] + rot_mat[0][2]) * mult, 
+                                (rot_mat[1][2] - rot_mat[2][1]) * mult);
+            case 2:
+                return Quaternion((rot_mat[0][1] + rot_mat[1][0]) * mult,
+                                biggestVal,
+                                (rot_mat[1][2] + rot_mat[2][1]) * mult,
+                                (rot_mat[2][0] - rot_mat[0][2]) * mult);
+            case 3:
+                return Quaternion((rot_mat[2][0] + rot_mat[0][2]) * mult,
+                                (rot_mat[1][2] + rot_mat[2][1]) * mult,
+                                biggestVal,
+                                (rot_mat[0][1] - rot_mat[1][0]) * mult);
+            default:
+                return Quaternion(0.0f,0.0f,0.0f,1.0f);
+        }
+    }
+
+}
+
+
+
+// {
+    // float sin_x = sin(vec.x/2.0f);
+    // float cos_x = cos(vec.x/2.0f);
+
+    // float sin_y = sin(vec.y/2.0f);
+    // float cos_y = cos(vec.y/2.0f);
+
+    // float sin_z = sin(vec.z/2.0f);
+    // float cos_z = cos(vec.z/2.0f);
+
+    // return Quaternion(
+    //     sin_x*cos_y*cos_z + cos_x*sin_y*sin_z,
+    //     cos_x*sin_y*cos_z - sin_x*cos_y*sin_z,
+    //     cos_x*cos_y*sin_z + sin_x*sin_y*cos_z,
+    //     cos_x*cos_y*cos_z - sin_x*sin_y*sin_z);
+// }
+
+//    sx*cy*cz + cx*sy*sz,
+//    cx*sy*cz - sx*cy*sz,
+//    cx*cy*sz + sx*sy*cz 
+//    cx*cy*cz - sx*sy*sz
