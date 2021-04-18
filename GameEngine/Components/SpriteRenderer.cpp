@@ -21,7 +21,7 @@ void SpriteRenderer::Draw(const Matrix4& MVP, const Shader& shader){
 
 
 Transform SpriteRenderer::BuildTransform(const Transform& transform) const{
-     return Transform(transform.Pos(),transform.Rot(),transform.Scale() * sprite_scale);
+    return Transform(transform.position,transform.rotation,transform.scale * sprite_scale);
 }
 
 void SpriteRenderer::SetAtlasCoordinate(const Vector2&  atlas_coords){

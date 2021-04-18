@@ -2,21 +2,23 @@
 
 Transform::Transform(){
     position = Vector3();
-    rotation = Vector3();
+    rotation = Quaternion();
     scale = Vector3(1.0f,1.0f,1.0f);
     model_mat = Matrix4(1.0);
     BuildMat();
 }
 
-Transform::Transform(const Vector3& pos, const Vector3& rot, const Vector3& scale): position(pos), rotation(rot), scale(scale){
+Transform::Transform(const Vector3& pos, const Vector3& rot, const Vector3& scale): position(pos), 
+                                                                                    rotation(Transformation::EulerToQuaternion(rot)), 
+                                                                                    scale(scale){
     BuildMat();
 }
 
+Transform::Transform(const Vector3& pos, const Quaternion& rot, const Vector3& scale) : position(pos), rotation(rot), scale(scale){BuildMat();}
+
 void Transform::BuildMat(){
     model_mat = Transformation::Translate( Matrix4(1.0f),position);
-    model_mat = Transformation::RotateX(model_mat,rotation.x);
-    model_mat = Transformation::RotateY(model_mat,rotation.y);
-    model_mat = Transformation::RotateZ(model_mat,rotation.z);
+    model_mat = model_mat * rotation.BuildRotMat();
     model_mat = Transformation::Scale(model_mat,scale);
 }
 
@@ -43,24 +45,24 @@ void Transform::SetScale(const Vector3& scale){
 }
 
 void Transform::SetRot(const Vector3& rot){
-    rotation = rot;
+    rotation = Transformation::EulerToQuaternion(rot);
 }
 
 void Transform::SetRot(const Quaternion& quat){
-    rotation = Transformation::QuaternionToEuler(quat);
+    rotation = quat;
 }
 
 void Transform::Rotate(const Vector3& rot){
-    rotation = rotation + rot;
+    rotation = Transformation::EulerToQuaternion(rot) * rotation;
 }
 
 void Transform::Rotate(const Quaternion& quad){
-    rotation = Transformation::QuaternionToEuler(Transformation::EulerToQuaternion(rotation) * (quad));
+    rotation = quad * rotation;
 }
 
 
 void Transform::LookAt(const Vector3& target){
-    rotation = Transformation::ExtractEulerFromMat(Transformation::LookAt(position,target,Vector3(0.0,1.0,0.0f)));
+    rotation = Transformation::Matrix4ToQuaternion(Transformation::LookAt(position,target,Vector3(0.0,1.0,0.0f)));
 }
 
 const Matrix4& Transform::ModelMat() const{
@@ -75,6 +77,6 @@ const Vector3& Transform::Pos() const{
     return position;
 }
 
-const Vector3& Transform::Rot() const{
+const Quaternion& Transform::Rot() const{
     return rotation;
 }

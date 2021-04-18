@@ -4,7 +4,7 @@
 
 namespace Transformation{    
     inline Vector3 QuaternionToEuler(const Quaternion& quat){
-        Vector3 euler = Transformation::ExtractEulerFromMat(quat.BuildRotMat());
+        Vector3 euler = Transformation::Matrix4ToEuler(quat.BuildRotMat());
         //Limits rotation to -2pi to 2pi
         // euler.x = Math::Clamp(euler.x,-2.0*Math::pi,2.0*Math::pi);
         // euler.y = Math::Clamp(euler.y,-2.0*Math::pi,2.0*Math::pi);
@@ -22,12 +22,12 @@ namespace Transformation{
 
         float sin_z = sin(vec.z/2.0f);
         float cos_z = cos(vec.z/2.0f);
-
+        //This looks like XYZ application order? Why does it works with camera->LookAt??
         return Quaternion(
-            sin_x*cos_y*cos_z - cos_x*sin_y*sin_z,
-            cos_x*sin_y*cos_z + sin_x*cos_y*sin_z,
-            cos_x*cos_y*sin_z - sin_x*sin_y*cos_z,
-            cos_x*cos_y*cos_z + sin_x*sin_y*sin_z);
+            sin_x*cos_y*cos_z + cos_x*sin_y*sin_z,
+            cos_x*sin_y*cos_z - sin_x*cos_y*sin_z,
+            cos_x*cos_y*sin_z + sin_x*sin_y*cos_z,
+            cos_x*cos_y*cos_z - sin_x*sin_y*sin_z);
         //--------------------------------------------------------------------------------
 
 

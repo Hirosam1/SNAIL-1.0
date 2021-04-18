@@ -8,7 +8,7 @@
 
 namespace Transformation{
     //Extracts euler rotation from matrix, matrix must be not scaled
-    inline Vector3 ExtractEulerFromMat(const Matrix4& mat){
+    inline Vector3 Matrix4ToEuler(const Matrix4& mat){
         float x,y,z;
         x = atan2(mat.Row(2).y,mat.Row(2).z);
         float cosY = sqrt(mat.Row(0).x*mat.Row(0).x + mat.Row(1).x *mat.Row(1).x);

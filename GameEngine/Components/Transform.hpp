@@ -20,10 +20,12 @@ class Transform : public Component{
         Transform();
         //Copy transform
         Transform(const Transform& transform) : position(Vector3(transform.Pos())),
-                                                rotation(Vector3(transform.Rot())),
+                                                rotation(transform.Rot()),
                                                 scale(Vector3(transform.Scale())){BuildMat();}
+
         //Create a transform with the given paramters
         Transform(const Vector3& pos, const Vector3& rot, const Vector3& scale);
+        Transform(const Vector3& pos, const Quaternion& rot, const Vector3& scale);
         //Sets the transform position
         void SetPos(const Vector3& pos);
         //Moves from current position to the move position
@@ -43,7 +45,7 @@ class Transform : public Component{
         //Returns the current position
         const Vector3& Pos() const;
         //Returns the current rotation
-        const Vector3& Rot() const;
+        const Quaternion& Rot() const;
         //Returns the current Scale
         const Vector3& Scale() const;
         //Returns the model matrix
@@ -54,7 +56,7 @@ class Transform : public Component{
         //transform position
         Vector3 position;
         //transform rotation
-        Vector3 rotation;
+        Quaternion rotation;
         //transform scale
         Vector3 scale;
     private:
