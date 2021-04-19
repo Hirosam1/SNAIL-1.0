@@ -2,15 +2,9 @@
 #include "DataStructures/Vector.hpp"
 #include "DataStructures/Quaternion.hpp"
 
-namespace Transformation{    
+namespace Quat{
     inline Vector3 QuaternionToEuler(const Quaternion& quat){
-        Vector3 euler = Transformation::Matrix4ToEuler(quat.BuildRotMat());
-        //Limits rotation to -2pi to 2pi
-        // euler.x = Math::Clamp(euler.x,-2.0*Math::pi,2.0*Math::pi);
-        // euler.y = Math::Clamp(euler.y,-2.0*Math::pi,2.0*Math::pi);
-        // euler.z = Math::Clamp(euler.z,-2.0*Math::pi,2.0*Math::pi);
-        
-        return euler;     
+        return quat.QuaternionToEuler();
     }
 
     inline Quaternion EulerToQuaternion(const Vector3& vec){
@@ -18,7 +12,7 @@ namespace Transformation{
         float cos_x = cos(vec.x/2.0f);
 
         float sin_y = sin(vec.y/2.0f);
-        float cos_y = cos(vec.y/2.0f);
+        float cos_y = cos(vec.y/2.0f); 
 
         float sin_z = sin(vec.z/2.0f);
         float cos_z = cos(vec.z/2.0f);
@@ -28,9 +22,6 @@ namespace Transformation{
             cos_x*sin_y*cos_z - sin_x*cos_y*sin_z,
             cos_x*cos_y*sin_z + sin_x*sin_y*cos_z,
             cos_x*cos_y*cos_z - sin_x*sin_y*sin_z);
-        //--------------------------------------------------------------------------------
-
-
     }
 
     inline Quaternion Matrix4ToQuaternion(const Matrix4& rot_mat){
@@ -85,27 +76,3 @@ namespace Transformation{
     }
 
 }
-
-
-
-// {
-    // float sin_x = sin(vec.x/2.0f);
-    // float cos_x = cos(vec.x/2.0f);
-
-    // float sin_y = sin(vec.y/2.0f);
-    // float cos_y = cos(vec.y/2.0f);
-
-    // float sin_z = sin(vec.z/2.0f);
-    // float cos_z = cos(vec.z/2.0f);
-
-    // return Quaternion(
-    //     sin_x*cos_y*cos_z + cos_x*sin_y*sin_z,
-    //     cos_x*sin_y*cos_z - sin_x*cos_y*sin_z,
-    //     cos_x*cos_y*sin_z + sin_x*sin_y*cos_z,
-    //     cos_x*cos_y*cos_z - sin_x*sin_y*sin_z);
-// }
-
-//    sx*cy*cz + cx*sy*sz,
-//    cx*sy*cz - sx*cy*sz,
-//    cx*cy*sz + sx*sy*cz 
-//    cx*cy*cz - sx*sy*sz

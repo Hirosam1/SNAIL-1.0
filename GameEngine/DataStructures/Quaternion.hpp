@@ -5,6 +5,7 @@
 #include "DataStructures/Matrix.hpp"
 
 #include "Math/Math.hpp"
+#include "Math/Matrix_Transform.hpp"
 
 
 struct AxisAngle
@@ -33,6 +34,7 @@ class Quaternion {
         AxisAngle QuaternionToAxisAngle() const;
         //Convert Rodriguez angle axis rotation back to quaternions
         Quaternion AxisAngleToQuaternion(const AxisAngle& axis_angle) const;
+        Vector3 QuaternionToEuler() const;
         Matrix4 BuildRotMat() const;
         //Spherical interpolation
         Quaternion Slerp(const Quaternion& end, float t) const;
@@ -40,7 +42,8 @@ class Quaternion {
         Vector3 Vec() const;
         //Operators overloading
         Quaternion operator*(const Quaternion& quad) const;
-
+        //Cast quaternion into a vector4
+        Vector4 Vec4Cast() const;
         float x,y,z,w;
        
 };

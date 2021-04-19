@@ -11,49 +11,65 @@ class RotateCubeQuat : public Behaviour{
 
         Vector3 pos_A;
         Vector3 pos_B = Vector3(3.0,-1.5,1.0);
+        Vector3 pos_prev;
         Vector3 pos_target;
 
         Quaternion rot_A = Quaternion();
         Quaternion rot_B;
+        Quaternion rot_prev;
         Quaternion rot_target;
 
         bool released = true;
+
+        float time_duration = 4.0;
+        float time_elapsed = 0.0;
 
         InputHandler ih = InputHandler(2);
         void Begin() override{
             rot_B = Quaternion(Vector3(0.0,1.0,0.0), Math::ToRadians(90));
             rot_B = rot_B * Quaternion(Vector3(1.0,0.0,0.0), Math::ToRadians(90));
             pos_A = transform->position;
+
             rot_target = rot_B;
             pos_target = pos_B;
+            pos_prev = pos_A;
+            rot_prev = rot_A;
+
             ih.AddCommandBack(GLFW_KEY_Z,GLFW_PRESS,CHANGE_POS_PRESS);
             ih.AddCommandBack(GLFW_KEY_Z,GLFW_RELEASE,CHANGE_POS_RELEASE);
         }
 
         void Update() override{
             ih.HandleInput();
-
+            float t =time_elapsed/time_duration;
             if(ih.GetInputInfo(CHANGE_POS_PRESS).was_activated && released){
+                
+                
                 released= false;
                 if(pos_target == pos_B){
                     pos_target = pos_A;
                     rot_target = rot_A;
+                    pos_prev = pos_B;
+                    rot_prev = rot_B;
                 }else{
                     pos_target = pos_B;
                     rot_target = rot_B;
+                    pos_prev = pos_A;
+                    rot_prev = rot_A;
                 }
+                // float p_dist = Vector::Length(transform->position - pos_prev) /Vector::Length(pos_prev - pos_target) ;
+                float p_dist = 1.0 - t;
+                time_elapsed = p_dist * time_duration;
+                t = time_elapsed/time_duration;
             }
             if(ih.GetInputInfo(CHANGE_POS_RELEASE).was_activated){
                 released = true;
             }
-
-            if(Math::Length((rot_target * transform->rotation.Inverse()).Vec()) > 0.005f ){
-                transform->position = Math::Lerp(transform->position,pos_target,speed * Time::deltaTime);
-                transform->rotation = transform->rotation.Slerp(rot_target, speed * Time::deltaTime);
-            }else{
-                transform->rotation = rot_target;
-                transform->position = pos_target;
+           
+            if(t < 1.0){
+                time_elapsed += Time::deltaTime;
+                transform->position = Vector::Lerp(pos_prev,pos_target, t);
+                transform->rotation = rot_prev.Slerp(rot_target, t);
             }
-
         } 
 };

@@ -14,19 +14,20 @@ class ObjectFollower : public Behaviour{
                                 Vector3(1.0,renderer->mesh->texture->image_data.height/(float) renderer->mesh->texture->image_data.width,1.0);
             transform->SetScale(new_scale);
             obj_h_height = (float)transform->scale.y/2.0f;
+            transform->position = Vector3(transform->position.x,obj_h_height,transform->position.z);
         }
 
         void Update() override{
             if(to_follow){
-                Vector3 target = to_follow->transform->Pos() - transform->Pos();
-                if(Math::Length(target) > 0.25f){
-                    target = Math::Normalize(target);
+                Vector3 target = Vector3(to_follow->transform->Pos().x,0.0,to_follow->transform->Pos().z) - Vector3(transform->Pos().x,0.0,transform->Pos().z);
+                if(Vector::Length(target) > 0.20f){
+                    target = Vector::Normalize(target);
                     // transform->LookAt(to_follow->transform->position);
                     //Rotates only in the y axis
                     transform->SetRot(Vector3(0.0f,atan2(target.x,target.z),0.0f));
                     transform->Translate(target * speed * Time::deltaTime);
                     //Limit how far it can go down based on height
-                    transform->position.y = Math::Clamp(transform->position.y,obj_h_height,transform->position.y);
+                    // transform->position.y = Math::Clamp(transform->position.y,,transform->position.y);
                 }
             }
         }

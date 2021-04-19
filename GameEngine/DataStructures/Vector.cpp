@@ -77,8 +77,13 @@ Vector4 Vector4::operator/(const float val) const{
 }
 
 //Matrix products ---------------------------------
-float Vector4::Dot(const Vector4& other){
+float Vector4::Dot(const Vector4& other) const{
     return (x * other.x + y * other.y + z * other.z + w  *other.w);
+}
+
+
+Vector4 Vector4::Lerp(const Vector4& end, float t) const{
+    return *this + t*(end - *this);
 }
 
 //Printing
@@ -94,6 +99,10 @@ Vector4 operator*(float a, const Vector4& vec){
 
 Vector4 operator-(const Vector4& vec){
     return Vector4(-vec.x,-vec.y,-vec.z,-vec.w);
+}
+
+bool Vector4::operator==(const Vector4& other) const{
+    return (x == other.x && y == other.y && z == other.z && w == other.w);
 }
 
 #pragma endregion
@@ -182,8 +191,8 @@ float Vector3::Dot(const Vector3& other) const{
     return (x * other.x + y * other.y + z * other.z);
 }
 
-bool Vector3::operator==(const Vector3& other){
-    return (x == other.x && y == other.y && z == other.z);
+Vector3 Vector3::Lerp(const Vector3& end, float t) const{
+    return *this + t*(end - *this);
 }
 
 //Printing
@@ -202,6 +211,10 @@ Vector3 operator-(float a, const Vector3& vec){
 
 Vector3 operator-(const Vector3& vec){
     return Vector3(-vec.x,-vec.y,-vec.z);
+}
+
+bool Vector3::operator==(const Vector3& other) const{
+    return (x == other.x && y == other.y && z == other.z);
 }
 
 #pragma endregion
@@ -278,6 +291,10 @@ Vector2 Vector2::Rotate(float angle){
 }
 
 
+Vector2 Vector2::Lerp(const Vector2& end , float t){
+    return *this + t*(end - *this);
+}
+
 //Printing
 std::ostream& operator<<(std::ostream& stream, const Vector2& other){
     stream <<"(" <<other.x <<", " << other.y <<")";
@@ -287,5 +304,10 @@ std::ostream& operator<<(std::ostream& stream, const Vector2& other){
 Vector2 operator*(float a,const Vector2& vec){
     return vec.Multiply(a);
 }
+
+bool Vector2::operator==(const Vector2& other) const{
+    return (x == other.x && y == other.y);
+}
+
 #pragma endregion
 

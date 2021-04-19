@@ -57,7 +57,7 @@ void Camera::SetCameraDir(const Vector3& dir){
 void Camera::LookAt(const Vector3& target, const Vector3& up){
     if(game_object){
         Transform* tranform = game_object->transform;
-        tranform->SetRot(Transformation::Matrix4ToQuaternion(Transformation::CamLookAt(tranform->Pos(),tranform->Pos() + target,up)));
+        tranform->SetRot(Quat::Matrix4ToQuaternion(Matrix::CamLookAt(tranform->Pos(),tranform->Pos() + target,up)));
     }
 }
 
@@ -66,7 +66,7 @@ void Camera::BuildMat(){
         Transform* tranform = game_object->transform;
         view = Matrix4(1.0f);
         view = tranform->rotation.BuildRotMat();
-        view = Transformation::Translate(view, -tranform->Pos());
+        view = Matrix::Translate(view, -tranform->Pos());
         Vector4 column = tranform->ModelMat().Column(2);
         camera_front = -Vector3(column.x,column.y,column.z);
     }

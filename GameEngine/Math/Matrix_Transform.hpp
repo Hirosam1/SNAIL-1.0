@@ -6,7 +6,7 @@
 
 #include "Math/Math.hpp"
 
-namespace Transformation{
+namespace Matrix{
     //Extracts euler rotation from matrix, matrix must be not scaled
     inline Vector3 Matrix4ToEuler(const Matrix4& mat){
         float x,y,z;
@@ -130,8 +130,8 @@ namespace Transformation{
     //Creates a matrix transformation that is the inverse of look at, usefull for camera look at
     inline Matrix4 CamLookAt(Vector3 pos, Vector3 target, Vector3 up){
         Matrix4 look(1.0);
-        Vector3 z_axis = Math::Normalize(pos - target);
-        Vector3 x_axis = Math::Normalize(up.Cross(z_axis));
+        Vector3 z_axis = Vector::Normalize(pos - target);
+        Vector3 x_axis = Vector::Normalize(up.Cross(z_axis));
         Vector3 y_axis = z_axis.Cross(x_axis);
 
         look.mat[0] = x_axis.x;
@@ -156,8 +156,8 @@ namespace Transformation{
     //Creates a matrix transformation that looks at target
     inline Matrix4 LookAt(Vector3 pos, Vector3 target, Vector3 up){
         Matrix4 look(1.0);
-        Vector3 z_axis = Math::Normalize(target - pos);
-        Vector3 x_axis = Math::Normalize(up.Cross(z_axis));
+        Vector3 z_axis = Vector::Normalize(target - pos);
+        Vector3 x_axis = Vector::Normalize(up.Cross(z_axis));
         Vector3 y_axis = z_axis.Cross(x_axis);
 
         look.mat[0] = x_axis.x;

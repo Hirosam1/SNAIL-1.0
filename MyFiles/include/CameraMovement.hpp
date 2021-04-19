@@ -64,10 +64,10 @@ class CameraMovement : public Behaviour{
                     move_pos -= main_camera->Front();
                 }
                 if(ih.GetInputInfo(MOVE_LEFT).was_activated){
-                    move_pos -= Math::Normalize(main_camera->Front().Cross(main_camera->Up()));
+                    move_pos -= Vector::Normalize(main_camera->Front().Cross(main_camera->Up()));
                 }
                 if(ih.GetInputInfo(MOVE_RIGHT).was_activated){
-                    move_pos += Math::Normalize(main_camera->Front().Cross(main_camera->Up()));
+                    move_pos += Vector::Normalize(main_camera->Front().Cross(main_camera->Up()));
                 }
                 if(ih.GetInputInfo(MOVE_UPWARDS).was_activated){
                     move_pos += main_camera->Up();
@@ -75,7 +75,7 @@ class CameraMovement : public Behaviour{
                 if(ih.GetInputInfo(MOVE_DOWNWARDS).was_activated){
                     move_pos -= main_camera->Up();
                 }
-            main_camera->game_object->transform->Translate(Math::Normalize(move_pos) * velocity * Time::deltaTime);
+            main_camera->game_object->transform->Translate(Vector::Normalize(move_pos) * velocity * Time::deltaTime);
             main_camera->LookAt(direction, Vector3(0.0,1.0,0.0));
         }
         void Update() override{

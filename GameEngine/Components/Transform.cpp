@@ -9,7 +9,7 @@ Transform::Transform(){
 }
 
 Transform::Transform(const Vector3& pos, const Vector3& rot, const Vector3& scale): position(pos), 
-                                                                                    rotation(Transformation::EulerToQuaternion(rot)), 
+                                                                                    rotation(Quat::EulerToQuaternion(rot)), 
                                                                                     scale(scale){
     BuildMat();
 }
@@ -17,9 +17,9 @@ Transform::Transform(const Vector3& pos, const Vector3& rot, const Vector3& scal
 Transform::Transform(const Vector3& pos, const Quaternion& rot, const Vector3& scale) : position(pos), rotation(rot), scale(scale){BuildMat();}
 
 void Transform::BuildMat(){
-    model_mat = Transformation::Translate( Matrix4(1.0f),position);
+    model_mat = Matrix::Translate( Matrix4(1.0f),position);
     model_mat = model_mat * rotation.BuildRotMat();
-    model_mat = Transformation::Scale(model_mat,scale);
+    model_mat = Matrix::Scale(model_mat,scale);
 }
 
 Vector3 Transform::Front() const{
@@ -45,7 +45,7 @@ void Transform::SetScale(const Vector3& scale){
 }
 
 void Transform::SetRot(const Vector3& rot){
-    rotation = Transformation::EulerToQuaternion(rot);
+    rotation = Quat::EulerToQuaternion(rot);
 }
 
 void Transform::SetRot(const Quaternion& quat){
@@ -53,7 +53,7 @@ void Transform::SetRot(const Quaternion& quat){
 }
 
 void Transform::Rotate(const Vector3& rot){
-    rotation = Transformation::EulerToQuaternion(rot) * rotation;
+    rotation = Quat::EulerToQuaternion(rot) * rotation;
 }
 
 void Transform::Rotate(const Quaternion& quad){
@@ -62,7 +62,7 @@ void Transform::Rotate(const Quaternion& quad){
 
 
 void Transform::LookAt(const Vector3& target){
-    rotation = Transformation::Matrix4ToQuaternion(Transformation::LookAt(position,target,Vector3(0.0,1.0,0.0f)));
+    rotation = Quat::Matrix4ToQuaternion(Matrix::LookAt(position,target,Vector3(0.0,1.0,0.0f)));
 }
 
 const Matrix4& Transform::ModelMat() const{

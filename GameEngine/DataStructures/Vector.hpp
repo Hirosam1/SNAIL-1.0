@@ -37,8 +37,12 @@ struct Vector4{
         Vector4 Divide(const float val) const;
         Vector4 operator/(const float val) const;
 
-        float Dot(const Vector4& other);
+        float Dot(const Vector4& other) const;
         //friend std::ostream& operator<<(std::ostream&, const MathS::Vector4&);
+        //Linear interpolation
+        Vector4 Lerp(const Vector4& end, float t) const;
+
+        bool operator==(const Vector4& other) const;
 
     };
 
@@ -83,8 +87,9 @@ struct Vector3{
 
         float Dot(const Vector3& other) const;
         //friend std::ostream& operator<<(std::ostream&, const MathS::Vector3&);
+        Vector3 Lerp(const Vector3& end, float t) const;
 
-        bool operator==(const Vector3& other);
+        bool operator==(const Vector3& other) const;
 
     };
 
@@ -121,6 +126,10 @@ struct Vector2{
         Vector2 operator/(const float val) const;
 
         Vector2 Rotate(const float angle);
+
+        Vector2 Lerp(const Vector2& end, float t);
+
+        bool operator==(const Vector2& other) const;
 
     };
 

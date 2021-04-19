@@ -18,11 +18,10 @@ Quaternion::Quaternion(float x, float y, float z, float w){
 Quaternion::Quaternion(const Vector3& axis, float rad_angle){
     w = cos(rad_angle/2.0f);
     float sin_a = sin(rad_angle/2.0f);
-    axis = Math::Normalize(axis);
+    axis = Vector::Normalize(axis);
     x = sin_a * axis.x;
     y = sin_a * axis.y;
     z = sin_a * axis.z;
-
 }
 
 float Quaternion::Length() const{
@@ -58,7 +57,7 @@ Quaternion Quaternion::Pow(float p) const{
 }
 
 Quaternion Quaternion::Inverse() const{
-    float length =  Math::Length(Vector3(x,y,z));
+    float length =  Vector::Length(Vector3(x,y,z));
     float q_sqr = w*w + length*length;
     float _w = w/q_sqr;
     Vector3 v = -Vector3(x,y,z)/q_sqr;
@@ -67,7 +66,7 @@ Quaternion Quaternion::Inverse() const{
 
 
 AxisAngle Quaternion::QuaternionToAxisAngle() const{
-    Vector3 axis = Math::Normalize(Vector3(x,y,z));
+    Vector3 axis = Vector::Normalize(Vector3(x,y,z));
     float angle = acos(w) * 2.0f;
     return AxisAngle{axis,angle};
     
@@ -129,19 +128,13 @@ Matrix4 Quaternion::BuildRotMat() const{
     return mat;
 }
 
-/* GLM
-		Result[0][0] = T(1) - T(2) * (qyy +  qzz);
-		Result[0][1] = T(2) * (qxy + qwz);
-		Result[0][2] = T(2) * (qxz - qwy);
+Vector3 Quaternion::QuaternionToEuler() const{
+    return Matrix::Matrix4ToEuler(this->BuildRotMat());
+}
 
-		Result[1][0] = T(2) * (qxy - qwz);
-		Result[1][1] = T(1) - T(2) * (qxx +  qzz);
-		Result[1][2] = T(2) * (qyz + qwx);
-
-		Result[2][0] = T(2) * (qxz + qwy);
-		Result[2][1] = T(2) * (qyz - qwx);
-		Result[2][2] = T(1) - T(2) * (qxx +  qyy);
-*/
+Vector4 Quaternion::Vec4Cast() const{
+    return Vector4(x,y,z,w);
+}
 
 std::ostream& operator<<(std::ostream& stream, const Quaternion& other){
     stream <<"(" <<other.x <<", " << other.y <<", " <<other.z<<", " << other.w <<")";

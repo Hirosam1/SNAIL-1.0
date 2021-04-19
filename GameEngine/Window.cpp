@@ -29,7 +29,7 @@ Window::Window(unsigned int width, unsigned int height, std::string game_name){
         glfwSetWindowUserPointer(window,static_cast<void*>(this));
         glViewport(0,0,width,height);
         glEnable(GL_DEPTH_TEST);
-        //glEnable(GL_CULL_FACE);
+        glEnable(GL_CULL_FACE);
     }
 }
 
