@@ -23,7 +23,7 @@ class ObjectFollower : public Behaviour{
                     target = Math::Normalize(target);
                     // transform->LookAt(to_follow->transform->position);
                     //Rotates only in the y axis
-                    transform->rotation.y = atan2(target.x,target.z);
+                    transform->SetRot(Vector3(0.0f,atan2(target.x,target.z),0.0f));
                     transform->Translate(target * speed * Time::deltaTime);
                     //Limit how far it can go down based on height
                     transform->position.y = Math::Clamp(transform->position.y,obj_h_height,transform->position.y);

@@ -138,7 +138,7 @@ class Game {
             //Camera has to be added last to avoid weird de-sync rendering
             go = new GameObject();
             go->object_name = "Main Camera";
-            go->transform->SetPos(Vector3(0.0,0.4,1.0));
+            go->transform->SetPos(Vector3(0.0,1.0,5.0));
             //Creates a camera and sets up projection configuration
             Camera* a_camera = new Camera(Camera_Projection::PERSPECTIVE_PROJECTION);
             go->PushComponentBack(a_camera);

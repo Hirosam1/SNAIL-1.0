@@ -84,6 +84,8 @@ struct Vector3{
         float Dot(const Vector3& other) const;
         //friend std::ostream& operator<<(std::ostream&, const MathS::Vector3&);
 
+        bool operator==(const Vector3& other);
+
     };
 
 //Vector2 Holds 2 values. And have operations between the same vector-type

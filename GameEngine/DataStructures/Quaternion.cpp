@@ -78,6 +78,16 @@ Quaternion Quaternion::AxisAngleToQuaternion(const AxisAngle& a_a) const{
 }
 
 Quaternion Quaternion::Slerp(const Quaternion& end, float t) const{
+    //If both are identical, or close to it, the dot product, the sum of both multiplication, will be the unit length
+    float cosTheta = Vector4(x,y,z,w).Dot(Vector4(end.x,end.y,end.z,end.w));
+    // Perform a linear interpolation when cosTheta is close to 1 to avoid side effect of sin(angle) becoming a zero denominator
+    if(cosTheta > 1.0f - 0.005f){
+        return Quaternion(Math::Lerp(x,end.x,t),
+                          Math::Lerp(y,end.y,t),
+                          Math::Lerp(z,end.z,t),
+                          Math::Lerp(w,end.w,t));
+    }
+
     //a -> start
     //b -> end
     //t -> percentage 
