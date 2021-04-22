@@ -6,4 +6,6 @@ class Object {
     public:
         virtual ~Object() = default;
         std::string object_name = "new object";
+        //Temporary, but real variable that holds all objects from the game
+        static Object* all_objects[];
 };

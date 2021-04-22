@@ -62,9 +62,9 @@ class Game {
             #endif
             TraceEventsSession end_tes = TraceEventsSession("Terminating game");
             Timer _timer = Timer(&end_tes,"Unloading resources");
-            for(int i = 0; i < 10; i++){
-                if(res_init[i]){
-                    res_init[i]->UnloadResourse();
+            for(int i = 0; i < 20; i++){
+                if(Resource::all_resources[i]){
+                    Resource::all_resources[i]->UnloadResourse();
                 }
             }
             _timer.Stop();
@@ -77,58 +77,58 @@ class Game {
     private:
         //Loads all the initial resources
         void LoadResources(){
-            //Creating models-----------------------------------------------------
-            Model* square_model = new Model(DefaultShapes::SquareWithTex());
-            Model* cube_model = new Model(DefaultShapes::CubeWithTex());
-            res_init[0] = dynamic_cast<Resource*>(square_model);
-            res_init[1] = dynamic_cast<Resource*>(cube_model);
-            //--------------------------------------------------------------------
-            Texture* sprite_sheet = new Texture("resources/images/sprite_sheet.png");
-            Texture* omni_sprite = new Texture("resources/images/omnipothead.png");
-            Texture* follow_sprite = new Texture("resources/images/spooky.png");
-            res_init[2] = dynamic_cast<Resource*>(sprite_sheet);
-            res_init[3] = dynamic_cast<Resource*>(omni_sprite);
-            //--------------------------------------------------------------------
-            Shader* atlas_shader = new Shader("resources/shaders/vertex/atlas.vert", "resources/shaders/fragment/sprite.frag");
-            Shader* mesh_shader = new Shader ("resources/shaders/vertex/basic.vert","resources/shaders/fragment/sprite.frag");
-            res_init[4] = dynamic_cast<Resource*>(atlas_shader);
-            res_init[5] = dynamic_cast<Resource*>(mesh_shader);
-            SpriteAtlas* sprite_atlas = new SpriteAtlas(sprite_sheet,1,3);
-            objs_init[0] = dynamic_cast<Object*>(sprite_atlas);
-            //--------------------------------------------------------------------
-            objs_init[1] = dynamic_cast<Object*>(new Mesh(square_model,sprite_sheet));
-            objs_init[2] = dynamic_cast<Object*>(new Mesh(square_model,omni_sprite));
-            objs_init[3] = dynamic_cast<Object*>(new Mesh(cube_model,follow_sprite));
+                //Creating models-----------------------------------------------------
+                Model* square_model = new Model(DefaultShapes::SquareWithTex());
+                Model* cube_model = new Model(DefaultShapes::CubeWithTex());
+                Resource::all_resources[0] = dynamic_cast<Resource*>(square_model);
+                Resource::all_resources[1] = dynamic_cast<Resource*>(cube_model);
+                //--------------------------------------------------------------------
+                Texture* sprite_sheet = new Texture("resources/images/sprite_sheet.png");
+                Texture* omni_sprite = new Texture("resources/images/omnipothead.png");
+                Texture* follow_sprite = new Texture("resources/images/spooky.png");
+                Resource::all_resources[2] = dynamic_cast<Resource*>(sprite_sheet);
+                Resource::all_resources[3] = dynamic_cast<Resource*>(omni_sprite);
+                //--------------------------------------------------------------------
+                Shader* atlas_shader = new Shader("resources/shaders/vertex/atlas.vert", "resources/shaders/fragment/sprite.frag");
+                Shader* mesh_shader = new Shader ("resources/shaders/vertex/basic.vert","resources/shaders/fragment/sprite.frag");
+                Resource::all_resources[4] = dynamic_cast<Resource*>(atlas_shader);
+                Resource::all_resources[5] = dynamic_cast<Resource*>(mesh_shader);
+                SpriteAtlas* sprite_atlas = new SpriteAtlas(sprite_sheet,1,3);
+                Object::all_objects[0] = dynamic_cast<Object*>(sprite_atlas);
+                //--------------------------------------------------------------------
+                Object::all_objects[1] = dynamic_cast<Object*>(new Mesh(square_model,sprite_sheet));
+                Object::all_objects[2] = dynamic_cast<Object*>(new Mesh(square_model,omni_sprite));
+                Object::all_objects[3] = dynamic_cast<Object*>(new Mesh(cube_model,follow_sprite));
         }
         //Initiate the games objects with the components previously loaded
         void LoadGameObjects(){
             Scene* init_scene = new Scene();
             GameObject* go = new GameObject();
-            go->PushComponentBack(new SpriteRenderer(dynamic_cast<Mesh*>(objs_init[1]), dynamic_cast<Shader*>(res_init[4]),dynamic_cast<SpriteAtlas*>(objs_init[0] ),0,0));
+            go->PushComponentBack(new SpriteRenderer(dynamic_cast<Mesh*>(Object::all_objects[1]), dynamic_cast<Shader*>(Resource::all_resources[4]),dynamic_cast<SpriteAtlas*>(Object::all_objects[0] ),0,0));
             go->object_name = "first tile floor";
             go->transform->SetPos(Vector3(0.0,0.5,0.0));
             init_scene->AddGameObject(go);
 
             go = new GameObject();
-            go->PushComponentBack(new SpriteRenderer(dynamic_cast<Mesh*>(objs_init[1]), dynamic_cast<Shader*>(res_init[4]),dynamic_cast<SpriteAtlas*>(objs_init[0] ),0,0));
+            go->PushComponentBack(new SpriteRenderer(dynamic_cast<Mesh*>(Object::all_objects[1]), dynamic_cast<Shader*>(Resource::all_resources[4]),dynamic_cast<SpriteAtlas*>(Object::all_objects[0] ),0,0));
             go->transform->SetPos(Vector3(1.0,0.5,0.0));
             init_scene->AddGameObject(go);
 
             go = new GameObject();
-            go->PushComponentBack(new SpriteRenderer(dynamic_cast<Mesh*>(objs_init[1]), dynamic_cast<Shader*>(res_init[4]),dynamic_cast<SpriteAtlas*>(objs_init[0]),1,0));
+            go->PushComponentBack(new SpriteRenderer(dynamic_cast<Mesh*>(Object::all_objects[1]), dynamic_cast<Shader*>(Resource::all_resources[4]),dynamic_cast<SpriteAtlas*>(Object::all_objects[0]),1,0));
             go->PushComponentBack(new MovingObject());
             go->transform = new Transform(Vector3(-1.5,0.5,0.5),Vector3(0.0,Math::ToRadians(90),0.0),Vector3(1.0,1.0,1.0));
             init_scene->AddGameObject(go);
 
             go = new GameObject();
             go->object_name = "Camera Follower";
-            go->PushComponentBack(new MeshRenderer(dynamic_cast<Mesh*>(objs_init[2]),dynamic_cast<Shader*>(res_init[5])));
+            go->PushComponentBack(new MeshRenderer(dynamic_cast<Mesh*>(Object::all_objects[2]),dynamic_cast<Shader*>(Resource::all_resources[5])));
             go->PushComponentBack(new ObjectFollower());
             go->transform->SetPos(Vector3(0.0,1.5,0.5));
             init_scene->AddGameObject(go);
 
             go = new GameObject();
-            go->PushComponentBack(new MeshRenderer(dynamic_cast<Mesh*>(objs_init[3]),dynamic_cast<Shader*>(res_init[5])));
+            go->PushComponentBack(new MeshRenderer(dynamic_cast<Mesh*>(Object::all_objects[3]),dynamic_cast<Shader*>(Resource::all_resources[5])));
             //go->PushComponentBack(new HeadFollower());
             go->PushComponentBack(new RotateCubeQuat());
             go->transform->position = Vector3(0.0,1.5,0.5);
@@ -145,7 +145,6 @@ class Game {
             go->PushComponentBack(new CameraMovement());
             init_scene->main_camera = a_camera; 
             init_scene->AddGameObject(go);
-
             Scene::active_scene = init_scene;
         }
         //Initiate the game objects created
@@ -171,9 +170,6 @@ class Game {
         }
         std::string game_name;
         TraceEventsSession tes = TraceEventsSession("Profile");
-        //Pointers Holders
-        Resource* res_init[10] = {nullptr};
-        Object* objs_init[10] = {nullptr};
         //Global funcs
         Time time;
         StateManager state_man;

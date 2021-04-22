@@ -4,10 +4,14 @@
 #include "Objects/GameObject.hpp"
 
 class Camera;
+#include "SceneLoader.hpp"
+
+
 
 class Scene : public Object{
     public:
-        Scene(){}
+        Scene() = default; 
+        Scene(const std::string& scene_path);
         static Scene* active_scene;
         Camera* main_camera;
         //Starts a scene

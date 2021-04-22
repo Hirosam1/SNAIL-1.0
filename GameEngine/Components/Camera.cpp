@@ -48,8 +48,6 @@ void Camera::NormalizeFrustum(){
     frustum.far = NormalizePlaneWithLength(frustum.far,n);
 }
 
-
-
 void Camera::SetCameraDir(const Vector3& dir){
     camera_front = dir;
     //view = Transformation::CamLookAt(camera_pos, camera_pos + camera_front, camera_up);

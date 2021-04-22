@@ -25,6 +25,7 @@
 #include "DataStructures/ImplicitObjects.hpp"
 #include "DataStructures/Matrix.hpp"
 #include "DataStructures/Vector.hpp"
+#include "DataStructures/Quaternion.hpp"
 
 #include "Math/Math.hpp"
 #include "Math/Matrix_Transform.hpp"

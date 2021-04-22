@@ -10,4 +10,6 @@ class Resource{
             std::cout<<"IMPLEMENT UNLOADER!!!\n"; 
             #endif
         }
+        //Temporary, but real variable that holds all resources from the game
+        static Resource* all_resources[];
 };

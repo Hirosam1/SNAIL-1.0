@@ -2,6 +2,9 @@
 
 Scene* Scene::active_scene = nullptr;
 
+Scene::Scene(const std::string& scene_path){
+}
+
 void Scene::BeginScene(){
     for(GameObject* game_object : game_objects){
         game_object->Begin();
