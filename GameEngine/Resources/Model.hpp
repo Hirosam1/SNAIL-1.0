@@ -1,10 +1,9 @@
 #pragma once
 #include "GMpch.hpp"
-#include "Resources/Shader.hpp"
 #include "Resources/Resource.hpp"
+#include "Resources/Shader.hpp"
 
 #include "GLStateManager.hpp"
-#include "Shader.hpp"
 
 #include  "DataStructures/Vector.hpp"
 #include "DataStructures/Matrix.hpp"

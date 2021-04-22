@@ -21,15 +21,15 @@ class CameraMovement : public Behaviour{
     InputHandler ih = InputHandler(6);
     float velocity = 2.0f;
     void CalculateYawnPitch(){
-        if(first_mouse && main_window->cursor_info.x_pos >= 0){
+        if(first_mouse && Window::main_window->cursor_info.x_pos >= 0){
             first_mouse = false;
-            lastX = main_window->cursor_info.x_pos;
-            lastY = main_window->cursor_info.y_pos;
+            lastX = Window::main_window->cursor_info.x_pos;
+            lastY = Window::main_window->cursor_info.y_pos;
         }
-        float xoffset = main_window->cursor_info.x_pos - lastX;
-        float yoffset = lastY - main_window->cursor_info.y_pos;
-        lastX = main_window->cursor_info.x_pos;
-        lastY = main_window->cursor_info.y_pos;
+        float xoffset = Window::main_window->cursor_info.x_pos - lastX;
+        float yoffset = lastY - Window::main_window->cursor_info.y_pos;
+        lastX = Window::main_window->cursor_info.x_pos;
+        lastY = Window::main_window->cursor_info.y_pos;
         yawn += xoffset * sensitivity;
         yawn = yawn > 359 ? yawn - 360 : yawn < -359 ? yawn + 359 : yawn;
         pitch += yoffset * sensitivity;
@@ -42,7 +42,7 @@ class CameraMovement : public Behaviour{
     }
     public:
         void Begin() override{
-            glfwSetInputMode(main_window->window,GLFW_CURSOR,GLFW_CURSOR_DISABLED);
+            glfwSetInputMode(Window::main_window->window,GLFW_CURSOR,GLFW_CURSOR_DISABLED);
             ih.AddCommandBack(GLFW_KEY_W,GLFW_PRESS,MOVE_FORWARDS);
             ih.AddCommandBack(GLFW_KEY_S,GLFW_PRESS,MOVE_BACKWARDS);
             ih.AddCommandBack(GLFW_KEY_Q,GLFW_PRESS,MOVE_UPWARDS);

@@ -1,10 +1,25 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "DataStructures/Vector.hpp"
+#include "DataStructures/Matrix.hpp"
+#include "DataStructures/ImplicitObjects.hpp"
+#include "DataStructures/Quaternion.hpp"
+
+#include "Math/Math.hpp"
+#include "Math/Matrix_Transform.hpp"
+#include "Math/Quternion_Transform.hpp"
+
+#include "Resources/Resource.hpp"
 #include "Resources/Model.hpp"
 #include "Resources/Shader.hpp"
 #include "Resources/Texture.hpp"
-#include "Resources/Resource.hpp"
+
+#include "Objects/Object.hpp"
+#include "Objects/Scene.hpp"
+#include "Objects/GameObject.hpp"
+#include "Objects/Mesh.hpp"
+#include "Objects/SpriteAtlas.hpp"
 
 #include "Components/Component.hpp"
 #include "Components/Behaviour.hpp"
@@ -15,21 +30,6 @@
 #include "Components/SpriteRenderer.hpp"
 #include "Components/MeshRenderer.hpp"
 #include "Components/Camera.hpp"
-
-#include "Objects/Scene.hpp"
-#include "Objects/GameObject.hpp"
-#include "Objects/Scene.hpp"
-#include "Objects/Mesh.hpp"
-#include "Objects/SpriteAtlas.hpp"
-
-#include "DataStructures/ImplicitObjects.hpp"
-#include "DataStructures/Matrix.hpp"
-#include "DataStructures/Vector.hpp"
-#include "DataStructures/Quaternion.hpp"
-
-#include "Math/Math.hpp"
-#include "Math/Matrix_Transform.hpp"
-#include "Math/Quternion_Transform.hpp"
 
 #include "FileIO.hpp"
 #include "Time.hpp"

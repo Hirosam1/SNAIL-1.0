@@ -8,9 +8,8 @@
 //Maybe make a LuaBehaviour later :)
 class Behaviour : public Component{
     public:
-        Window* main_window;
         Transform* transform;
-        void Begin(GameObject* _game_object) override{this->game_object = _game_object;main_window = Window::main_window;transform = _game_object->transform;Begin();};
+        void Begin(GameObject* _game_object) override{this->game_object = _game_object;transform = _game_object->transform;Begin();};
         //Called each frame
         void Update(GameObject* _game_object) override {Update();};
 

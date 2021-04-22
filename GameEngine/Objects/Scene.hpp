@@ -1,12 +1,11 @@
 #pragma once
 #include "GMpch.hpp"
-#include "Object.hpp"
+
+#include "Objects/Object.hpp"
 #include "Objects/GameObject.hpp"
 
 class Camera;
 #include "SceneLoader.hpp"
-
-
 
 class Scene : public Object{
     public:

@@ -1,13 +1,10 @@
 #pragma once
 #include "GMpch.hpp"
 
-#include "Resources/Shader.hpp"
+#include "Components/Renderer.hpp"
+#include "Components/Transform.hpp"
 
 #include "Objects/SpriteAtlas.hpp"
-#include "Objects/GameObject.hpp"
-
-#include "Components/Transform.hpp"
-#include "Components/Renderer.hpp"
 
 #include "DataStructures/Vector.hpp"
 

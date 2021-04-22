@@ -1,11 +1,9 @@
 #pragma once
 #include "GMpch.hpp"
 
-#include "Resources/Texture.hpp"
-
-#include "Components/Transform.hpp"
-
 #include "Objects/Object.hpp"
+
+#include "Resources/Texture.hpp"
 
 #include "DataStructures/Vector.hpp"
 

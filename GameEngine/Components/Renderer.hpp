@@ -9,8 +9,6 @@
 #include "Objects/Scene.hpp"
 #include "Objects/Mesh.hpp"
 
-#include "Window.hpp"
-
 #include "DataStructures/Matrix.hpp"
 #include "DataStructures/ImplicitObjects.hpp"
 

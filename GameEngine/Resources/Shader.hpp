@@ -1,11 +1,12 @@
 #pragma once
 #include "GMpch.hpp"
 
+#include "Resources/Resource.hpp"
+
 #include <glad/glad.h>
 
-#include "FileIO.hpp"
 #include "GLStateManager.hpp"
-#include "Resources/Resource.hpp"
+#include "FileIO.hpp"
 
 //Shader class to perform openGL shader operations
 class Shader : public Resource{

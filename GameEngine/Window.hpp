@@ -4,7 +4,6 @@
 #include <GLFW/glfw3.h>
 
 class GameObject;
-class Camera;
 class Scene;
 
 struct CursorInfo{

@@ -1,10 +1,8 @@
 #pragma once
 #include "GMpch.hpp"
-#include "Objects/Mesh.hpp"
 
 #include "Components/Renderer.hpp"
 
-class Mesh;
 class Shader;
 class Matrix4;
 
