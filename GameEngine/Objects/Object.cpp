@@ -1,3 +1,4 @@
 #include "Objects/Object.hpp"
 
-Object* Object::all_objects[20] = {nullptr};
+//Initiate the entire array with 0 (nullptr)
+Object* Object::all_objects[30] = {nullptr};
