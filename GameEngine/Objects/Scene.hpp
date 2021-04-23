@@ -2,10 +2,10 @@
 #include "GMpch.hpp"
 
 #include "Objects/Object.hpp"
-#include "Objects/GameObject.hpp"
+#include "SceneLoader.hpp"
 
 class Camera;
-#include "SceneLoader.hpp"
+class GameObject;
 
 class Scene : public Object{
     public:
