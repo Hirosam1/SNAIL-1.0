@@ -37,7 +37,7 @@ Texture::Texture(std::string texture_path, bool repeat){
         glGenerateMipmap(GL_TEXTURE_2D);
     }else{
         std::cout<<"Failed to load texture\n";
-        Debug::WriteErrorLog("ERROR::Texture","Failed to load the "+texture_path+" texture. Check file name/extension.");
+        Debug::WriteErrorLog(ErrorType::TEXTURE_IMG_LOAD_FAIL,&texture_path,1);
     }
     FreeImageData(image_data);
     // glPixelStorei(GL_UNPACK_ALIGNMENT,4);

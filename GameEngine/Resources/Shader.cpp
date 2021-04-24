@@ -17,7 +17,8 @@ Shader::Shader(std::string vertex_path, std::string fragment_path){
     if(!sucess){
         glad_glGetProgramInfoLog(program_id,512,NULL,info_log);
         std::cout<<"ERROR while linking two shaders ("<<vertex_path<<", "<<fragment_path<<")\n\tInfoLog->"<<info_log<<"\n";
-        Debug::WriteErrorLog("ERROR::Shader","Error while linking two shaders ("+vertex_path+", "+fragment_path+")\n\tInfoLog->"+info_log);
+        std::string params[] = {vertex_path, fragment_path, info_log};
+        Debug::WriteErrorLog(ErrorType::SHADER_LINK_FAIL,params);
     }
 
     glDeleteShader(vertex_shader);
@@ -38,7 +39,8 @@ GLuint Shader::LoadShader(GLenum shader_type,std::string& shader_path){
     if(!sucess){
         glGetShaderInfoLog(shader,512,NULL,info_log);
         std::cout<<"ERROR while compiling shader (" <<shader_path<<")\n\tInfoLog-> " <<info_log<<"\n";
-        Debug::WriteErrorLog("ERROR::Shader","Error while compiling shader ("+shader_path+")\n\tInfoLog-> "+ info_log);
+        std::string params[] = {shader_path, info_log};
+        Debug::WriteErrorLog(ErrorType::SHADER_COMPILE_FAIL,params);
     }
 
     return shader;
