@@ -1,5 +1,5 @@
 #include "Scene.hpp"
-#include "SceneLoader.hpp"
+#include "DataManager.hpp"
 
 Scene* Scene::active_scene = nullptr;
 

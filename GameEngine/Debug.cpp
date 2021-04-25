@@ -15,7 +15,7 @@ void Debug::CleanErrorLog(){
 //     outfile.close();
 // }
 
-void Debug::WriteErrorLog(ErrorType err, std::string* params, unsigned int size){
+void Debug::WriteErrorLog(ErrorType err, const std::string* params, unsigned int size){
     std::ofstream outfile;
     outfile.open(ErrorLog, std::ofstream::out | std::ofstream::app);
     std::string ErrorText;
@@ -33,6 +33,8 @@ void Debug::WriteErrorLog(ErrorType err, std::string* params, unsigned int size)
     case ErrorType::FILE_LOAD_TEXT_FAIL:
         ErrorText = "ERROR::@FileIO::FILE_LOAD_TEXT_FAIL(File "+params[0]+" was not successfully opened!";
         break;
+    case ErrorType::OBJECTLOADER_LOADING_SCENE_FAIL:
+        ErrorText = "ERROR::@ObjectLoader::OBJECTLOADER_LOADING_SCENE_FAIL(Failed to load the " + params[0] +" scene file, check the name/extension.)";
     default:
         ErrorText = "Unknon Error ->" + params[0];
         break;

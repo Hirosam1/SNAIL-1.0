@@ -2,7 +2,7 @@
 #include "GMpch.hpp"
 #include "GameEngine.hpp"
 #include "Behaviours.hpp"
-#include "SceneLoader.hpp"
+#include "DataManager.hpp"
 
 //Controlls general flow and management of the whole game
 class Game {
@@ -64,8 +64,8 @@ class Game {
             TraceEventsSession end_tes = TraceEventsSession("Terminating game");
             Timer _timer = Timer(&end_tes,"Unloading resources");
             for(int i = 0; i < 20; i++){
-                if(Object::all_objects[i]){
-                    Object::all_objects[i]->UnloadObject();
+                if(Object::objects[i]){
+                    Object::objects[i]->UnloadObject();
                 }
             }
             _timer.Stop();
