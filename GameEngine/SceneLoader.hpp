@@ -10,8 +10,7 @@ struct SceneData{
     void AddGameObject(GameObject* go){game_objects.push_back(go);};
 };
 
-class SceneLoader {
-    public:
-        static void LoadResources(const std::string& resources_path);
-        static SceneData LoadScene(const std::string& scene_path);
+namespace ObjectLoader {
+        void LoadResources(const std::string& resources_path);
+        SceneData LoadScene(const std::string& scene_path);
 };

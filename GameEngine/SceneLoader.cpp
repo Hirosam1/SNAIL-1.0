@@ -28,7 +28,7 @@
 // Behaviour -------------------------------
 #include "../MyFiles/include/Behaviours.hpp"
 
-void SceneLoader::LoadResources(const std::string& resources_path){
+void ObjectLoader::LoadResources(const std::string& resources_path){
         //Creating models-----------------------------------------------------
         Model* square_model = new Model(DefaultShapes::SquareWithTex());
         Model* cube_model = new Model(DefaultShapes::CubeWithTex());
@@ -53,7 +53,7 @@ void SceneLoader::LoadResources(const std::string& resources_path){
         Object::all_objects[9] = dynamic_cast<Object*>(new Mesh(cube_model,follow_sprite));
 }
 
-SceneData SceneLoader::LoadScene(const std::string& scene_path){
+SceneData ObjectLoader::LoadScene(const std::string& scene_path){
         GameObject* go = new GameObject();
         SceneData init_scene;
         go->PushComponentBack(new SpriteRenderer(dynamic_cast<Mesh*>(Object::all_objects[7]), dynamic_cast<Shader*>(Object::all_objects[4]),dynamic_cast<SpriteAtlas*>(Object::all_objects[6] ),0,0));
@@ -74,7 +74,7 @@ SceneData SceneLoader::LoadScene(const std::string& scene_path){
 
         go = new GameObject();
         go->object_name = "Camera Follower";
-        go->PushComponentBack(new MeshRenderer(dynamic_cast<Mesh*>(Object::all_objects[8]),dynamic_cast<Shader*>(Object::all_objects[5])));
+        go->PushComponentBack(new SpriteRenderer(dynamic_cast<Mesh*>(Object::all_objects[8]),dynamic_cast<Shader*>(Object::all_objects[5])));
         go->PushComponentBack(new ObjectFollower());
         go->transform->SetPos(Vector3(0.0,1.5,0.5));
         init_scene.AddGameObject(go);

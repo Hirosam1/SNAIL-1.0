@@ -23,6 +23,7 @@ class SpriteRenderer : public Renderer{
         void Draw(const Matrix4& transform, const Shader& shader) override;
         //Will update the transform to ajust to sprite dimensions
         Transform BuildTransform(const Transform& transform) const override;
+        Vector3 SpriteScale();
         //Optional Sprite atlas
         SpriteAtlas* sprite_atlas = nullptr;
         //Total sprite draws per frame

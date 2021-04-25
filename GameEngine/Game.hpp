@@ -78,7 +78,7 @@ class Game {
     private:
         //Loads all the initial resources
         void LoadResources(){
-            SceneLoader::LoadResources("asd");
+            ObjectLoader::LoadResources("asd");
         }
         //Initiate the games objects with the components previously loaded
         void LoadGameObjects(){

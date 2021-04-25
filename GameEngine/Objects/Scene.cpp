@@ -1,10 +1,10 @@
 #include "Scene.hpp"
-#include "Objects/GameObject.hpp"
+#include "SceneLoader.hpp"
 
 Scene* Scene::active_scene = nullptr;
 
 Scene::Scene(const std::string& scene_path){
-    SceneData scene_data = SceneLoader::LoadScene(scene_path);
+    SceneData scene_data = ObjectLoader::LoadScene(scene_path);
     game_objects = scene_data.game_objects;
     main_camera = scene_data.main_camera;
 }

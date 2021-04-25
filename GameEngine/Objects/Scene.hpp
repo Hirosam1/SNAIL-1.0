@@ -2,7 +2,7 @@
 #include "GMpch.hpp"
 
 #include "Objects/Object.hpp"
-#include "SceneLoader.hpp"
+#include "Objects/GameObject.hpp"
 
 class Camera;
 class GameObject;
