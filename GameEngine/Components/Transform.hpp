@@ -23,7 +23,6 @@ class Transform : public Component{
         Transform(const Transform& transform) : position(Vector3(transform.Pos())),
                                                 rotation(transform.Rot()),
                                                 scale(Vector3(transform.Scale())){BuildMat();}
-
         //Create a transform with the given paramters
         Transform(const Vector3& pos, const Vector3& rot, const Vector3& scale);
         Transform(const Vector3& pos, const Quaternion& rot, const Vector3& scale);

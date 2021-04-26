@@ -16,11 +16,13 @@ class Object{
     public:
         virtual ~Object() = default;
         std::string object_name = "new object";
-        //variable that holds the objects used by game_objects and components
-        static std::vector<Object*> objects;
         static void AddObjectBack(Object* obj);
+        static void UnloadAllObjects();
+        static Object* FindObjectByName(const std::string& name);
         //seperating objects - except components,and game object themselves, since they are gameobject specific - pointers by their name, they will hold the all_object addresses
         virtual void UnloadObject(){};
     private:
         static unsigned int objects_count;
+        //variable that holds the objects used by game_objects and components
+        static std::vector<Object*> objects;
 };

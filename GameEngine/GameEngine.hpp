@@ -22,7 +22,7 @@
 #include "Objects/SpriteAtlas.hpp"
 
 #include "Components/Component.hpp"
-#include "Components/Behaviour.hpp"
+#include "Components/Behavior.hpp"
 #include "Components/Transform.hpp"
 #include "Components/RigidBody2D.hpp"
 #include "Components/Collider2D.hpp"

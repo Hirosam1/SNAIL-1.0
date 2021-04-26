@@ -1,7 +1,7 @@
 #pragma once
 #include "GameEngine.hpp"
 
-class CameraMovement : public Behaviour{
+class CameraMovement : public Behavior{
 
     enum CameraControlls{
         MOVE_FORWARDS,

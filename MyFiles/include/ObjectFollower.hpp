@@ -1,7 +1,7 @@
 #pragma once
 #include "GameEngine.hpp"
 
-class ObjectFollower : public Behaviour{
+class ObjectFollower : public Behavior{
     public:
         float speed = .35f;
         GameObject* to_follow = nullptr;

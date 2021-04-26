@@ -1,7 +1,7 @@
 #pragma once
 #include "GameEngine.hpp"
 
-class MovingObject : public Behaviour{
+class MovingObject : public Behavior{
     public:
         float range_multiplier;
         float x_init;

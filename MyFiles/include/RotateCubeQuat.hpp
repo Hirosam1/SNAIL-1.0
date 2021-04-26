@@ -1,7 +1,7 @@
 #pragma once
 #include "GameEngine.hpp"
 
-class RotateCubeQuat : public Behaviour{
+class RotateCubeQuat : public Behavior{
     public:
         enum PosKeys{
             CHANGE_POS_PRESS,

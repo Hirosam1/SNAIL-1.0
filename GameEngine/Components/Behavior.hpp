@@ -6,7 +6,7 @@
 #include "Objects/GameObject.hpp"
 
 //Maybe make a LuaBehaviour later :)
-class Behaviour : public Component{
+class Behavior : public Component{
     public:
         Transform* transform;
         void Begin(GameObject* _game_object) override{this->game_object = _game_object;transform = _game_object->transform;Begin();};

@@ -5,19 +5,9 @@
 #include "DataStructures/ImplicitObjects.hpp"
 #include "DataStructures/Quaternion.hpp"
 
-#include "Math/Math.hpp"
-#include "Math/Matrix_Transform.hpp"
-#include "Math/Quternion_Transform.hpp"
-
 #include "Objects/Object.hpp"
 #include "Objects/GameObject.hpp"
-#include "Objects/Mesh.hpp"
-#include "Objects/SpriteAtlas.hpp"
 
-#include "Components/Camera.hpp"
-#include "Components/MeshRenderer.hpp"
-#include "Components/Renderer.hpp"
-#include "Components/SpriteRenderer.hpp"
 #include "Components/Transform.hpp"
 
 #include "Resources/Model.hpp"
@@ -25,7 +15,7 @@
 #include "Resources/Texture.hpp"
 //------------------------------------------
 // Behaviour -------------------------------
-#include "../MyFiles/include/Behaviours.hpp"
+#include "../MyFiles/include/Behaviors.hpp"
 
 void ObjectLoader::LoadResources(const std::string& resources_path){
         //Creating models-----------------------------------------------------
@@ -41,14 +31,23 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
         Object::AddObjectBack(dynamic_cast<Resource*>(omni_sprite));
         //--------------------------------------------------------------------
         Shader* atlas_shader = new Shader("resources/shaders/vertex/atlas.vert", "resources/shaders/fragment/sprite.frag");
+        atlas_shader->object_name = "MyAtlasShader";
         Shader* mesh_shader = new Shader ("resources/shaders/vertex/basic.vert","resources/shaders/fragment/sprite.frag");
+        mesh_shader->object_name = "MyNormalShader";
         Object::AddObjectBack(dynamic_cast<Resource*>(atlas_shader));
         Object::AddObjectBack(dynamic_cast<Resource*>(mesh_shader));
         SpriteAtlas* sprite_atlas = new SpriteAtlas(sprite_sheet,1,3);
+        sprite_atlas->object_name = "MySpriteAtlas" ;
         Object::AddObjectBack(dynamic_cast<Object*>(sprite_atlas));
         //--------------------------------------------------------------------
-        Object::AddObjectBack(dynamic_cast<Object*>(new Mesh(square_model,sprite_sheet)));
-        Object::AddObjectBack(dynamic_cast<Object*>(new Mesh(square_model,omni_sprite)));
+        Mesh* a_mesh = new Mesh(square_model,sprite_sheet);
+        a_mesh->object_name = "CoolPlaneAtlas";
+        Object::AddObjectBack(dynamic_cast<Object*>(a_mesh));
+
+        a_mesh = new Mesh(square_model,omni_sprite);
+        a_mesh->object_name = "CoolPlaneNormal";
+        Object::AddObjectBack(dynamic_cast<Object*>(a_mesh));
+        
         Object::AddObjectBack(dynamic_cast<Object*>(new Mesh(cube_model,follow_sprite)));
 }
 
@@ -63,7 +62,65 @@ SceneData ObjectLoader::LoadScene(const std::string& scene_path){
                 return SceneData{};
         }
         //Loads file into program
-        
+        SceneData scene_data;
+        json j;
+        i_f >> j;
+        scene_data.scene_name = j["SceneInfo"]["SceneName"].get<std::string>();
+        //Checks if there is data in scene
+        if(!j.contains("SceneData")){
+                Debug::WriteErrorLog(ErrorType::OBJECTLOADER_NODATA_SCENE_WARN,&scene_path);
+                return scene_data;
+        }
+        json j_game_objects = j["SceneData"];
+        if(!j_game_objects.contains("GameObjects")){
+                Debug::WriteErrorLog(ErrorType::OBJECTLOADER_NODATA_SCENE_WARN,&scene_path);
+                return scene_data;
+        }  
+        j_game_objects = j_game_objects["GameObjects"];
+        for(json::iterator j_go = j_game_objects.begin(); j_go != j_game_objects.end(); j_go++){
+                GameObject* go = new GameObject();
+                if(j_go.value().contains("ObjectName")){
+                        go->object_name = j_go.value()["ObjectName"].get<std::string>();
+                }
+                if(j_go.value().contains("ObjectComponents")){
+                        json j_go_comps = j_go.value()["ObjectComponents"];
+                        for(json::iterator j_comp = j_go_comps.begin() ; j_comp != j_go_comps.end() ; j_comp++){
+                                json::object_t obj = j_comp.value().get<json::object_t>();
+                                if(strcmp(obj.begin()->first.data(),"Transform") == 0){
+                                        Transform trans = ComponentFactory::CreateTransform(j_comp.value(),scene_path);
+                                        *go->transform = trans;
+                                }
+                                else{
+                                        Component* comp = MakeComponent(obj.begin()->first, obj.begin()->second, scene_path);
+                                        if(comp){
+                                                go->PushComponentBack(comp);
+                                        }   
+                                }
+
+                        }
+                }
+                if(j_go.value().contains("IsMainCamera")){
+                        if(j_go.value()["IsMainCamera"].get<bool>()){
+                                if(Camera* camera = go->GetComponent<Camera>()){
+                                        scene_data.main_camera = camera;
+                                }
+                        }
+                }
+                scene_data.AddGameObject(go);
+        }
+        return scene_data;
+}
+
+
+Component* ObjectLoader::MakeComponent(json j_component, json j_values,const std::string& file_name){
+        //Checks if component factory exists
+        if(ComponentFactory::components_factories.find(j_component.get<std::string>()) == ComponentFactory::components_factories.end()){
+                std::string params[] = {file_name,j_component.get<std::string>()};
+                Debug::WriteErrorLog(ErrorType::OBJECTLOADER_NO_COMPONENT_FACTOR_FAIL,params);
+                return nullptr;
+        }
+        //Returns from function factory
+        return ComponentFactory::components_factories[j_component.get<std::string>()](j_values,file_name);
 }
 
         // GameObject* go = new GameObject();

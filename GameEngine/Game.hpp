@@ -1,7 +1,7 @@
 #pragma once
 #include "GMpch.hpp"
 #include "GameEngine.hpp"
-#include "Behaviours.hpp"
+#include "Behaviors.hpp"
 #include "DataManager.hpp"
 
 //Controlls general flow and management of the whole game
@@ -63,11 +63,7 @@ class Game {
             #endif
             TraceEventsSession end_tes = TraceEventsSession("Terminating game");
             Timer _timer = Timer(&end_tes,"Unloading resources");
-            for(int i = 0; i < 20; i++){
-                if(Object::objects[i]){
-                    Object::objects[i]->UnloadObject();
-                }
-            }
+            Object::UnloadAllObjects();
             _timer.Stop();
             Timer timer2 = Timer(&end_tes,"Terminating glfw window");
             glfwTerminate();
@@ -82,7 +78,7 @@ class Game {
         }
         //Initiate the games objects with the components previously loaded
         void LoadGameObjects(){
-            Scene* init_scene = new Scene("asd");
+            Scene* init_scene = new Scene("Scene1.sscene.json");
             Scene::active_scene = init_scene;
         }
         //Initiate the game objects created

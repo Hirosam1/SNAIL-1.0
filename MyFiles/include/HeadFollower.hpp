@@ -1,6 +1,6 @@
 #include "GameEngine.hpp"
 
-class HeadFollower : public Behaviour{
+class HeadFollower : public Behavior{
     public:
 
     private:

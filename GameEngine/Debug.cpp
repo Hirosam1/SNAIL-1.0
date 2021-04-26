@@ -35,6 +35,22 @@ void Debug::WriteErrorLog(ErrorType err, const std::string* params, unsigned int
         break;
     case ErrorType::OBJECTLOADER_LOADING_SCENE_FAIL:
         ErrorText = "ERROR::@ObjectLoader::OBJECTLOADER_LOADING_SCENE_FAIL(Failed to load the " + params[0] +" scene file, check the name/extension.)";
+        break;
+    case ErrorType::OBJECTLOADER_NODATA_SCENE_WARN:
+        ErrorText = "WARNING::@ObjectLoader::OBJECTLOADER_NODATA_SCENE_WARN(The file " + params[0] + " does not have any game_object data, the scene will be completely empty!)";
+        break;
+    case ErrorType::OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL:
+        ErrorText = "ERROR::@ObjectLoader::OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL(From the scene "+ params[0] +" the object "+ params[1] +" created on resources does not exist, or does not match type.)";
+        break;
+    case ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL:
+        ErrorText = "ERROR::@ObjectLoader::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL(From the scene "+ params[0] +" is passing bad/few paramters to component " + params[1] + ".)";
+        break;
+    case ErrorType::OBJECTLOADER_NO_COMPONENT_FACTOR_FAIL:
+        ErrorText = "ERROR::@ObjectLoader::OBJECTLOADER_NO_COMPONENT_FACTOR_FAIL(From the scene "+ params[0] +" there are no factories to build component "+ params[1]  +".)";
+        break;
+    case ErrorType::OBJECTLOADER_NO_BEHAVIOR_FAIL:
+        ErrorText = "ERROR::@ObjectLoader::OBJECTLOADER_NO_BEHAVIOR_FAIL(From the scene" + params[0] +" there is no behavior named "+ params[1] +".)";
+        break;
     default:
         ErrorText = "Unknon Error ->" + params[0];
         break;
