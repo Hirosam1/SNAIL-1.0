@@ -36,7 +36,9 @@ Texture::Texture(std::string texture_path, bool repeat){
         //Creting this avoids some artifacts
         glGenerateMipmap(GL_TEXTURE_2D);
     }else{
+        #ifdef DEBUG
         std::cout<<"Failed to load texture\n";
+        #endif
         Debug::WriteErrorLog(ErrorType::TEXTURE_IMG_LOAD_FAIL,&texture_path,1);
     }
     FreeImageData(image_data);

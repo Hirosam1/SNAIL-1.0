@@ -16,7 +16,9 @@ Shader::Shader(std::string vertex_path, std::string fragment_path){
     glGetProgramiv(program_id,GL_LINK_STATUS,&sucess);
     if(!sucess){
         glad_glGetProgramInfoLog(program_id,512,NULL,info_log);
+        #ifdef DEBUG
         std::cout<<"ERROR while linking two shaders ("<<vertex_path<<", "<<fragment_path<<")\n\tInfoLog->"<<info_log<<"\n";
+        #endif
         std::string params[] = {vertex_path, fragment_path, info_log};
         Debug::WriteErrorLog(ErrorType::SHADER_LINK_FAIL,params);
     }
@@ -38,7 +40,9 @@ GLuint Shader::LoadShader(GLenum shader_type,std::string& shader_path){
     glGetShaderiv(shader,GL_COMPILE_STATUS,&sucess);
     if(!sucess){
         glGetShaderInfoLog(shader,512,NULL,info_log);
+        #ifdef DEBUG
         std::cout<<"ERROR while compiling shader (" <<shader_path<<")\n\tInfoLog-> " <<info_log<<"\n";
+        #endif
         std::string params[] = {shader_path, info_log};
         Debug::WriteErrorLog(ErrorType::SHADER_COMPILE_FAIL,params);
     }

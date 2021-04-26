@@ -21,7 +21,9 @@ Window::Window(unsigned int width, unsigned int height, std::string game_name){
         glfwMakeContextCurrent(window);
         main_window = this;
         if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
+            #ifdef DEBUG
             std::cout<<"Failed to initialize GLAD\n";
+            #endif
         }
         glfwSetFramebufferSizeCallback(window,this->FrameBufferCallBack);
         glfwSetCursorPosCallback(window,this->CursorPosCallBack);

@@ -7,8 +7,8 @@ class Matrix4;
 //Vector4 Holds 4 values. And have operations between the same vector-type
 struct Vector4{
         public:
-            Vector4(){x = 0.0f; y = 0.0f; z = 0.0f; a=0; if(!std::is_standard_layout<Vector4>()){std::cout<<"WARNING!! Vector 3 is not standard layout form!!!";}};
-            Vector4(float x,float y,float z, float w) : x (x), y(y),z(z),w(w){if(!std::is_standard_layout<Vector4>()){std::cout<<"WARNING!! Vector 3 is not standard layout form!!!";}};
+            Vector4(){x = 0.0f; y = 0.0f; z = 0.0f; a=0;};
+            Vector4(float x,float y,float z, float w) : x (x), y(y),z(z),w(w){};
             void SetValues(float x,float y,float z,float w);
             Vector4(const Vector4& other) : x(other.x), y(other.y), z(other.z), w(other.w){};
             void operator=(const Vector4 other){this->x = other.x;this->y = other.y;this->z = other.z; this->w=other.w;};
@@ -49,8 +49,8 @@ struct Vector4{
 //Vector3 Holds 3 values. And have operations between the same vector-type
 struct Vector3{
         public:
-            Vector3(){x = 0.0f; y = 0.0f; z = 0.0f; if(!std::is_standard_layout<Vector3>()){std::cout<<"WARNING!! Vector 3 is not standard layout form!!!";}};
-            Vector3(float x,float y,float z) : x (x), y(y),z(z){if(!std::is_standard_layout<Vector3>()){std::cout<<"WARNING!! Vector 3 is not standard layout form!!!";}};
+            Vector3(){x = 0.0f; y = 0.0f; z = 0.0f;};
+            Vector3(float x,float y,float z) : x (x), y(y),z(z){};
             void SetValues(float x,float y,float z);
             Vector3 operator=(const Vector3 vec) const{return vec;};
             union{
@@ -96,8 +96,8 @@ struct Vector3{
 //Vector2 Holds 2 values. And have operations between the same vector-type
 struct Vector2{
         public:
-            Vector2(){x = 0.0f; y = 0.0f; if(!std::is_standard_layout<Vector2>()){std::cout<<"WARNING!! Vector 2 is not standard layout form!!!";}};
-            Vector2(float x,float y) : x (x), y(y){if(!std::is_standard_layout<Vector2>()){std::cout<<"WARNING!! Vector 2 is not standard layout form!!!";}};
+            Vector2(){x = 0.0f; y = 0.0f;};
+            Vector2(float x,float y) : x (x), y(y){};
             void SetValues(float x,float y);
             Vector2(const Vector2& other) : x(other.x), y(other.y){};
             void operator=(const Vector2 other){this->x = other.x;this->y = other.y;};

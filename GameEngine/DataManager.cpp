@@ -57,7 +57,9 @@ SceneData ObjectLoader::LoadScene(const std::string& scene_path){
         std::ifstream i_f(scene_path);
         //Checks if the file exists
         if(!i_f){
+                #ifdef DEBUG
                 std::cout<< "Failed to load scene file!\n";
+                #endif
                 Debug::WriteErrorLog(ErrorType::OBJECTLOADER_LOADING_SCENE_FAIL,&scene_path);
                 return SceneData{};
         }
@@ -66,7 +68,9 @@ SceneData ObjectLoader::LoadScene(const std::string& scene_path){
         json j;
         i_f >> j;
         scene_data.scene_name = j["SceneInfo"]["SceneName"].get<std::string>();
+        #ifdef DEBUG
         std::cout<<"Loading " << scene_data.scene_name << " scene.\n";
+        #endif
         //Checks if there is data in scene
         if(!j.contains("SceneData")){
                 Debug::WriteErrorLog(ErrorType::OBJECTLOADER_NODATA_SCENE_WARN,&scene_path);

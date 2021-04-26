@@ -20,7 +20,6 @@ class GameObject : public Object{
                     return component_return;
                 }
             }
-            std::cout<<"Could not find operator \""<< typeid(T).name() <<"\" For the game object: "<<object_name<<"\n";
             return nullptr;
         };
         //Safely pushes back a component !!(MAYBE??)IMPLEMENT CHECK FOR UNIQUE COMPONENT!!
