@@ -1,21 +1,17 @@
 #include "DataManager.hpp"
 //All includes but scene
-#include "DataStructures/Vector.hpp"
-#include "DataStructures/Matrix.hpp"
-#include "DataStructures/ImplicitObjects.hpp"
-#include "DataStructures/Quaternion.hpp"
 
 #include "Objects/Object.hpp"
 #include "Objects/GameObject.hpp"
 
-#include "Components/Transform.hpp"
-
 #include "Resources/Model.hpp"
 #include "Resources/Shader.hpp"
 #include "Resources/Texture.hpp"
-//------------------------------------------
-// Behaviour -------------------------------
-#include "../MyFiles/include/Behaviors.hpp"
+
+#include "Objects/Mesh.hpp"
+#include "Objects/SpriteAtlas.hpp"
+
+#include "Components/Camera.hpp"
 
 void ObjectLoader::LoadResources(const std::string& resources_path){
         //Creating models-----------------------------------------------------
@@ -47,7 +43,6 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
         a_mesh = new Mesh(square_model,omni_sprite);
         a_mesh->object_name = "CoolPlaneNormal";
         Object::AddObjectBack(dynamic_cast<Object*>(a_mesh));
-        
         Object::AddObjectBack(dynamic_cast<Object*>(new Mesh(cube_model,follow_sprite)));
 }
 
@@ -92,8 +87,7 @@ SceneData ObjectLoader::LoadScene(const std::string& scene_path){
                         for(json::iterator j_comp = j_go_comps.begin() ; j_comp != j_go_comps.end() ; j_comp++){
                                 json::object_t obj = j_comp.value().get<json::object_t>();
                                 if(strcmp(obj.begin()->first.data(),"Transform") == 0){
-                                        Transform trans = ComponentFactory::CreateTransform(j_comp.value(),scene_path);
-                                        *go->transform = trans;
+                                        *go->transform = ComponentFactory::CreateTransform(obj.begin()->second,scene_path);
                                 }
                                 else{
                                         Component* comp = MakeComponent(obj.begin()->first, obj.begin()->second, scene_path);

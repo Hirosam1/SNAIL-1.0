@@ -22,5 +22,5 @@ namespace ComponentFactory{
 };
 
 namespace ResourceFactory{
-    
+
 };

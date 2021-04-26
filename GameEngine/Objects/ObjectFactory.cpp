@@ -122,12 +122,24 @@ Component* ComponentFactory::CreateBehavior(json j, const std::string& file_name
 }
 
 Transform ComponentFactory::CreateTransform(json j,const std::string& file_name){
-    Transform trans = Transform();
-    if(j.size() == 1){
-            std::vector<float> vec3 = j["Transform"].get<std::vector<float>>();
-            if(vec3.size() == 3){
-                trans.position = Vector3(vec3[0],vec3[1],vec3[2]);
-            }
-    }
-    return trans;
+        Transform trans = Transform();
+        if(j.contains("Position")){
+                std::vector<float> vec3 = j["Position"].get<std::vector<float>>();
+                if(vec3.size() == 3){
+                        trans.position = Vector3(vec3[0],vec3[1],vec3[2]);
+                }
+        }
+        if(j.contains("Rotation")){
+                std::vector<float> vec3 = j["Rotation"].get<std::vector<float>>();
+                if(vec3.size() == 3){
+                        trans.SetRot(Vector3(vec3[0],vec3[1],vec3[2]));
+                }
+        }
+        if(j.contains("Scale")){
+                std::vector<float> vec3 = j["Scale"].get<std::vector<float>>();
+                if(vec3.size() == 3){
+                        trans.scale = Vector3(vec3[0],vec3[1],vec3[2]);
+                }
+        }
+        return trans;
 }

@@ -2,6 +2,7 @@
 #include "GMpch.hpp"
 #include "Debug.hpp"
 #include "Objects/ObjectFactory.hpp"
+#include "Components/Transform.hpp"
 
 #include <json/json.hpp>
 

@@ -8,11 +8,16 @@
     "GameObjects" : [
             {"ObjectComponents" : [
                     {"SpriteRenderer" : {"Mesh" : "CoolPlaneAtlas" , "Shader" : "MyAtlasShader", "SpriteAtlas" : "MySpriteAtlas", "AtlasPosition" : [0,0]}},
-                    {"Transform" : [0.0,0.5,0.0]}]
+                    {"Transform" : {"Position" : [0.0,0.5,0.0]} }]
             },
             {"ObjectComponents" : [
                 {"SpriteRenderer" : {"Mesh" : "CoolPlaneAtlas" , "Shader" : "MyAtlasShader", "SpriteAtlas" : "MySpriteAtlas", "AtlasPosition" : [0,0]}},
-                {"Transform" : [1.0,0.5,0.0]}]
+                {"Transform" : {"Position" : [1.0,0.5,0.0]} }]
+            },
+            {"ObjectComponents" : [
+                {"SpriteRenderer" : {"Mesh" : "CoolPlaneAtlas" , "Shader" : "MyAtlasShader", "SpriteAtlas" : "MySpriteAtlas", "AtlasPosition" : [1,0]}},
+                {"Transform" :  {"Position" : [-1.5,0.5,0.5], "Rotation" : [0.0,1.5707,0.0]} },
+                {"Behavior" : "MovingObject"}]
             },
             {"ObjectComponents" : [
                     {"SpriteRenderer" : {"Mesh" : "CoolPlaneNormal", "Shader" :"MyNormalShader"}},
@@ -20,7 +25,7 @@
              "ObjectName" : "Camera Follower"},
             {"ObjectComponents" : [
                 {"Camera" : {"CameraProjection" : 1}}, 
-                {"Transform" : [0.0,0.5,0.5]}, 
+                {"Transform" : {"Position" : [0.0,0.5,0.5]}}, 
                 {"Behavior" : "CameraMovement"}],
              "ObjectName" : "Main Camera",
              "IsMainCamera" : true
