@@ -59,4 +59,4 @@ Makefile
 Myfiles/bin/
 
 #Ignore .git ignore
-!*.sscne.json
+!*.sscene.json

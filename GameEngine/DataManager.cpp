@@ -66,6 +66,7 @@ SceneData ObjectLoader::LoadScene(const std::string& scene_path){
         json j;
         i_f >> j;
         scene_data.scene_name = j["SceneInfo"]["SceneName"].get<std::string>();
+        std::cout<<"Loading " << scene_data.scene_name << " scene.\n";
         //Checks if there is data in scene
         if(!j.contains("SceneData")){
                 Debug::WriteErrorLog(ErrorType::OBJECTLOADER_NODATA_SCENE_WARN,&scene_path);

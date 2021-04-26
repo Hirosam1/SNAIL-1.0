@@ -1,0 +1,30 @@
+{
+    "SceneInfo" : {
+        "SceneName" : "My First Cool Scene",
+        "ChangeResources" : false,
+        "IsFirstScene" : true
+    },
+    "SceneData" : { 
+    "GameObjects" : [
+            {"ObjectComponents" : [
+                    {"SpriteRenderer" : {"Mesh" : "CoolPlaneAtlas" , "Shader" : "MyAtlasShader", "SpriteAtlas" : "MySpriteAtlas", "AtlasPosition" : [0,0]}},
+                    {"Transform" : [0.0,0.5,0.0]}]
+            },
+            {"ObjectComponents" : [
+                {"SpriteRenderer" : {"Mesh" : "CoolPlaneAtlas" , "Shader" : "MyAtlasShader", "SpriteAtlas" : "MySpriteAtlas", "AtlasPosition" : [0,0]}},
+                {"Transform" : [1.0,0.5,0.0]}]
+            },
+            {"ObjectComponents" : [
+                    {"SpriteRenderer" : {"Mesh" : "CoolPlaneNormal", "Shader" :"MyNormalShader"}},
+                    {"Behavior" : "ObjectFollower"}],
+             "ObjectName" : "Camera Follower"},
+            {"ObjectComponents" : [
+                {"Camera" : {"CameraProjection" : 1}}, 
+                {"Transform" : [0.0,0.5,0.5]}, 
+                {"Behavior" : "CameraMovement"}],
+             "ObjectName" : "Main Camera",
+             "IsMainCamera" : true
+            }
+        ]
+    }
+}
