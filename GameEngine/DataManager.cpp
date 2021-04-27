@@ -11,6 +11,12 @@ using namespace nlohmann;
 void ObjectLoader::LoadResources(const std::string& resources_path){
         std::ifstream i_f(resources_path);
         //Checks if the file exists
+        //Init singletons
+        new ComponentFactory();
+        new ResourcesInfo();
+        new ObjectsInfo();
+        //-------------
+
         if(!i_f){
                 #ifdef DEBUG
                 std::cout<< "Failed to load resource file!\n";
@@ -40,7 +46,7 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                                 if(FileIO::TryToRead(j_sh.value(),"Name",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&shader_name)){
                                 if(FileIO::TryToRead(j_sh.value(),"VertexPath",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&shader_info.vertex_path)){
                                 if(FileIO::TryToRead(j_sh.value(),"FragmentPath",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&shader_info.fragment_path)){         
-                                        ResourcesInfo::shaders_map[shader_name] = shader_info;
+                                        ResourcesInfo::singleton->shaders_map[shader_name] = shader_info;
                                 }
                                 }
                                 }
@@ -53,7 +59,7 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                         for(json::iterator j_tex = j_aux["Textures"].begin() ; j_tex != j_aux["Textures"].end() ; j_tex++){
                                 if(FileIO::TryToRead(j_tex.value(),"Name",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&texture_name)){
                                 if(FileIO::TryToRead(j_tex.value(),"TexturePath",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&tex_info.texture_path)){
-                                        ResourcesInfo::texture_map[texture_name] = tex_info;
+                                        ResourcesInfo::singleton->texture_map[texture_name] = tex_info;
                                 }
                                 }
                         }
@@ -78,7 +84,7 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                                                 break;
                                         }
                                 }
-                                        ResourcesInfo::model_map[model_name] = model_info;
+                                        ResourcesInfo::singleton->model_map[model_name] = model_info;
                                 }
                         }
                 }
@@ -95,7 +101,7 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                                 if(FileIO::TryToRead(j_spa.value(),"SheetTexture",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&atlas_info.sheet_texture_name)){
                                 if(FileIO::TryToRead(j_spa.value(),"SheetDimensions",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&vec2)){
                                         atlas_info.atlas_dimensions = Vector2(vec2[0],vec2[1]);
-                                        ObjectsInfo::sprite_atlas_map[atlas_name] = atlas_info;
+                                        ObjectsInfo::singleton->sprite_atlas_map[atlas_name] = atlas_info;
 
                                 }
                                 }
@@ -110,7 +116,7 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                                 if(FileIO::TryToRead(j_m.value(),"Name",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&mesh_name)){
                                 if(FileIO::TryToRead(j_m.value(),"Model",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&mesh_info.model_name)){
                                 if(FileIO::TryToRead(j_m.value(),"Texture",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&mesh_info.texture_name)){
-                                        ObjectsInfo::meshes_map[mesh_name] = mesh_info;
+                                        ObjectsInfo::singleton->meshes_map[mesh_name] = mesh_info;
                                 }
                                 }
                                 }
@@ -193,57 +199,11 @@ SceneData ObjectLoader::LoadScene(const std::string& scene_path){
 
 Component* ObjectLoader::MakeComponent(json j_component, json j_values,const std::string& file_name){
         //Checks if component factory exists
-        if(ComponentFactory::components_factories.find(j_component.get<std::string>()) == ComponentFactory::components_factories.end()){
+        if(ComponentFactory::singleton->components_factories.find(j_component.get<std::string>()) == ComponentFactory::singleton->components_factories.end()){
                 std::string params[] = {file_name,j_component.get<std::string>()};
                 Debug::WriteErrorLog(ErrorType::OBJECTLOADER_NO_COMPONENT_FACTOR_FAIL,params);
                 return nullptr;
         }
         //Returns from function factory
-        return ComponentFactory::components_factories[j_component.get<std::string>()](j_values,file_name);
+        return ComponentFactory::singleton->components_factories[j_component.get<std::string>()](j_values,file_name);
 }
-
-        // GameObject* go = new GameObject();
-        // SceneData init_scene;
-        // go->PushComponentBack(new SpriteRenderer(dynamic_cast<Mesh*>(Object::objects[7]), dynamic_cast<Shader*>(Object::objects[4]),dynamic_cast<SpriteAtlas*>(Object::objects[6] ),0,0));
-        // go->object_name = "first tile floor";
-        // go->transform->SetPos(Vector3(0.0,0.5,0.0));
-        // init_scene.AddGameObject(go);
-
-        // go = new GameObject();
-        // go->PushComponentBack(new SpriteRenderer(dynamic_cast<Mesh*>(Object::objects[7]), dynamic_cast<Shader*>(Object::objects[4]),dynamic_cast<SpriteAtlas*>(Object::objects[6] ),0,0));
-        // go->transform->SetPos(Vector3(1.0,0.5,0.0));
-        // init_scene.AddGameObject(go);
-
-        // go = new GameObject();
-        // go->PushComponentBack(new SpriteRenderer(dynamic_cast<Mesh*>(Object::objects[7]), dynamic_cast<Shader*>(Object::objects[4]),dynamic_cast<SpriteAtlas*>(Object::objects[6]),1,0));
-        // go->PushComponentBack(new MovingObject());
-        // go->transform = new Transform(Vector3(-1.5,0.5,0.5),Vector3(0.0,Math::ToRadians(90),0.0),Vector3(1.0,1.0,1.0));
-        // init_scene.AddGameObject(go);
-
-        // go = new GameObject();
-        // go->object_name = "Camera Follower";
-        // go->PushComponentBack(new SpriteRenderer(dynamic_cast<Mesh*>(Object::objects[8]),dynamic_cast<Shader*>(Object::objects[5])));
-        // go->PushComponentBack(new ObjectFollower());
-        // go->transform->SetPos(Vector3(0.0,1.5,0.5));
-        // init_scene.AddGameObject(go);
-
-        // go = new GameObject();
-        // go->PushComponentBack(new MeshRenderer(dynamic_cast<Mesh*>(Object::objects[9]),dynamic_cast<Shader*>(Object::objects[5])));
-        // //go->PushComponentBack(new HeadFollower());
-        // go->PushComponentBack(new RotateCubeQuat());
-        // go->transform->position = Vector3(0.0,1.5,0.5);
-        // init_scene.AddGameObject(go);
-
-
-        // //Camera has to be added last to avoid weird de-sync rendering
-        // go = new GameObject();
-        // go->object_name = "Main Camera";
-        // go->transform->SetPos(Vector3(0.0,1.0,5.0));
-        // //Creates a camera and sets up projection configuration
-        // Camera* a_camera = new Camera(Camera_Projection::PERSPECTIVE_PROJECTION);
-        // go->PushComponentBack(a_camera);
-        // go->PushComponentBack(new CameraMovement());
-        // init_scene.main_camera = a_camera; 
-        // init_scene.AddGameObject(go);
-
-        // return init_scene;

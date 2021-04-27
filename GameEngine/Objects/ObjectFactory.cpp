@@ -29,22 +29,69 @@
 
 using namespace nlohmann;
 
+ComponentFactory* ComponentFactory::singleton = nullptr;
+ResourcesInfo* ResourcesInfo::singleton = nullptr;
+ObjectsInfo* ObjectsInfo::singleton = nullptr;
 
-// !! MIGHT WANT TO TRANFORM THOSE CLASSES INTO SINGLETON TO ENSURE INITIALIZATION REGARDLESS OF ORDER OF TRANSLATION UNIT !!
+ComponentFactory::ComponentFactory(){
+        if(!singleton){
+                components_factories = {      
+                {"SpriteRenderer", CreateSpriteRenderer},
+                {"MeshRenderer", CreateMeshRenderer},
+                {"Camera", CreateCamera},
+                {"Behavior", CreateBehavior}};
+                singleton = this;
+        }
+        else{
+                delete this;
+        }
+}
 
-std::map<std::string, Component*(*)(nlohmann::json,const std::string&)> ComponentFactory::components_factories = {      
-        {"SpriteRenderer", CreateSpriteRenderer},
-        {"Camera", CreateCamera},
-        {"Behavior", CreateBehavior},
-    };
+ResourcesInfo::ResourcesInfo(){
+        if(!singleton){
+                singleton = this;
+        }else{
+                delete this;
+        }
+}
 
-std::map<std::string, ResourcesInfo::ShaderInfo>  ResourcesInfo::shaders_map  = std::map<std::string, ResourcesInfo::ShaderInfo>();
-std::map<std::string, ResourcesInfo::TextureInfo> ResourcesInfo::texture_map = std::map<std::string, ResourcesInfo::TextureInfo>();
-std::map<std::string, ResourcesInfo::ModelInfo> ResourcesInfo::model_map = std::map<std::string, ResourcesInfo::ModelInfo>();
+ObjectsInfo::ObjectsInfo(){
+        if(!singleton){
+                singleton = this;
+        }else{
+                delete this;
+        }
+}
 
-std::map<std::string, ObjectsInfo::SpriteAtlasInfo> ObjectsInfo::sprite_atlas_map  = std::map<std::string, ObjectsInfo::SpriteAtlasInfo>();
-std::map<std::string, ObjectsInfo::MeshInfo> ObjectsInfo::meshes_map = std::map<std::string, ObjectsInfo::MeshInfo>();
-
+Component* ComponentFactory::CreateMeshRenderer(json j,const std::string& file_name){
+        MeshRenderer* m_r = nullptr;
+        Mesh* mesh;
+        Shader* shader;
+        std::string shader_name;
+        std::string mesh_name;
+        std::string params[] = {file_name,"MeshRenderer"};
+        if(FileIO::TryToRead(j,"Mesh",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&mesh_name)){
+                mesh = ObjectsInfo::FindOrCreateMesh(mesh_name);
+        if(FileIO::TryToRead(j,"Shader", ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&shader_name)){
+               shader = ResourcesInfo::FindOrCreateShader(shader_name);
+               if(mesh){
+                        m_r = new MeshRenderer(mesh,shader);
+                        
+                }else{
+                     if(!shader){
+                             params[1] = shader_name;
+                             Debug::WriteErrorLog(ErrorType::OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL,params);
+                     }   
+                     if(!mesh){
+                             params[1] = mesh_name;  
+                             Debug::WriteErrorLog(ErrorType::OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL,params);
+                     }
+                }
+        }
+        }
+        return  m_r; 
+}
+// !! THIS CODE IS UGLY! REFACTOR IT  LIKE!!
 Component* ComponentFactory::CreateSpriteRenderer(json j,const std::string& file_name){
         Mesh* mesh;
         Shader* shader;
@@ -75,7 +122,7 @@ Component* ComponentFactory::CreateSpriteRenderer(json j,const std::string& file
                 return nullptr;
         }
         //Tries to get sprite atlas
-        if(FileIO::TryToRead(j,"SpriteAtlas",ErrorType::NO_ERROR,nullptr,&obj_name) /*j.contains("SpriteAtlas")*/){
+        if(FileIO::TryToRead(j,"SpriteAtlas",ErrorType::NO_ERROR,nullptr,&obj_name)){
                 sprite_atlas = ObjectsInfo::FindOrCreateSpriteAtlas(obj_name);
                 if(!sprite_atlas){
                         params[1] = obj_name;
@@ -161,8 +208,8 @@ Transform ComponentFactory::CreateTransform(json j,const std::string& file_name)
 Mesh* ObjectsInfo::FindOrCreateMesh(const std::string& name){
         Mesh* mesh = dynamic_cast<Mesh*>(Object::FindObjectByName(name));
         if(!mesh){
-                if(ObjectsInfo::meshes_map.find(name) != ObjectsInfo::meshes_map.end()){
-                        ObjectsInfo::MeshInfo mesh_i = ObjectsInfo::meshes_map[name];
+                if(ObjectsInfo::singleton->meshes_map.find(name) != ObjectsInfo::singleton->meshes_map.end()){
+                        ObjectsInfo::MeshInfo mesh_i = ObjectsInfo::singleton->meshes_map[name];
                         Model* model = ResourcesInfo::FindOrCreateModel(mesh_i.model_name);
                         Texture* tex = ResourcesInfo::FindOrCreateTexture(mesh_i.texture_name);
                         if(model && tex){
@@ -178,8 +225,8 @@ Mesh* ObjectsInfo::FindOrCreateMesh(const std::string& name){
 SpriteAtlas* ObjectsInfo::FindOrCreateSpriteAtlas(const std::string& name){
         SpriteAtlas* atlas = dynamic_cast<SpriteAtlas*>(Object::FindObjectByName(name));
         if(!atlas){
-                if(ObjectsInfo::sprite_atlas_map.find(name) != ObjectsInfo::sprite_atlas_map.end()){
-                        ObjectsInfo::SpriteAtlasInfo s_info = ObjectsInfo::sprite_atlas_map[name];
+                if(ObjectsInfo::singleton->sprite_atlas_map.find(name) != ObjectsInfo::singleton->sprite_atlas_map.end()){
+                        ObjectsInfo::SpriteAtlasInfo s_info = ObjectsInfo::singleton->sprite_atlas_map[name];
                         Texture* tex = ResourcesInfo::FindOrCreateTexture(s_info.sheet_texture_name);
                         if(tex){
                                 atlas = new SpriteAtlas(tex, s_info.atlas_dimensions.x, s_info.atlas_dimensions.y);
@@ -194,9 +241,9 @@ SpriteAtlas* ObjectsInfo::FindOrCreateSpriteAtlas(const std::string& name){
 Texture* ResourcesInfo::FindOrCreateTexture(const std::string& name){
         Texture* tex = dynamic_cast<Texture*>(Object::FindObjectByName(name));
         if(!tex){
-                if(ResourcesInfo::texture_map.find(name) != ResourcesInfo::texture_map.end()){
+                if(ResourcesInfo::singleton->texture_map.find(name) != ResourcesInfo::singleton->texture_map.end()){
                         std::cout<< "Texture -> " << name << "created\n";
-                        tex = new Texture(ResourcesInfo::texture_map[name].texture_path);
+                        tex = new Texture(ResourcesInfo::singleton->texture_map[name].texture_path);
                         tex->object_name = name;
                         Object::AddObjectBack(tex);
                 }
@@ -207,9 +254,9 @@ Texture* ResourcesInfo::FindOrCreateTexture(const std::string& name){
 Shader* ResourcesInfo::FindOrCreateShader(const std::string& name){
         Shader* shader=  dynamic_cast<Shader*>(Object::FindObjectByName(name));
         if(!shader){
-                if(ResourcesInfo::shaders_map.find(name) != ResourcesInfo::shaders_map.end()){
+                if(ResourcesInfo::singleton->shaders_map.find(name) != ResourcesInfo::singleton->shaders_map.end()){
                         std::cout<< "Shader -> " << name << "created\n";
-                        shader = new Shader(ResourcesInfo::shaders_map[name].vertex_path,ResourcesInfo::shaders_map[name].fragment_path);
+                        shader = new Shader(ResourcesInfo::singleton->shaders_map[name].vertex_path,ResourcesInfo::singleton->shaders_map[name].fragment_path);
                         shader->object_name = name;
                         Object::AddObjectBack(shader);
                 }
@@ -220,10 +267,10 @@ Shader* ResourcesInfo::FindOrCreateShader(const std::string& name){
 Model* ResourcesInfo::FindOrCreateModel(const std::string& name){
         Model* model = dynamic_cast<Model*>(Object::FindObjectByName(name));
         if(!model){
-                if(ResourcesInfo::model_map.find(name) != ResourcesInfo::model_map.end()){
-                        if(ResourcesInfo::model_map[name].default_shape >= 0){
+                if(ResourcesInfo::singleton->model_map.find(name) != ResourcesInfo::singleton->model_map.end()){
+                        if(ResourcesInfo::singleton->model_map[name].default_shape >= 0){
                                 std::cout<< "Model  -> " << name << "created\n";
-                                switch (ResourcesInfo::model_map[name].default_shape)
+                                switch (ResourcesInfo::singleton->model_map[name].default_shape)
                                 {
                                 case 0:
                                         model = new Model(DefaultShapes::SquareWithTex());
