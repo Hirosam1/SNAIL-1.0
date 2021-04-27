@@ -4,49 +4,122 @@
 #include "Objects/Object.hpp"
 #include "Objects/GameObject.hpp"
 
-#include "Resources/Model.hpp"
-#include "Resources/Shader.hpp"
-#include "Resources/Texture.hpp"
-
-#include "Objects/Mesh.hpp"
-#include "Objects/SpriteAtlas.hpp"
-
 #include "Components/Camera.hpp"
 
-void ObjectLoader::LoadResources(const std::string& resources_path){
-        //Creating models-----------------------------------------------------
-        Model* square_model = new Model(DefaultShapes::SquareWithTex());
-        Model* cube_model = new Model(DefaultShapes::CubeWithTex());
-        Object::AddObjectBack(dynamic_cast<Resource*>(square_model));
-        Object::AddObjectBack(dynamic_cast<Resource*>(cube_model));
-        //--------------------------------------------------------------------
-        Texture* sprite_sheet = new Texture("resources/images/sprite_sheet.png");
-        Texture* omni_sprite = new Texture("resources/images/omnipothead.png");
-        Texture* follow_sprite = new Texture("resources/images/spooky.png");
-        Object::AddObjectBack(dynamic_cast<Resource*>(sprite_sheet));
-        Object::AddObjectBack(dynamic_cast<Resource*>(omni_sprite));
-        //--------------------------------------------------------------------
-        Shader* atlas_shader = new Shader("resources/shaders/vertex/atlas.vert", "resources/shaders/fragment/sprite.frag");
-        atlas_shader->object_name = "MyAtlasShader";
-        Shader* mesh_shader = new Shader ("resources/shaders/vertex/basic.vert","resources/shaders/fragment/sprite.frag");
-        mesh_shader->object_name = "MyNormalShader";
-        Object::AddObjectBack(dynamic_cast<Resource*>(atlas_shader));
-        Object::AddObjectBack(dynamic_cast<Resource*>(mesh_shader));
-        SpriteAtlas* sprite_atlas = new SpriteAtlas(sprite_sheet,1,3);
-        sprite_atlas->object_name = "MySpriteAtlas" ;
-        Object::AddObjectBack(dynamic_cast<Object*>(sprite_atlas));
-        //--------------------------------------------------------------------
-        Mesh* a_mesh = new Mesh(square_model,sprite_sheet);
-        a_mesh->object_name = "CoolPlaneAtlas";
-        Object::AddObjectBack(dynamic_cast<Object*>(a_mesh));
-
-        a_mesh = new Mesh(square_model,omni_sprite);
-        a_mesh->object_name = "CoolPlaneNormal";
-        Object::AddObjectBack(dynamic_cast<Object*>(a_mesh));
-        Object::AddObjectBack(dynamic_cast<Object*>(new Mesh(cube_model,follow_sprite)));
-}
-
 using namespace nlohmann;
+
+void ObjectLoader::LoadResources(const std::string& resources_path){
+        std::ifstream i_f(resources_path);
+        //Checks if the file exists
+        if(!i_f){
+                #ifdef DEBUG
+                std::cout<< "Failed to load resource file!\n";
+                #endif
+                Debug::WriteErrorLog(ErrorType::OBJECTLOADER_LOADING_SCENE_FAIL,&resources_path);
+                return;
+        } 
+        json j;
+        i_f >> j;
+        if(!j.contains("ResourceInfo")){
+                Debug::WriteErrorLog(ErrorType::RESLOADER_NO_RESINFO_FAIL,&resources_path);
+                return;
+        }
+        if(!j["ResourceInfo"].contains("ResourceName")){
+                Debug::WriteErrorLog(ErrorType::RESLOADER_NO_RESINFO_FAIL,&resources_path);
+                return;
+        }
+        if(j.contains("ResourceData")){
+                json j_aux = j["ResourceData"];
+                if(j_aux.contains("Shaders")){
+                        //Get all shaders
+                        for(json::iterator j_sh = j_aux["Shaders"].begin() ; j_sh != j_aux["Shaders"].end() ; j_sh++){
+                                ResourcesInfo::ShaderInfo shader_info;
+                                std::string shader_name;
+                                std::string params[] = {resources_path,"Shader"};
+
+                                if(FileIO::TryToRead(j_sh.value(),"Name",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&shader_name)){
+                                if(FileIO::TryToRead(j_sh.value(),"VertexPath",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&shader_info.vertex_path)){
+                                if(FileIO::TryToRead(j_sh.value(),"FragmentPath",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&shader_info.fragment_path)){         
+                                        ResourcesInfo::shaders_map[shader_name] = shader_info;
+                                }
+                                }
+                                }
+                        }
+                }
+                if(j_aux.contains("Textures")){
+                        std::string params[] = {resources_path,"Textures"};
+                        std::string texture_name;
+                        ResourcesInfo::TextureInfo tex_info;
+                        for(json::iterator j_tex = j_aux["Textures"].begin() ; j_tex != j_aux["Textures"].end() ; j_tex++){
+                                if(FileIO::TryToRead(j_tex.value(),"Name",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&texture_name)){
+                                if(FileIO::TryToRead(j_tex.value(),"TexturePath",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&tex_info.texture_path)){
+                                        ResourcesInfo::texture_map[texture_name] = tex_info;
+                                }
+                                }
+                        }
+                }
+                if(j_aux.contains("Models")){
+                        std::string params[] = {resources_path,"Models"};
+                        std::string model_name;
+                        ResourcesInfo::ModelInfo model_info;
+                        for(json::iterator j_model = j_aux["Models"].begin() ; j_model != j_aux["Models"].end() ; j_model++){
+                                if(FileIO::TryToRead(j_model.value(),"Name",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&model_name)){
+                                int i;
+                                if(FileIO::TryToRead(j_model.value(),"DefaultShape",ErrorType::NO_ERROR,nullptr,&i)){
+                                        switch (i)
+                                        {
+                                        case 0:
+                                                model_info.default_shape = 0;
+                                                break;
+                                        case 1:
+                                                model_info.default_shape = 1;
+                                                break;
+                                        default:
+                                                break;
+                                        }
+                                }
+                                        ResourcesInfo::model_map[model_name] = model_info;
+                                }
+                        }
+                }
+        }
+        if(j.contains("ObjectData")){
+                json j_aux = j["ObjectData"];
+                if(j_aux.contains("SpriteAtlas")){
+                        std::string params[] = {resources_path,"SpariteAtlas"};
+                        for(json::iterator j_spa = j_aux["SpriteAtlas"].begin() ; j_spa != j_aux["SpriteAtlas"].end(); j_spa++){
+                                std::string atlas_name;
+                                ObjectsInfo::SpriteAtlasInfo atlas_info;
+                                std::vector<int> vec2;
+                                if(FileIO::TryToRead(j_spa.value(),"Name",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&atlas_name)){
+                                if(FileIO::TryToRead(j_spa.value(),"SheetTexture",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&atlas_info.sheet_texture_name)){
+                                if(FileIO::TryToRead(j_spa.value(),"SheetDimensions",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&vec2)){
+                                        atlas_info.atlas_dimensions = Vector2(vec2[0],vec2[1]);
+                                        ObjectsInfo::sprite_atlas_map[atlas_name] = atlas_info;
+
+                                }
+                                }
+                                }
+                        }
+                }
+                if(j_aux.contains("Meshes")){
+                        std::string params[] = {resources_path,"Meshes"};
+                        for(json::iterator j_m = j_aux["Meshes"].begin() ; j_m != j_aux["Meshes"].end() ; j_m++){
+                                std::string mesh_name;
+                                ObjectsInfo::MeshInfo mesh_info;
+                                if(FileIO::TryToRead(j_m.value(),"Name",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&mesh_name)){
+                                if(FileIO::TryToRead(j_m.value(),"Model",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&mesh_info.model_name)){
+                                if(FileIO::TryToRead(j_m.value(),"Texture",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&mesh_info.texture_name)){
+                                        ObjectsInfo::meshes_map[mesh_name] = mesh_info;
+                                }
+                                }
+                                }
+
+                        }
+                }
+        }
+
+}
 
 SceneData ObjectLoader::LoadScene(const std::string& scene_path){
         std::ifstream i_f(scene_path);
@@ -62,7 +135,13 @@ SceneData ObjectLoader::LoadScene(const std::string& scene_path){
         SceneData scene_data;
         json j;
         i_f >> j;
-        scene_data.scene_name = j["SceneInfo"]["SceneName"].get<std::string>();
+        if(!j.contains("SceneInfo")){
+                Debug::WriteErrorLog(ErrorType::OBJECTLOADER_NO_SCENE_INFO_FAIL,&scene_path);
+                return scene_data;
+        }
+        if(!FileIO::TryToRead(j["SceneInfo"],"SceneName",ErrorType::OBJECTLOADER_NO_SCENE_INFO_FAIL,&scene_path,&scene_data.scene_name)){
+                return scene_data;
+        }
         #ifdef DEBUG
         std::cout<<"Loading " << scene_data.scene_name << " scene.\n";
         #endif
@@ -79,9 +158,7 @@ SceneData ObjectLoader::LoadScene(const std::string& scene_path){
         j_game_objects = j_game_objects["GameObjects"];
         for(json::iterator j_go = j_game_objects.begin(); j_go != j_game_objects.end(); j_go++){
                 GameObject* go = new GameObject();
-                if(j_go.value().contains("ObjectName")){
-                        go->object_name = j_go.value()["ObjectName"].get<std::string>();
-                }
+                FileIO::TryToRead(j_go.value(),"ObjectName",ErrorType::NO_ERROR,nullptr,&go->object_name);
                 if(j_go.value().contains("ObjectComponents")){
                         json j_go_comps = j_go.value()["ObjectComponents"];
                         for(json::iterator j_comp = j_go_comps.begin() ; j_comp != j_go_comps.end() ; j_comp++){
@@ -99,8 +176,11 @@ SceneData ObjectLoader::LoadScene(const std::string& scene_path){
                         }
                 }
                 if(j_go.value().contains("IsMainCamera")){
-                        if(j_go.value()["IsMainCamera"].get<bool>()){
-                                if(Camera* camera = go->GetComponent<Camera>()){
+                        bool is_main_cam = false;
+                        if(FileIO::TryToRead(j_go.value(),"IsMainCamera", ErrorType::NO_ERROR,nullptr,&is_main_cam) /*j_go.value()["IsMainCamera"].get<bool>()*/){
+                                Camera* camera;
+                                //Checks if isMainCam true and if there was a camera created in the game object
+                                if(is_main_cam && (camera = go->GetComponent<Camera>())){
                                         scene_data.main_camera = camera;
                                 }
                         }

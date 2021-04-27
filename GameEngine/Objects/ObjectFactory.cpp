@@ -29,50 +29,64 @@
 
 using namespace nlohmann;
 
+
+// !! MIGHT WANT TO TRANFORM THOSE CLASSES INTO SINGLETON TO ENSURE INITIALIZATION REGARDLESS OF ORDER OF TRANSLATION UNIT !!
+
+std::map<std::string, Component*(*)(nlohmann::json,const std::string&)> ComponentFactory::components_factories = {      
+        {"SpriteRenderer", CreateSpriteRenderer},
+        {"Camera", CreateCamera},
+        {"Behavior", CreateBehavior},
+    };
+
+std::map<std::string, ResourcesInfo::ShaderInfo>  ResourcesInfo::shaders_map  = std::map<std::string, ResourcesInfo::ShaderInfo>();
+std::map<std::string, ResourcesInfo::TextureInfo> ResourcesInfo::texture_map = std::map<std::string, ResourcesInfo::TextureInfo>();
+std::map<std::string, ResourcesInfo::ModelInfo> ResourcesInfo::model_map = std::map<std::string, ResourcesInfo::ModelInfo>();
+
+std::map<std::string, ObjectsInfo::SpriteAtlasInfo> ObjectsInfo::sprite_atlas_map  = std::map<std::string, ObjectsInfo::SpriteAtlasInfo>();
+std::map<std::string, ObjectsInfo::MeshInfo> ObjectsInfo::meshes_map = std::map<std::string, ObjectsInfo::MeshInfo>();
+
 Component* ComponentFactory::CreateSpriteRenderer(json j,const std::string& file_name){
         Mesh* mesh;
         Shader* shader;
         SpriteAtlas* sprite_atlas = nullptr;
         Vector2 atlas_pos;
         SpriteRenderer* sptr = nullptr;
+        std::string obj_name;
+        std::string params[] = {file_name,"SpriteRenderer"};
         //Tries to get mesh
-        if(!j.contains("Mesh")){
-                std::string params[]{file_name,"SpriteRenderer"};
-                Debug::WriteErrorLog(ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params);
-                return nullptr;   
+        if(!FileIO::TryToRead(j,"Mesh",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&obj_name)){
+                return nullptr;
         }
-        mesh = dynamic_cast<Mesh*>(Object::FindObjectByName(j["Mesh"].get<std::string>()));
+        mesh = ObjectsInfo::FindOrCreateMesh(obj_name);
         if(!mesh){
-                std::string params[]{file_name,j["Mesh"].get<std::string>()};
+                params[1]  = obj_name;
                 Debug::WriteErrorLog(ErrorType::OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL,params);
                 return nullptr;
         }
         //Tries to get shader
-        if(!j.contains("Shader")){
-                std::string params[]{file_name,"SpriteRenderer"};
-                Debug::WriteErrorLog(ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params);
-                return nullptr; 
+        params[1] = "SpriteRenderer";
+        if(!FileIO::TryToRead(j,"Shader",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&obj_name)){
+                return nullptr;
         }
-        shader = dynamic_cast<Shader*>(Object::FindObjectByName(j["Shader"].get<std::string>()));
+        shader = ResourcesInfo::FindOrCreateShader(obj_name);
         if(!shader){
-                std::string params[]{file_name,j["Shader"].get<std::string>()};
+                params[1] = obj_name;
                 Debug::WriteErrorLog(ErrorType::OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL,params);
                 return nullptr;
         }
         //Tries to get sprite atlas
-        if(j.contains("SpriteAtlas")){
-                sprite_atlas = dynamic_cast<SpriteAtlas*>(Object::FindObjectByName(j["SpriteAtlas"].get<std::string>()));
+        if(FileIO::TryToRead(j,"SpriteAtlas",ErrorType::NO_ERROR,nullptr,&obj_name) /*j.contains("SpriteAtlas")*/){
+                sprite_atlas = ObjectsInfo::FindOrCreateSpriteAtlas(obj_name);
                 if(!sprite_atlas){
-                        std::string params[]{file_name,j["SpriteAtlas"].get<std::string>()};
+                        params[1] = obj_name;
                         Debug::WriteErrorLog(ErrorType::OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL,params);
                         return nullptr;  
                 }
-                if(!j.contains("AtlasPosition")){
-                        std::string params[]{file_name,"SpriteRenderer"};
-                        Debug::WriteErrorLog(ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params);
-                        return nullptr;   
+                params[1] = "SpriteRenderer";
+                std::vector<int> vec2;
+                if(!FileIO::TryToRead(j,"AtlasPosition",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&vec2)){
+                        return nullptr;
                 }
-                std::vector<int> vec2 = j["AtlasPosition"].get<std::vector<int>>();
                 atlas_pos = Vector2(vec2[0],vec2[1]);
                 //Create Sprite Renderer
                 sptr = new SpriteRenderer(mesh,shader,sprite_atlas,atlas_pos.x,atlas_pos.y);
@@ -86,10 +100,10 @@ Component* ComponentFactory::CreateSpriteRenderer(json j,const std::string& file
 }
 
 Component* ComponentFactory::CreateCamera(json j, const std::string& file_name){
-        if(!j.contains("CameraProjection")){
+        int i;
+        if(!FileIO::TryToRead(j,"CameraProjection",ErrorType::NO_ERROR,nullptr,&i)){
                 return dynamic_cast<Component*>(new Camera());
         }
-        int i = j["CameraProjection"].get<int>();
         switch (i)
         {
         case 0:
@@ -103,7 +117,9 @@ Component* ComponentFactory::CreateCamera(json j, const std::string& file_name){
 }
 
 Component* ComponentFactory::CreateBehavior(json j, const std::string& file_name){
-        std::string behavior_name = j.get<std::string>();
+        // std::string behavior_name = j.get<std::string>();
+        std::string behavior_name;
+        FileIO::TryToRead(j,"__THIS_CELL__",ErrorType::NO_ERROR,nullptr,&behavior_name);
         if(strcmp(behavior_name.data(),"CameraMovement") == 0){
                 return dynamic_cast<Component*>(new CameraMovement());
         }else if(strcmp(behavior_name.data(),"HeadFollower") == 0){
@@ -123,23 +139,109 @@ Component* ComponentFactory::CreateBehavior(json j, const std::string& file_name
 
 Transform ComponentFactory::CreateTransform(json j,const std::string& file_name){
         Transform trans = Transform();
-        if(j.contains("Position")){
-                std::vector<float> vec3 = j["Position"].get<std::vector<float>>();
+        std::vector<float> vec3;
+        if(FileIO::TryToRead(j,"Position",ErrorType::NO_ERROR,nullptr,&vec3)){
                 if(vec3.size() == 3){
                         trans.position = Vector3(vec3[0],vec3[1],vec3[2]);
                 }
         }
-        if(j.contains("Rotation")){
-                std::vector<float> vec3 = j["Rotation"].get<std::vector<float>>();
+        if(FileIO::TryToRead(j,"Rotation",ErrorType::NO_ERROR,nullptr,&vec3)){
                 if(vec3.size() == 3){
                         trans.SetRot(Vector3(vec3[0],vec3[1],vec3[2]));
                 }
         }
-        if(j.contains("Scale")){
-                std::vector<float> vec3 = j["Scale"].get<std::vector<float>>();
+        if(FileIO::TryToRead(j,"Scale",ErrorType::NO_ERROR,nullptr,&vec3)){
                 if(vec3.size() == 3){
                         trans.scale = Vector3(vec3[0],vec3[1],vec3[2]);
                 }
         }
         return trans;
+}
+
+Mesh* ObjectsInfo::FindOrCreateMesh(const std::string& name){
+        Mesh* mesh = dynamic_cast<Mesh*>(Object::FindObjectByName(name));
+        if(!mesh){
+                if(ObjectsInfo::meshes_map.find(name) != ObjectsInfo::meshes_map.end()){
+                        ObjectsInfo::MeshInfo mesh_i = ObjectsInfo::meshes_map[name];
+                        Model* model = ResourcesInfo::FindOrCreateModel(mesh_i.model_name);
+                        Texture* tex = ResourcesInfo::FindOrCreateTexture(mesh_i.texture_name);
+                        if(model && tex){
+                                mesh = new Mesh(model,tex);
+                                mesh->object_name = name;
+                                Object::AddObjectBack(mesh);
+                        }
+                }
+        }
+        return mesh;
+}
+
+SpriteAtlas* ObjectsInfo::FindOrCreateSpriteAtlas(const std::string& name){
+        SpriteAtlas* atlas = dynamic_cast<SpriteAtlas*>(Object::FindObjectByName(name));
+        if(!atlas){
+                if(ObjectsInfo::sprite_atlas_map.find(name) != ObjectsInfo::sprite_atlas_map.end()){
+                        ObjectsInfo::SpriteAtlasInfo s_info = ObjectsInfo::sprite_atlas_map[name];
+                        Texture* tex = ResourcesInfo::FindOrCreateTexture(s_info.sheet_texture_name);
+                        if(tex){
+                                atlas = new SpriteAtlas(tex, s_info.atlas_dimensions.x, s_info.atlas_dimensions.y);
+                                atlas->object_name = name;
+                                Object::AddObjectBack(atlas);
+                        }
+                }
+        }
+        return atlas;
+}
+
+Texture* ResourcesInfo::FindOrCreateTexture(const std::string& name){
+        Texture* tex = dynamic_cast<Texture*>(Object::FindObjectByName(name));
+        if(!tex){
+                if(ResourcesInfo::texture_map.find(name) != ResourcesInfo::texture_map.end()){
+                        std::cout<< "Texture -> " << name << "created\n";
+                        tex = new Texture(ResourcesInfo::texture_map[name].texture_path);
+                        tex->object_name = name;
+                        Object::AddObjectBack(tex);
+                }
+        }
+        return tex;
+}
+
+Shader* ResourcesInfo::FindOrCreateShader(const std::string& name){
+        Shader* shader=  dynamic_cast<Shader*>(Object::FindObjectByName(name));
+        if(!shader){
+                if(ResourcesInfo::shaders_map.find(name) != ResourcesInfo::shaders_map.end()){
+                        std::cout<< "Shader -> " << name << "created\n";
+                        shader = new Shader(ResourcesInfo::shaders_map[name].vertex_path,ResourcesInfo::shaders_map[name].fragment_path);
+                        shader->object_name = name;
+                        Object::AddObjectBack(shader);
+                }
+        }
+        return shader;
+}
+
+Model* ResourcesInfo::FindOrCreateModel(const std::string& name){
+        Model* model = dynamic_cast<Model*>(Object::FindObjectByName(name));
+        if(!model){
+                if(ResourcesInfo::model_map.find(name) != ResourcesInfo::model_map.end()){
+                        if(ResourcesInfo::model_map[name].default_shape >= 0){
+                                std::cout<< "Model  -> " << name << "created\n";
+                                switch (ResourcesInfo::model_map[name].default_shape)
+                                {
+                                case 0:
+                                        model = new Model(DefaultShapes::SquareWithTex());
+                                        model->object_name = name;
+                                        Object::AddObjectBack(model);
+                                        break;
+                                case 1:
+                                        model = new Model(DefaultShapes::CubeWithTex());
+                                        model->object_name = name;
+                                        Object::AddObjectBack(model);
+                                        break;
+                                
+                                default:
+                                        break;
+                                }
+                                
+                        }
+                }
+        }
+        return model;
 }

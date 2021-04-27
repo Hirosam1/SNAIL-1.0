@@ -21,7 +21,8 @@
             },
             {"ObjectComponents" : [
                     {"SpriteRenderer" : {"Mesh" : "CoolPlaneNormal", "Shader" :"MyNormalShader"}},
-                    {"Behavior" : "ObjectFollower"}],
+                    {"Behavior" : "ObjectFollower"},
+                    {"Transform": {"Scale" : [1.5,1.5,1.0], "Position" : [-1.0,0.0,-1.0]}}],
              "ObjectName" : "Camera Follower"},
             {"ObjectComponents" : [
                 {"Camera" : {"CameraProjection" : 1}}, 

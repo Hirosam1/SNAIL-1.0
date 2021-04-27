@@ -32,16 +32,14 @@ class Game {
             LoadResources();
             res_load_time.Stop();
 
-            Timer res_obj_all_time = Timer(&tes, "Object and resource management");
-            Timer obj_loading = Timer(&tes, "Object loading");
+            Timer obj_loading = Timer(&tes, "Scene loading");
             #ifdef DEBUG
-            std::cout<<"Loading GameObjects\n";
+            std::cout<<"Loading Scene\n";
             #endif
 
-            LoadGameObjects();
+            LoadScene();
 
             obj_loading.Stop();
-            res_obj_all_time.Stop();
             #ifdef DEBUG
             std::cout<<"Initializing Scene\n";
             #endif
@@ -74,10 +72,10 @@ class Game {
     private:
         //Loads all the initial resources
         void LoadResources(){
-            ObjectLoader::LoadResources("asd");
+            ObjectLoader::LoadResources("Resources.sres.json");
         }
         //Initiate the games objects with the components previously loaded
-        void LoadGameObjects(){
+        void LoadScene(){
             Scene* init_scene = new Scene("Scene1.sscene.json");
             Scene::active_scene = init_scene;
         }

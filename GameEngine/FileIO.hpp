@@ -1,6 +1,7 @@
 #pragma once
 #include "GMpch.hpp"
 #include "Debug.hpp"
+#include "json/json.hpp"
 
 
 namespace FileIO{
@@ -16,4 +17,30 @@ namespace FileIO{
             std::string contents((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
             return contents;
     }
+    //Tries to get value, if it fails then debug error
+    template<typename T>
+        bool TryToRead(nlohmann::json j,const std::string& e,ErrorType err,const std::string*  params,T* value = nullptr){
+            if(j.contains(e)){
+                try{
+                    *value = j[e].get<T>();
+                    return true;
+                }catch(nlohmann::json::type_error){
+                    // !! DEBUG ERROR !!
+                    std::cout << " !! TYPE ERROR !!\n";
+                    return false;
+                }
+            }else{
+                if(strcmp(e.data(),"__THIS_CELL__") == 0){
+                    try{
+                        *value = j.get<T>();
+                    }catch(nlohmann::json::type_error){
+                        // !! DEBUG ERROR !!
+                        std::cout << " !! TYPE ERROR !!\n";
+                        return false; 
+                    }
+                }
+            }
+            Debug::WriteErrorLog(err,params);
+            return false;
+    };
 }

@@ -3,6 +3,7 @@
 #include "Debug.hpp"
 #include "Objects/ObjectFactory.hpp"
 #include "Components/Transform.hpp"
+#include "FileIO.hpp"
 
 #include <json/json.hpp>
 
