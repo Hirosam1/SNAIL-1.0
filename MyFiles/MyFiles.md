@@ -26,7 +26,7 @@ After that you can now make the executable by running make:
 If everything runs correctly it should have created a folder in MyFiles/bin/Debug where the executable is created.
 
 You can also run this, for the O2 optimized version:
-make config=release
+> make config=release
 
 ## Running the engine
 You can either move all needed files to the MyFiles/bin/Debug folder or run the application directly from the MyFiles folder using the console.
