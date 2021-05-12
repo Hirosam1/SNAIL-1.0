@@ -183,7 +183,7 @@ SceneData ObjectLoader::LoadScene(const std::string& scene_path){
                 }
                 if(j_go.value().contains("IsMainCamera")){
                         bool is_main_cam = false;
-                        if(FileIO::TryToRead(j_go.value(),"IsMainCamera", ErrorType::NO_ERROR,nullptr,&is_main_cam) /*j_go.value()["IsMainCamera"].get<bool>()*/){
+                        if(FileIO::TryToRead(j_go.value(),"IsMainCamera", ErrorType::NO_ERROR,nullptr,&is_main_cam)){
                                 Camera* camera;
                                 //Checks if isMainCam true and if there was a camera created in the game object
                                 if(is_main_cam && (camera = go->GetComponent<Camera>())){

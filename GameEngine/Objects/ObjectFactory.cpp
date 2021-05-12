@@ -74,7 +74,7 @@ Component* ComponentFactory::CreateMeshRenderer(json j,const std::string& file_n
                 mesh = ObjectsInfo::FindOrCreateMesh(mesh_name);
         if(FileIO::TryToRead(j,"Shader", ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&shader_name)){
                shader = ResourcesInfo::FindOrCreateShader(shader_name);
-               if(mesh){
+               if(mesh && shader){
                         m_r = new MeshRenderer(mesh,shader);
                         
                 }else{
