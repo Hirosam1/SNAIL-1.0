@@ -25,7 +25,7 @@
                 {"Behavior" : "MovingObject"}]
             },
             {"ObjectComponents" : [
-                    {"SpriteRenderer" : {"Mesh" : "CoolPlaneNormal", "Shader" :"MyNormalShader"}},
+                    {"SpriteRenderer" : {"Mesh" : "ScaryCubeHead", "Shader" :"MyNormalShader"}},
                     {"Behavior" : "ObjectFollower"},
                     {"Transform": {"Scale" : [1.5,1.5,1.0], "Position" : [-1.0,0.0,-1.0]}}],
              "ObjectName" : "Camera Follower"},

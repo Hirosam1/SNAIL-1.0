@@ -55,7 +55,15 @@
         "xtr1common": "cpp",
         "chrono": "cpp",
         "random": "cpp",
-        "ratio": "cpp"
+        "ratio": "cpp",
+        "array": "cpp",
+        "clocale": "cpp",
+        "forward_list": "cpp",
+        "iterator": "cpp",
+        "map": "cpp",
+        "numeric": "cpp",
+        "valarray": "cpp",
+        "xtree": "cpp"
     },
     "cSpell.words": [
         "Wwindow"

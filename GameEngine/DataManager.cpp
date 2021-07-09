@@ -45,7 +45,8 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
 
                                 if(FileIO::TryToRead(j_sh.value(),"Name",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&shader_name)){
                                 if(FileIO::TryToRead(j_sh.value(),"VertexPath",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&shader_info.vertex_path)){
-                                if(FileIO::TryToRead(j_sh.value(),"FragmentPath",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&shader_info.fragment_path)){         
+                                if(FileIO::TryToRead(j_sh.value(),"FragmentPath",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&shader_info.fragment_path)){
+                                        shader_name = shader_name + "." + ResourcesInfo::extension;    
                                         ResourcesInfo::singleton->shaders_map[shader_name] = shader_info;
                                 }
                                 }
@@ -59,6 +60,7 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                         for(json::iterator j_tex = j_aux["Textures"].begin() ; j_tex != j_aux["Textures"].end() ; j_tex++){
                                 if(FileIO::TryToRead(j_tex.value(),"Name",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&texture_name)){
                                 if(FileIO::TryToRead(j_tex.value(),"TexturePath",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&tex_info.texture_path)){
+                                        texture_name = texture_name + "." + ResourcesInfo::extension;
                                         ResourcesInfo::singleton->texture_map[texture_name] = tex_info;
                                 }
                                 }
@@ -84,6 +86,7 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                                                 break;
                                         }
                                 }
+                                        model_name = model_name + "." + ResourcesInfo::extension;
                                         ResourcesInfo::singleton->model_map[model_name] = model_info;
                                 }
                         }
@@ -101,6 +104,7 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                                 if(FileIO::TryToRead(j_spa.value(),"SheetTexture",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&atlas_info.sheet_texture_name)){
                                 if(FileIO::TryToRead(j_spa.value(),"SheetDimensions",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&vec2)){
                                         atlas_info.atlas_dimensions = Vector2(vec2[0],vec2[1]);
+                                        atlas_name = atlas_name + "." + ObjectsInfo::extension;
                                         ObjectsInfo::singleton->sprite_atlas_map[atlas_name] = atlas_info;
 
                                 }
@@ -116,6 +120,7 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                                 if(FileIO::TryToRead(j_m.value(),"Name",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&mesh_name)){
                                 if(FileIO::TryToRead(j_m.value(),"Model",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&mesh_info.model_name)){
                                 if(FileIO::TryToRead(j_m.value(),"Texture",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&mesh_info.texture_name)){
+                                        mesh_name = mesh_name + "." + ObjectsInfo::extension;
                                         ObjectsInfo::singleton->meshes_map[mesh_name] = mesh_info;
                                 }
                                 }

@@ -34,6 +34,7 @@ class ComponentFactory{
 
 class ResourcesInfo{
     public:
+    static const std::string extension;
     ResourcesInfo();
     struct ShaderInfo{
         std::string vertex_path;
@@ -54,14 +55,15 @@ class ResourcesInfo{
     std::map<std::string, TextureInfo> texture_map;
     std::map<std::string, ModelInfo> model_map;
 
-    static Shader* FindOrCreateShader(const std::string& name);
-    static Texture* FindOrCreateTexture(const std::string& name);
-    static Model* FindOrCreateModel(const std::string& name);
+    static Shader* FindOrLoadShader(const std::string& name);
+    static Texture* FindOrLoadTexture(const std::string& name);
+    static Model* FindOrLoadModel(const std::string& name);
     
 };
 
 class ObjectsInfo{
     public:
+    static const std::string extension;
     ObjectsInfo();
     struct SpriteAtlasInfo{
         std::string sheet_texture_name;
@@ -76,6 +78,6 @@ class ObjectsInfo{
     std::map<std::string, SpriteAtlasInfo> sprite_atlas_map;
     std::map<std::string, MeshInfo> meshes_map;
 
-    static SpriteAtlas* FindOrCreateSpriteAtlas(const std::string& name);
-    static Mesh* FindOrCreateMesh(const std::string& name);
+    static SpriteAtlas* FindOrLoadSpriteAtlas(const std::string& name);
+    static Mesh* FindOrLoadMesh(const std::string& name);
 };

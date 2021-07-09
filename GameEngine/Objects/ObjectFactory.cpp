@@ -33,6 +33,10 @@ ComponentFactory* ComponentFactory::singleton = nullptr;
 ResourcesInfo* ResourcesInfo::singleton = nullptr;
 ObjectsInfo* ObjectsInfo::singleton = nullptr;
 
+const std::string ResourcesInfo::extension = "sres";
+const std::string ObjectsInfo::extension = "sobj";
+
+
 ComponentFactory::ComponentFactory(){
         if(!singleton){
                 components_factories = {      
@@ -71,9 +75,9 @@ Component* ComponentFactory::CreateMeshRenderer(json j,const std::string& file_n
         std::string mesh_name;
         std::string params[] = {file_name,"MeshRenderer"};
         if(FileIO::TryToRead(j,"Mesh",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&mesh_name)){
-                mesh = ObjectsInfo::FindOrCreateMesh(mesh_name);
+                mesh = ObjectsInfo::FindOrLoadMesh(mesh_name);
         if(FileIO::TryToRead(j,"Shader", ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&shader_name)){
-               shader = ResourcesInfo::FindOrCreateShader(shader_name);
+               shader = ResourcesInfo::FindOrLoadShader(shader_name);
                if(mesh && shader){
                         m_r = new MeshRenderer(mesh,shader);
                         
@@ -104,7 +108,7 @@ Component* ComponentFactory::CreateSpriteRenderer(json j,const std::string& file
         if(!FileIO::TryToRead(j,"Mesh",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&obj_name)){
                 return nullptr;
         }
-        mesh = ObjectsInfo::FindOrCreateMesh(obj_name);
+        mesh = ObjectsInfo::FindOrLoadMesh(obj_name);
         if(!mesh){
                 params[1]  = obj_name;
                 Debug::WriteErrorLog(ErrorType::OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL,params);
@@ -115,7 +119,7 @@ Component* ComponentFactory::CreateSpriteRenderer(json j,const std::string& file
         if(!FileIO::TryToRead(j,"Shader",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&obj_name)){
                 return nullptr;
         }
-        shader = ResourcesInfo::FindOrCreateShader(obj_name);
+        shader = ResourcesInfo::FindOrLoadShader(obj_name);
         if(!shader){
                 params[1] = obj_name;
                 Debug::WriteErrorLog(ErrorType::OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL,params);
@@ -123,7 +127,7 @@ Component* ComponentFactory::CreateSpriteRenderer(json j,const std::string& file
         }
         //Tries to get sprite atlas
         if(FileIO::TryToRead(j,"SpriteAtlas",ErrorType::NO_ERROR,nullptr,&obj_name)){
-                sprite_atlas = ObjectsInfo::FindOrCreateSpriteAtlas(obj_name);
+                sprite_atlas = ObjectsInfo::FindOrLoadSpriteAtlas(obj_name);
                 if(!sprite_atlas){
                         params[1] = obj_name;
                         Debug::WriteErrorLog(ErrorType::OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL,params);
@@ -205,16 +209,17 @@ Transform ComponentFactory::CreateTransform(json j,const std::string& file_name)
         return trans;
 }
 
-Mesh* ObjectsInfo::FindOrCreateMesh(const std::string& name){
-        Mesh* mesh = dynamic_cast<Mesh*>(Object::FindObjectByName(name));
+Mesh* ObjectsInfo::FindOrLoadMesh(const std::string& name){
+        std::string name_ext = name + "." + ObjectsInfo::extension;
+        Mesh* mesh = dynamic_cast<Mesh*>(Object::FindObjectByName(name_ext));
         if(!mesh){
-                if(ObjectsInfo::singleton->meshes_map.find(name) != ObjectsInfo::singleton->meshes_map.end()){
-                        ObjectsInfo::MeshInfo mesh_i = ObjectsInfo::singleton->meshes_map[name];
-                        Model* model = ResourcesInfo::FindOrCreateModel(mesh_i.model_name);
-                        Texture* tex = ResourcesInfo::FindOrCreateTexture(mesh_i.texture_name);
+                if(ObjectsInfo::singleton->meshes_map.find(name_ext) != ObjectsInfo::singleton->meshes_map.end()){
+                        ObjectsInfo::MeshInfo mesh_i = ObjectsInfo::singleton->meshes_map[name_ext];
+                        Model* model = ResourcesInfo::FindOrLoadModel(mesh_i.model_name);
+                        Texture* tex = ResourcesInfo::FindOrLoadTexture(mesh_i.texture_name);
                         if(model && tex){
                                 mesh = new Mesh(model,tex);
-                                mesh->object_name = name;
+                                mesh->object_name = name_ext;
                                 Object::AddObjectBack(mesh);
                         }
                 }
@@ -222,15 +227,16 @@ Mesh* ObjectsInfo::FindOrCreateMesh(const std::string& name){
         return mesh;
 }
 
-SpriteAtlas* ObjectsInfo::FindOrCreateSpriteAtlas(const std::string& name){
-        SpriteAtlas* atlas = dynamic_cast<SpriteAtlas*>(Object::FindObjectByName(name));
+SpriteAtlas* ObjectsInfo::FindOrLoadSpriteAtlas(const std::string& name){
+        std::string name_ext = name + "." + ObjectsInfo::extension;
+        SpriteAtlas* atlas = dynamic_cast<SpriteAtlas*>(Object::FindObjectByName(name_ext));
         if(!atlas){
-                if(ObjectsInfo::singleton->sprite_atlas_map.find(name) != ObjectsInfo::singleton->sprite_atlas_map.end()){
-                        ObjectsInfo::SpriteAtlasInfo s_info = ObjectsInfo::singleton->sprite_atlas_map[name];
-                        Texture* tex = ResourcesInfo::FindOrCreateTexture(s_info.sheet_texture_name);
+                if(ObjectsInfo::singleton->sprite_atlas_map.find(name_ext) != ObjectsInfo::singleton->sprite_atlas_map.end()){
+                        ObjectsInfo::SpriteAtlasInfo s_info = ObjectsInfo::singleton->sprite_atlas_map[name_ext];
+                        Texture* tex = ResourcesInfo::FindOrLoadTexture(s_info.sheet_texture_name);
                         if(tex){
                                 atlas = new SpriteAtlas(tex, s_info.atlas_dimensions.x, s_info.atlas_dimensions.y);
-                                atlas->object_name = name;
+                                atlas->object_name = name_ext;
                                 Object::AddObjectBack(atlas);
                         }
                 }
@@ -238,48 +244,51 @@ SpriteAtlas* ObjectsInfo::FindOrCreateSpriteAtlas(const std::string& name){
         return atlas;
 }
 
-Texture* ResourcesInfo::FindOrCreateTexture(const std::string& name){
-        Texture* tex = dynamic_cast<Texture*>(Object::FindObjectByName(name));
+Texture* ResourcesInfo::FindOrLoadTexture(const std::string& name){
+        std::string name_ext = name + "." + ResourcesInfo::extension;
+        Texture* tex = dynamic_cast<Texture*>(Object::FindObjectByName(name_ext));
         if(!tex){
-                if(ResourcesInfo::singleton->texture_map.find(name) != ResourcesInfo::singleton->texture_map.end()){
-                        std::cout<< "Texture -> " << name << "created\n";
-                        tex = new Texture(ResourcesInfo::singleton->texture_map[name].texture_path);
-                        tex->object_name = name;
+                if(ResourcesInfo::singleton->texture_map.find(name_ext) != ResourcesInfo::singleton->texture_map.end()){
+                        std::cout<< "Texture -> " << name_ext << "created\n";
+                        tex = new Texture(ResourcesInfo::singleton->texture_map[name_ext].texture_path);
+                        tex->object_name = name_ext;
                         Object::AddObjectBack(tex);
                 }
         }
         return tex;
 }
 
-Shader* ResourcesInfo::FindOrCreateShader(const std::string& name){
-        Shader* shader=  dynamic_cast<Shader*>(Object::FindObjectByName(name));
+Shader* ResourcesInfo::FindOrLoadShader(const std::string& name){
+        std::string name_ext = name + "." + ResourcesInfo::extension;
+        Shader* shader=  dynamic_cast<Shader*>(Object::FindObjectByName(name_ext));
         if(!shader){
-                if(ResourcesInfo::singleton->shaders_map.find(name) != ResourcesInfo::singleton->shaders_map.end()){
-                        std::cout<< "Shader -> " << name << "created\n";
-                        shader = new Shader(ResourcesInfo::singleton->shaders_map[name].vertex_path,ResourcesInfo::singleton->shaders_map[name].fragment_path);
-                        shader->object_name = name;
+                if(ResourcesInfo::singleton->shaders_map.find(name_ext) != ResourcesInfo::singleton->shaders_map.end()){
+                        std::cout<< "Shader -> " << name_ext << "created\n";
+                        shader = new Shader(ResourcesInfo::singleton->shaders_map[name_ext].vertex_path,ResourcesInfo::singleton->shaders_map[name_ext].fragment_path);
+                        shader->object_name = name_ext;
                         Object::AddObjectBack(shader);
                 }
         }
         return shader;
 }
 
-Model* ResourcesInfo::FindOrCreateModel(const std::string& name){
-        Model* model = dynamic_cast<Model*>(Object::FindObjectByName(name));
+Model* ResourcesInfo::FindOrLoadModel(const std::string& name){
+        std::string name_ext = name + "." + ResourcesInfo::extension;
+        Model* model = dynamic_cast<Model*>(Object::FindObjectByName(name_ext));
         if(!model){
-                if(ResourcesInfo::singleton->model_map.find(name) != ResourcesInfo::singleton->model_map.end()){
-                        if(ResourcesInfo::singleton->model_map[name].default_shape >= 0){
-                                std::cout<< "Model  -> " << name << "created\n";
-                                switch (ResourcesInfo::singleton->model_map[name].default_shape)
+                if(ResourcesInfo::singleton->model_map.find(name_ext) != ResourcesInfo::singleton->model_map.end()){
+                        if(ResourcesInfo::singleton->model_map[name_ext].default_shape >= 0){
+                                std::cout<< "Model  -> " << name_ext << "created\n";
+                                switch (ResourcesInfo::singleton->model_map[name_ext].default_shape)
                                 {
                                 case 0:
                                         model = new Model(DefaultShapes::SquareWithTex());
-                                        model->object_name = name;
+                                        model->object_name = name_ext;
                                         Object::AddObjectBack(model);
                                         break;
                                 case 1:
                                         model = new Model(DefaultShapes::CubeWithTex());
-                                        model->object_name = name;
+                                        model->object_name = name_ext;
                                         Object::AddObjectBack(model);
                                         break;
                                 

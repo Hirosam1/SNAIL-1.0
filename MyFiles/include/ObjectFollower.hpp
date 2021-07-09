@@ -10,7 +10,7 @@ class ObjectFollower : public Behavior{
 
             to_follow = Scene::active_scene->main_camera->game_object;
 
-            obj_h_height = (game_object->GetComponent<SpriteRenderer>()->SpriteScale().y *  transform->scale.y)/2.0f;
+            obj_h_height = (game_object->GetComponent<SpriteRenderer>()->SpriteScale().y * transform->scale.y)/2.0f;
             transform->position = Vector3(transform->position.x,obj_h_height,transform->position.z);
         }
 
