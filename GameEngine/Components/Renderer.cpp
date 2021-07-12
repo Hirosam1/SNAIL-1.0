@@ -1,5 +1,7 @@
 #include "Components/Renderer.hpp"
 
+int Renderer::draw_count = 0;
+
 Transform Renderer::BuildTransform(const Transform& transform) const{
     return Transform(transform);
 }
@@ -12,6 +14,7 @@ void Renderer::Update(GameObject* game_object){
         shader->UseShader();
         //Chooses the winding order based on the scale
         glFrontFace(new_transform.Scale().x * new_transform.Scale().y * new_transform.Scale().z > 0 ? GL_CCW : GL_CW );
+        draw_count++;
         //Delegates to sub-class
         Draw(MVP,*shader);
         //Back to normal the winding order

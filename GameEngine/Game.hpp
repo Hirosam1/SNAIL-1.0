@@ -61,7 +61,7 @@ class Game {
             #endif
             TraceEventsSession end_tes = TraceEventsSession("Terminating game");
             Timer _timer = Timer(&end_tes,"Unloading resources");
-            Object::UnloadAllObjects();
+            
             _timer.Stop();
             Timer timer2 = Timer(&end_tes,"Terminating glfw window");
             glfwTerminate();
@@ -92,10 +92,8 @@ class Game {
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                 
                 Scene::active_scene->UpdateScene();
+                Renderer::draw_count = 0;
 
-                SpriteRenderer::draw_count = 0;
-                MeshRenderer::draw_count = 0;
-                
                 glfwSwapBuffers(Window::main_window->window);
                 glfwPollEvents();
             }

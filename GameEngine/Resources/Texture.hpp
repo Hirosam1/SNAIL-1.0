@@ -32,8 +32,8 @@ class Texture : public Resource{
         void UseTexture(const Shader& shader,const std::string& uniform_name, int tex_num) const;
         ImageIO::ImageData image_data;
         //Unloads the resourse from the openGL context
-        void UnloadObject() override{glDeleteTextures(1,&texture_id);}
-        ~Texture(){}
+        void UnloadObject() override{glDeleteTextures(1,&texture_id); texture_id = 0;}
+        ~Texture(){std::cout<<"tried to delete texture\n";}
     private:
         GLuint texture_id;
 };

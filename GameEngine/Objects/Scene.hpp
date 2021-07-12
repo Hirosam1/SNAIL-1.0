@@ -23,6 +23,8 @@ class Scene : public Object{
         GameObject* FindGameObject(const std::string& object_name);
         //Returns a list of the games objects of the scene
         std::list<GameObject*>& GameObjectList();
+        //Unloads scene
+        void UnloadScene();
     private:
         std::list<GameObject*> game_objects;
 };

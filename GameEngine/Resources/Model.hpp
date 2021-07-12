@@ -36,7 +36,8 @@ class Model : public Resource{
         //Binds VAO 
         void BindVAO();
         //Unloads the resourse from the openGL context
-        void UnloadObject() override{glDeleteBuffers(1,&VBO); glDeleteBuffers(1,&EBO); glDeleteBuffers(1,&VAO);};
+        void UnloadObject() override{glDeleteBuffers(1,&VBO); glDeleteBuffers(1,&EBO); glDeleteBuffers(1,&VAO); VBO = 0; EBO = 0; VAO = 0;};
+        ~Model(){std::cout<<"tried to delete model\n";}
     private:
         bool has_indices;
         //Method for glDrawArrays

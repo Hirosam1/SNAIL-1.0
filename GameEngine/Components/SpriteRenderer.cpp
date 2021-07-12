@@ -13,11 +13,8 @@ SpriteRenderer::SpriteRenderer(Mesh* mesh, Shader* shader,SpriteAtlas* atlas, un
     tex_coord = sprite_atlas->GetCoordinate(atlas_coords);
 }
 
-int SpriteRenderer::draw_count = 0;
-
 void SpriteRenderer::Draw(const Matrix4& MVP, const Shader& shader){
     shader.SetUniform4f(atlas_str,tex_coord.x,tex_coord.y,tex_coord.z,tex_coord.w);
-    SpriteRenderer::draw_count++;
     mesh->Draw(shader,MVP);
 }
 

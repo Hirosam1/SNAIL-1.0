@@ -23,6 +23,8 @@ class Renderer : public Component{
         // !!! Probably have many meshes each one with its shaders and textures !!!
         Mesh* mesh;
         Shader* shader;
+        //Draw count in the last frame
+        static int draw_count;
     private:
         //test a sphere in the transform coordinates against the view frustum, returns true if visible
         bool TestSphereAgainstFrustum(const Transform& transform) const;

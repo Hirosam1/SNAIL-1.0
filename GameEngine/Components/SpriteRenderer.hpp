@@ -26,8 +26,6 @@ class SpriteRenderer : public Renderer{
         Vector3 SpriteScale();
         //Optional Sprite atlas
         SpriteAtlas* sprite_atlas = nullptr;
-        //Total sprite draws per frame
-        static int draw_count;
     private:
         //The scale format of the sprite so it does not deform when dealing with non square sprites
         Vector3 sprite_scale;

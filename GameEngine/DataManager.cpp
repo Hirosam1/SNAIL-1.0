@@ -106,7 +106,6 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                                         atlas_info.atlas_dimensions = Vector2(vec2[0],vec2[1]);
                                         atlas_name = atlas_name + "." + ObjectsInfo::extension;
                                         ObjectsInfo::singleton->sprite_atlas_map[atlas_name] = atlas_info;
-
                                 }
                                 }
                                 }
@@ -165,7 +164,7 @@ SceneData ObjectLoader::LoadScene(const std::string& scene_path){
         if(!j_game_objects.contains("GameObjects")){
                 Debug::WriteErrorLog(ErrorType::OBJECTLOADER_NODATA_SCENE_WARN,&scene_path);
                 return scene_data;
-        }  
+        }
         j_game_objects = j_game_objects["GameObjects"];
         for(json::iterator j_go = j_game_objects.begin(); j_go != j_game_objects.end(); j_go++){
                 GameObject* go = new GameObject();

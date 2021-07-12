@@ -9,6 +9,7 @@ int main(int argc, char** argv){
     my_game.InitGame();
     my_game.RunGame();
     my_game.TerminateGame();
+    std::cout<<"Game Terminated\n";
     return 0;
 }
 
