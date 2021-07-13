@@ -19,12 +19,10 @@ class RotateCubeQuat : public Behavior{
         Quaternion rot_prev;
         Quaternion rot_target;
 
-        bool released = true;
-
         float time_duration = 4.0;
         float time_elapsed = 0.0;
 
-        InputHandler ih = InputHandler(2);
+        InputHandler ih = InputHandler(1);
         void Begin() override{
             rot_B = Quaternion(Vector3(0.0,1.0,0.0), Math::ToRadians(90));
             rot_B = rot_B * Quaternion(Vector3(1.0,0.0,0.0), Math::ToRadians(90));
@@ -35,17 +33,13 @@ class RotateCubeQuat : public Behavior{
             pos_prev = pos_A;
             rot_prev = rot_A;
 
-            ih.AddCommandBack(GLFW_KEY_Z,GLFW_PRESS,CHANGE_POS_PRESS);
-            ih.AddCommandBack(GLFW_KEY_Z,GLFW_RELEASE,CHANGE_POS_RELEASE);
+            ih.AddCommandBack(GLFW_KEY_Z,PressType::KEY_PRESS,CHANGE_POS_PRESS);
         }
 
         void Update() override{
             ih.HandleInput();
             float t =time_elapsed/time_duration;
-            if(ih.GetInputInfo(CHANGE_POS_PRESS).was_activated && released){
-                
-                
-                released= false;
+            if(ih.GetInputInfo(CHANGE_POS_PRESS).was_activated){
                 if(pos_target == pos_B){
                     pos_target = pos_A;
                     rot_target = rot_A;
@@ -61,9 +55,6 @@ class RotateCubeQuat : public Behavior{
                 float p_dist = 1.0 - t;
                 time_elapsed = p_dist * time_duration;
                 t = time_elapsed/time_duration;
-            }
-            if(ih.GetInputInfo(CHANGE_POS_RELEASE).was_activated){
-                released = true;
             }
            
             if(t < 1.0){

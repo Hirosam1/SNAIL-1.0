@@ -9,7 +9,8 @@ class CameraMovement : public Behavior{
         MOVE_UPWARDS,
         MOVE_DOWNWARDS,
         MOVE_LEFT,
-        MOVE_RIGHT
+        MOVE_RIGHT,
+        SWITCH_SCENE
     };
     Camera* main_camera = nullptr;
     float yawn = 90;
@@ -18,7 +19,7 @@ class CameraMovement : public Behavior{
     bool first_mouse = true;
     float lastX;
     float lastY;
-    InputHandler ih = InputHandler(6);
+    InputHandler ih = InputHandler(7);
     float velocity = 2.0f;
     void CalculateYawnPitch(){
         if(first_mouse && Window::main_window->cursor_info.x_pos >= 0){
@@ -43,18 +44,18 @@ class CameraMovement : public Behavior{
     public:
         void Begin() override{
             glfwSetInputMode(Window::main_window->window,GLFW_CURSOR,GLFW_CURSOR_DISABLED);
-            ih.AddCommandBack(GLFW_KEY_W,GLFW_PRESS,MOVE_FORWARDS);
-            ih.AddCommandBack(GLFW_KEY_S,GLFW_PRESS,MOVE_BACKWARDS);
-            ih.AddCommandBack(GLFW_KEY_Q,GLFW_PRESS,MOVE_UPWARDS);
-            ih.AddCommandBack(GLFW_KEY_E,GLFW_PRESS,MOVE_DOWNWARDS);
-            ih.AddCommandBack(GLFW_KEY_A,GLFW_PRESS,MOVE_LEFT);
-            ih.AddCommandBack(GLFW_KEY_D,GLFW_PRESS,MOVE_RIGHT);
+            ih.AddCommandBack(GLFW_KEY_W,PressType::KEY_HOLD,MOVE_FORWARDS);
+            ih.AddCommandBack(GLFW_KEY_S,PressType::KEY_HOLD,MOVE_BACKWARDS);
+            ih.AddCommandBack(GLFW_KEY_Q,PressType::KEY_HOLD,MOVE_UPWARDS);
+            ih.AddCommandBack(GLFW_KEY_E,PressType::KEY_HOLD,MOVE_DOWNWARDS);
+            ih.AddCommandBack(GLFW_KEY_A,PressType::KEY_HOLD,MOVE_LEFT);
+            ih.AddCommandBack(GLFW_KEY_D,PressType::KEY_HOLD,MOVE_RIGHT);
+            ih.AddCommandBack(GLFW_KEY_X,PressType::KEY_PRESS, SWITCH_SCENE);
             main_camera = game_object->GetComponent<Camera>();
             yawn *= main_camera->Front().z;
 
         }
         void UpdateCamera(){
-            ih.HandleInput();
             Vector3 direction(cos(Math::ToRadians(pitch))*cos(Math::ToRadians(yawn)),sin(Math::ToRadians(pitch)),cos(Math::ToRadians(pitch))*sin(Math::ToRadians(yawn)));
             Vector3 move_pos;
                 if(ih.GetInputInfo(MOVE_FORWARDS).was_activated){
@@ -80,6 +81,10 @@ class CameraMovement : public Behavior{
         }
         void Update() override{
             CalculateYawnPitch();
+            ih.HandleInput();
+            if(ih.GetInputInfo(SWITCH_SCENE).was_activated){
+                std::cout<<"HEEEY!\n"; 
+            }
             if(main_camera != nullptr){
                 UpdateCamera();
             }

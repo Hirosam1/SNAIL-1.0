@@ -3,22 +3,25 @@
 #include "GMpch.hpp"
 #include "Window.hpp"
 
-enum InputType{
+enum PressType{
     KEY_RELEASE,
-    KEY_PRESSED
-};
-
-struct InputInfo{
-    bool was_activated;
-};
-
-struct InputConfig{
-    unsigned int glfw_Key;
-    unsigned int glfw_press_type;
-    int command;
+    KEY_HOLD,
+    KEY_PRESS
 };
 
 class InputHandler{
+
+    struct InputInfo{
+        bool was_activated;
+        bool is_ready;
+    };
+
+    struct InputConfig{
+        unsigned int glfw_Key;
+        PressType ih_press_type;
+        int command;
+    };
+
     public:
         //checks if at least one key was activated
         bool activated = false;
@@ -35,13 +38,27 @@ class InputHandler{
         void HandleInput(){ 
             ResetInputInfo();
             for(int i = 0; i < inputs_config.size(); i++){
-                if(glfwGetKey(window,inputs_config[i].glfw_Key) == inputs_config[i].glfw_press_type){
+                unsigned int glfw_press_type = inputs_config[i].ih_press_type == PressType::KEY_PRESS || inputs_config[i].ih_press_type == PressType::KEY_HOLD ? GLFW_PRESS 
+                                                : GLFW_RELEASE;
+                if(inputs_config[i].ih_press_type == PressType::KEY_PRESS){
+                    if(!inputs_info[i].is_ready){
+                        if (glfwGetKey(window,inputs_config[i].glfw_Key) == GLFW_RELEASE){
+                            inputs_info[i].is_ready = true;
+                        }
+                    }else{
+                        if (glfwGetKey(window,inputs_config[i].glfw_Key) == GLFW_PRESS){
+                            inputs_info[i].is_ready = false;
+                            inputs_info[i].was_activated = true;
+                        }
+                    }
+                }
+                else if(glfwGetKey(window,inputs_config[i].glfw_Key) == glfw_press_type){
                     activated = true;
                     inputs_info[i].was_activated = true;
                 }
             }
         };
-        void AddCommandBack(unsigned int key, unsigned int press_type,int command){
+        void AddCommandBack(unsigned int key, PressType press_type,int command){
             if(command_position < inputs_config.size()){
                 inputs_config[command_position] = InputConfig{key,press_type,command};
                 input_mapping[command] = command_position;
