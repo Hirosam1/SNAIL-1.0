@@ -39,10 +39,5 @@ std::list<GameObject*>& Scene::GameObjectList(){
 }
 
 void Scene::UnloadScene(){
-    for(GameObject* game_object : game_objects){
-        if(game_object){
-            game_object->UnloadObject();
-        }
-    }
-    ResourcesInfo::shaders_map.
+    Object::UnloadAllObjects();
 }

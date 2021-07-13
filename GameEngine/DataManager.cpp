@@ -1,7 +1,5 @@
 #include "DataManager.hpp"
 //All includes but scene
-
-#include "Objects/Object.hpp"
 #include "Objects/GameObject.hpp"
 
 #include "Components/Camera.hpp"

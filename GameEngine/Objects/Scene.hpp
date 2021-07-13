@@ -24,7 +24,7 @@ class Scene : public Object{
         //Returns a list of the games objects of the scene
         std::list<GameObject*>& GameObjectList();
         //Unloads scene
-        void UnloadScene();
+        static void UnloadScene();
     private:
         std::list<GameObject*> game_objects;
 };

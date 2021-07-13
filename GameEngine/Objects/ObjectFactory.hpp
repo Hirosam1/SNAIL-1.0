@@ -6,6 +6,11 @@
 
 #include "json/json.hpp"
 
+
+//This file will be responsible for creating all objects used in the game, it also stores the meta-data of the objects that are build in the ResourceLoader funcrtion from 
+// the DataManager.hpp 
+// !! I might move this "meta-data" from this file to a separate file, that both DataManager and ObjectFactory can reference them from, for better UML, and avoid reference conflicts !!
+
 class Component;
 class Resource;
 
@@ -16,6 +21,7 @@ class Texture;
 
 class Mesh;
 class SpriteAtlas;
+
 
 
 class ComponentFactory{

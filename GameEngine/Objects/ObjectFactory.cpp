@@ -211,6 +211,7 @@ Transform ComponentFactory::CreateTransform(json j,const std::string& file_name)
 
 Mesh* ObjectsInfo::FindOrLoadMesh(const std::string& name){
         std::string name_ext = name + "." + ObjectsInfo::extension;
+        //Tries to find if the object's already loaded on scene
         Mesh* mesh = dynamic_cast<Mesh*>(Object::FindObjectByName(name_ext));
         if(!mesh){
                 if(ObjectsInfo::singleton->meshes_map.find(name_ext) != ObjectsInfo::singleton->meshes_map.end()){
@@ -229,6 +230,7 @@ Mesh* ObjectsInfo::FindOrLoadMesh(const std::string& name){
 
 SpriteAtlas* ObjectsInfo::FindOrLoadSpriteAtlas(const std::string& name){
         std::string name_ext = name + "." + ObjectsInfo::extension;
+        //Tries to find if the object's already loaded on scene
         SpriteAtlas* atlas = dynamic_cast<SpriteAtlas*>(Object::FindObjectByName(name_ext));
         if(!atlas){
                 if(ObjectsInfo::singleton->sprite_atlas_map.find(name_ext) != ObjectsInfo::singleton->sprite_atlas_map.end()){
@@ -246,6 +248,7 @@ SpriteAtlas* ObjectsInfo::FindOrLoadSpriteAtlas(const std::string& name){
 
 Texture* ResourcesInfo::FindOrLoadTexture(const std::string& name){
         std::string name_ext = name + "." + ResourcesInfo::extension;
+        //Tries to find if the object's already loaded on scene
         Texture* tex = dynamic_cast<Texture*>(Object::FindObjectByName(name_ext));
         if(!tex){
                 if(ResourcesInfo::singleton->texture_map.find(name_ext) != ResourcesInfo::singleton->texture_map.end()){
@@ -260,6 +263,7 @@ Texture* ResourcesInfo::FindOrLoadTexture(const std::string& name){
 
 Shader* ResourcesInfo::FindOrLoadShader(const std::string& name){
         std::string name_ext = name + "." + ResourcesInfo::extension;
+        //Tries to find if the object's already loaded on scene
         Shader* shader=  dynamic_cast<Shader*>(Object::FindObjectByName(name_ext));
         if(!shader){
                 if(ResourcesInfo::singleton->shaders_map.find(name_ext) != ResourcesInfo::singleton->shaders_map.end()){
@@ -274,6 +278,7 @@ Shader* ResourcesInfo::FindOrLoadShader(const std::string& name){
 
 Model* ResourcesInfo::FindOrLoadModel(const std::string& name){
         std::string name_ext = name + "." + ResourcesInfo::extension;
+        //Tries to find if the object's already loaded on scene
         Model* model = dynamic_cast<Model*>(Object::FindObjectByName(name_ext));
         if(!model){
                 if(ResourcesInfo::singleton->model_map.find(name_ext) != ResourcesInfo::singleton->model_map.end()){

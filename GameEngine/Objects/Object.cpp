@@ -11,11 +11,13 @@ void Object::AddObjectBack(Object* obj){
 }
 
 void Object::UnloadAllObjects(){
-    for(Object* o : objects){
-        if(o){
-            o->UnloadObject();
+    for(int i = 0; i < objects.size(); i++){
+        if(objects[i]){
+            objects[i]->UnloadObject();
+            delete objects[i];
         }
     }
+    objects.clear();
 }
 
 Object* Object::FindObjectByName(const std::string& name){

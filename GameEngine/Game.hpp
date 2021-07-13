@@ -61,7 +61,7 @@ class Game {
             #endif
             TraceEventsSession end_tes = TraceEventsSession("Terminating game");
             Timer _timer = Timer(&end_tes,"Unloading resources");
-            
+            Scene::UnloadScene();
             _timer.Stop();
             Timer timer2 = Timer(&end_tes,"Terminating glfw window");
             glfwTerminate();
