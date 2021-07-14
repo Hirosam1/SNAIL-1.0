@@ -8,25 +8,24 @@
     "GameObjects" : [
             {"ObjectComponents" : [
                     {"SpriteRenderer" : {"Mesh" : "CoolPlaneAtlas" , "Shader" : "MyAtlasShader", "SpriteAtlas" : "MySpriteAtlas", "AtlasPosition" : [0,0]}},
-                    {"Transform" : {"Position" : [0.0,0.5,0.0]} }],
-                    "ObjectName" : "wood1"
+                    {"Transform" : {"Position" : [0.0,0.5,0.0]} }]
             },
             {"ObjectComponents":[
                 {"SpriteRenderer" : {"Mesh" : "CoolPlaneAtlas" , "Shader" : "MyAtlasShader", "SpriteAtlas" : "MySpriteAtlas", "AtlasPosition" : [0,0]}},
                 {"Transform" : {"Position" : [1.0,0.5,0.0]}}
-            ],"ObjectName" : "wood2"},
+            ]},
             {"ObjectComponents":[
                 {"MeshRenderer" : {"Mesh" : "ScaryCubeHead", "Shader" : "MyNormalShader"} },
                 {"Transform" : {"Position" : [0.0,1.5,0.5]}},
                 {"Behavior" : "RotateCubeQuat"}
-            ], "ObjectName" : "ScaryCubeHead"},
+            ]},
             {"ObjectComponents" : [
                 {"SpriteRenderer" : {"Mesh" : "CoolPlaneAtlas" , "Shader" : "MyAtlasShader", "SpriteAtlas" : "MySpriteAtlas", "AtlasPosition" : [1,0]}},
                 {"Transform" :  {"Position" : [-1.5,0.5,0.5], "Rotation" : [0.0,1.5707,0.0]} },
-                {"Behavior" : "MovingObject"}], "ObjectName" : "Stone"
+                {"Behavior" : "MovingObject"}]
             },
             {"ObjectComponents" : [
-                    {"SpriteRenderer" : {"Mesh" : "ScaryCubeHead", "Shader" :"MyNormalShader"}},
+                    {"SpriteRenderer" : {"Mesh" : "OmnipotheadMesh", "Shader" :"MyNormalShader"}},
                     {"Behavior" : "ObjectFollower"},
                     {"Transform": {"Scale" : [1.5,1.5,1.0], "Position" : [-1.0,0.0,-1.0]}}],
              "ObjectName" : "Camera Follower"},

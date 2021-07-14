@@ -5,7 +5,9 @@ Scene* Scene::active_scene = nullptr;
 
 Scene::Scene(const std::string& scene_path){
     SceneData scene_data = ObjectLoader::LoadScene(scene_path);
+    scene_name = scene_data.scene_name;
     game_objects = scene_data.game_objects;
+    objects = scene_data.objects;
     main_camera = scene_data.main_camera;
 }
 
@@ -17,7 +19,16 @@ void Scene::BeginScene(){
 
 void Scene::UpdateScene(){
     for(GameObject* game_object : game_objects){
-        game_object->Update();
+        if(game_object){
+            game_object->Update();
+        }
+    }
+    if(this->request_change){
+        this->UnloadScene();
+        Scene::active_scene = this->my_next_scene;
+        Scene::active_scene->BeginScene();
+        delete this;
+        return;
     }
 }
 
@@ -38,6 +49,21 @@ std::list<GameObject*>& Scene::GameObjectList(){
     return game_objects;
 }
 
+void Scene::LoadScene(const std::string& scene_path){
+    Scene::active_scene->my_next_scene = new Scene(scene_path);
+    Scene::active_scene->request_change = true;
+}
+
 void Scene::UnloadScene(){
-    Object::UnloadAllObjects();
+    for(GameObject* go : game_objects){
+        go->UnloadObject();
+        delete go;
+    }
+    for(int i = 0; i < objects.size(); i++){
+        if(objects[i]){
+            objects[i]->UnloadObject();
+            delete objects[i];
+            objects[i] = nullptr;
+        }
+    }
 }

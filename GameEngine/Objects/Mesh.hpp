@@ -16,6 +16,7 @@ class Mesh : public Object{
         // !!! maybe I can make to default add a default texture !!! 
         Mesh(Model* model, Texture* texture = nullptr);
         void Draw(const Shader& shader, const Matrix4& MVP);
+        ~Mesh(){std::cout<<"tried to delete mesh\n";}
         //Model to be rendered
         Model* model;
         //Texture of the model

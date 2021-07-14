@@ -83,7 +83,9 @@ class CameraMovement : public Behavior{
             CalculateYawnPitch();
             ih.HandleInput();
             if(ih.GetInputInfo(SWITCH_SCENE).was_activated){
-                std::cout<<"HEEEY!\n"; 
+                if(Scene::active_scene->scene_name == "My First Cool Scene"){
+                    Scene::LoadScene("Scene1.sscene.json");
+                }
             }
             if(main_camera != nullptr){
                 UpdateCamera();

@@ -36,6 +36,16 @@ ObjectsInfo* ObjectsInfo::singleton = nullptr;
 const std::string ResourcesInfo::extension = "sres";
 const std::string ObjectsInfo::extension = "sobj";
 
+Object* FindObjectByName(const std::string& obj_name, std::vector<Object*>* objects){
+        for(Object* o : *objects){
+        if(o){
+            if(strcmp(o->object_name.data(),obj_name.data()) == 0){
+                return o;
+            }
+        }
+    }
+    return nullptr;
+}
 
 ComponentFactory::ComponentFactory(){
         if(!singleton){
@@ -67,7 +77,7 @@ ObjectsInfo::ObjectsInfo(){
         }
 }
 
-Component* ComponentFactory::CreateMeshRenderer(json j,const std::string& file_name){
+Component* ComponentFactory::CreateMeshRenderer(json j,const std::string& file_name, std::vector<Object*>* game_objects){
         MeshRenderer* m_r = nullptr;
         Mesh* mesh;
         Shader* shader;
@@ -75,9 +85,9 @@ Component* ComponentFactory::CreateMeshRenderer(json j,const std::string& file_n
         std::string mesh_name;
         std::string params[] = {file_name,"MeshRenderer"};
         if(FileIO::TryToRead(j,"Mesh",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&mesh_name)){
-                mesh = ObjectsInfo::FindOrLoadMesh(mesh_name);
+                mesh = ObjectsInfo::FindOrLoadMesh(mesh_name, game_objects);
         if(FileIO::TryToRead(j,"Shader", ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&shader_name)){
-               shader = ResourcesInfo::FindOrLoadShader(shader_name);
+               shader = ResourcesInfo::FindOrLoadShader(shader_name, game_objects);
                if(mesh && shader){
                         m_r = new MeshRenderer(mesh,shader);
                         
@@ -96,7 +106,7 @@ Component* ComponentFactory::CreateMeshRenderer(json j,const std::string& file_n
         return  m_r; 
 }
 // !! THIS CODE IS UGLY! REFACTOR IT  LIKE!!
-Component* ComponentFactory::CreateSpriteRenderer(json j,const std::string& file_name){
+Component* ComponentFactory::CreateSpriteRenderer(json j,const std::string& file_name, std::vector<Object*>* game_objects){
         Mesh* mesh;
         Shader* shader;
         SpriteAtlas* sprite_atlas = nullptr;
@@ -108,7 +118,7 @@ Component* ComponentFactory::CreateSpriteRenderer(json j,const std::string& file
         if(!FileIO::TryToRead(j,"Mesh",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&obj_name)){
                 return nullptr;
         }
-        mesh = ObjectsInfo::FindOrLoadMesh(obj_name);
+        mesh = ObjectsInfo::FindOrLoadMesh(obj_name, game_objects);
         if(!mesh){
                 params[1]  = obj_name;
                 Debug::WriteErrorLog(ErrorType::OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL,params);
@@ -119,7 +129,7 @@ Component* ComponentFactory::CreateSpriteRenderer(json j,const std::string& file
         if(!FileIO::TryToRead(j,"Shader",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&obj_name)){
                 return nullptr;
         }
-        shader = ResourcesInfo::FindOrLoadShader(obj_name);
+        shader = ResourcesInfo::FindOrLoadShader(obj_name, game_objects);
         if(!shader){
                 params[1] = obj_name;
                 Debug::WriteErrorLog(ErrorType::OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL,params);
@@ -127,7 +137,7 @@ Component* ComponentFactory::CreateSpriteRenderer(json j,const std::string& file
         }
         //Tries to get sprite atlas
         if(FileIO::TryToRead(j,"SpriteAtlas",ErrorType::NO_ERROR,nullptr,&obj_name)){
-                sprite_atlas = ObjectsInfo::FindOrLoadSpriteAtlas(obj_name);
+                sprite_atlas = ObjectsInfo::FindOrLoadSpriteAtlas(obj_name, game_objects);
                 if(!sprite_atlas){
                         params[1] = obj_name;
                         Debug::WriteErrorLog(ErrorType::OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL,params);
@@ -150,7 +160,7 @@ Component* ComponentFactory::CreateSpriteRenderer(json j,const std::string& file
 
 }
 
-Component* ComponentFactory::CreateCamera(json j, const std::string& file_name){
+Component* ComponentFactory::CreateCamera(json j, const std::string& file_name, std::vector<Object*>* game_objects){
         int i;
         if(!FileIO::TryToRead(j,"CameraProjection",ErrorType::NO_ERROR,nullptr,&i)){
                 return dynamic_cast<Component*>(new Camera());
@@ -167,7 +177,7 @@ Component* ComponentFactory::CreateCamera(json j, const std::string& file_name){
         }
 }
 
-Component* ComponentFactory::CreateBehavior(json j, const std::string& file_name){
+Component* ComponentFactory::CreateBehavior(json j, const std::string& file_name, std::vector<Object*>* game_objects){
         // std::string behavior_name = j.get<std::string>();
         std::string behavior_name;
         FileIO::TryToRead(j,"__THIS_CELL__",ErrorType::NO_ERROR,nullptr,&behavior_name);
@@ -209,92 +219,95 @@ Transform ComponentFactory::CreateTransform(json j,const std::string& file_name)
         return trans;
 }
 
-Mesh* ObjectsInfo::FindOrLoadMesh(const std::string& name){
+Mesh* ObjectsInfo::FindOrLoadMesh(const std::string& name, std::vector<Object*>* game_objects){
         std::string name_ext = name + "." + ObjectsInfo::extension;
         //Tries to find if the object's already loaded on scene
-        Mesh* mesh = dynamic_cast<Mesh*>(Object::FindObjectByName(name_ext));
+        Mesh* mesh = dynamic_cast<Mesh*>(FindObjectByName(name_ext, game_objects));
         if(!mesh){
                 if(ObjectsInfo::singleton->meshes_map.find(name_ext) != ObjectsInfo::singleton->meshes_map.end()){
                         ObjectsInfo::MeshInfo mesh_i = ObjectsInfo::singleton->meshes_map[name_ext];
-                        Model* model = ResourcesInfo::FindOrLoadModel(mesh_i.model_name);
-                        Texture* tex = ResourcesInfo::FindOrLoadTexture(mesh_i.texture_name);
+                        Model* model = ResourcesInfo::FindOrLoadModel(mesh_i.model_name, game_objects);
+                        Texture* tex = ResourcesInfo::FindOrLoadTexture(mesh_i.texture_name, game_objects);
                         if(model && tex){
+                                std::cout<< "Mesh -> " << name_ext << " created\n";
                                 mesh = new Mesh(model,tex);
                                 mesh->object_name = name_ext;
-                                Object::AddObjectBack(mesh);
+                                game_objects->push_back(mesh);
+                                
                         }
                 }
         }
         return mesh;
 }
 
-SpriteAtlas* ObjectsInfo::FindOrLoadSpriteAtlas(const std::string& name){
+SpriteAtlas* ObjectsInfo::FindOrLoadSpriteAtlas(const std::string& name, std::vector<Object*>* game_objects){
         std::string name_ext = name + "." + ObjectsInfo::extension;
         //Tries to find if the object's already loaded on scene
-        SpriteAtlas* atlas = dynamic_cast<SpriteAtlas*>(Object::FindObjectByName(name_ext));
+        SpriteAtlas* atlas = dynamic_cast<SpriteAtlas*>(FindObjectByName(name_ext,game_objects));
         if(!atlas){
                 if(ObjectsInfo::singleton->sprite_atlas_map.find(name_ext) != ObjectsInfo::singleton->sprite_atlas_map.end()){
                         ObjectsInfo::SpriteAtlasInfo s_info = ObjectsInfo::singleton->sprite_atlas_map[name_ext];
-                        Texture* tex = ResourcesInfo::FindOrLoadTexture(s_info.sheet_texture_name);
+                        Texture* tex = ResourcesInfo::FindOrLoadTexture(s_info.sheet_texture_name, game_objects);
                         if(tex){
+                                std::cout<< "SpriteAtlas -> " << name_ext << " created\n";
                                 atlas = new SpriteAtlas(tex, s_info.atlas_dimensions.x, s_info.atlas_dimensions.y);
                                 atlas->object_name = name_ext;
-                                Object::AddObjectBack(atlas);
+                                game_objects->push_back(atlas);
                         }
                 }
         }
         return atlas;
 }
 
-Texture* ResourcesInfo::FindOrLoadTexture(const std::string& name){
+Texture* ResourcesInfo::FindOrLoadTexture(const std::string& name, std::vector<Object*>* game_objects){
         std::string name_ext = name + "." + ResourcesInfo::extension;
         //Tries to find if the object's already loaded on scene
-        Texture* tex = dynamic_cast<Texture*>(Object::FindObjectByName(name_ext));
+        Texture* tex = dynamic_cast<Texture*>(FindObjectByName(name_ext, game_objects));
         if(!tex){
                 if(ResourcesInfo::singleton->texture_map.find(name_ext) != ResourcesInfo::singleton->texture_map.end()){
-                        std::cout<< "Texture -> " << name_ext << "created\n";
+                        std::cout<< "Texture -> " << name_ext << " created\n";
                         tex = new Texture(ResourcesInfo::singleton->texture_map[name_ext].texture_path);
                         tex->object_name = name_ext;
-                        Object::AddObjectBack(tex);
+                        game_objects->push_back(tex);
                 }
         }
         return tex;
 }
 
-Shader* ResourcesInfo::FindOrLoadShader(const std::string& name){
+Shader* ResourcesInfo::FindOrLoadShader(const std::string& name, std::vector<Object*>* game_objects){
         std::string name_ext = name + "." + ResourcesInfo::extension;
         //Tries to find if the object's already loaded on scene
-        Shader* shader=  dynamic_cast<Shader*>(Object::FindObjectByName(name_ext));
+        Shader* shader=  dynamic_cast<Shader*>(FindObjectByName(name_ext, game_objects));
         if(!shader){
                 if(ResourcesInfo::singleton->shaders_map.find(name_ext) != ResourcesInfo::singleton->shaders_map.end()){
-                        std::cout<< "Shader -> " << name_ext << "created\n";
+                        std::cout<< "Shader -> " << name_ext << " created\n";
                         shader = new Shader(ResourcesInfo::singleton->shaders_map[name_ext].vertex_path,ResourcesInfo::singleton->shaders_map[name_ext].fragment_path);
                         shader->object_name = name_ext;
-                        Object::AddObjectBack(shader);
+                        game_objects->push_back(shader);
                 }
         }
         return shader;
 }
 
-Model* ResourcesInfo::FindOrLoadModel(const std::string& name){
+Model* ResourcesInfo::FindOrLoadModel(const std::string& name, std::vector<Object*>* game_objects){
         std::string name_ext = name + "." + ResourcesInfo::extension;
         //Tries to find if the object's already loaded on scene
-        Model* model = dynamic_cast<Model*>(Object::FindObjectByName(name_ext));
+        Model* model = dynamic_cast<Model*>(FindObjectByName(name_ext, game_objects));
         if(!model){
                 if(ResourcesInfo::singleton->model_map.find(name_ext) != ResourcesInfo::singleton->model_map.end()){
                         if(ResourcesInfo::singleton->model_map[name_ext].default_shape >= 0){
-                                std::cout<< "Model  -> " << name_ext << "created\n";
+                                std::cout<< "Model  -> " << name_ext << " created\n";
                                 switch (ResourcesInfo::singleton->model_map[name_ext].default_shape)
                                 {
                                 case 0:
                                         model = new Model(DefaultShapes::SquareWithTex());
                                         model->object_name = name_ext;
-                                        Object::AddObjectBack(model);
+                                        game_objects->push_back(model);
                                         break;
                                 case 1:
                                         model = new Model(DefaultShapes::CubeWithTex());
                                         model->object_name = name_ext;
-                                        Object::AddObjectBack(model);
+                                        game_objects->push_back(model);
                                         break;
                                 
                                 default:

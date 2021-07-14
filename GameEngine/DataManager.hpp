@@ -16,6 +16,7 @@ struct SceneData{
     std::string scene_name;
     std::list<GameObject*> game_objects;
     Camera* main_camera;
+    std::vector<Object*> objects = std::vector<Object*>(30,nullptr);
     void AddGameObject(GameObject* go){game_objects.push_back(go);};
 };
 
@@ -25,10 +26,10 @@ namespace ObjectLoader {
         void LoadResources(const std::string& resources_path);
         //Reads and loads objects based on the resource data, it will create the game objects and bind with the components in it, using the objectFactory file.
         SceneData LoadScene(const std::string& scene_path);
-        Component* MakeComponent(nlohmann::json j_component, nlohmann::json j_values,const std::string& file_name);
+        Component* MakeComponent(nlohmann::json j_component, nlohmann::json j_values,const std::string& file_name, SceneData* scene_data);
 };
 
-
+ 
 
 namespace ObjectWriter{
     void WriteScene(SceneData scene_data);

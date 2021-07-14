@@ -175,7 +175,7 @@ SceneData ObjectLoader::LoadScene(const std::string& scene_path){
                                         *go->transform = ComponentFactory::CreateTransform(obj.begin()->second,scene_path);
                                 }
                                 else{
-                                        Component* comp = MakeComponent(obj.begin()->first, obj.begin()->second, scene_path);
+                                        Component* comp = MakeComponent(obj.begin()->first, obj.begin()->second, scene_path, &scene_data);
                                         if(comp){
                                                 go->PushComponentBack(comp);
                                         }   
@@ -199,7 +199,7 @@ SceneData ObjectLoader::LoadScene(const std::string& scene_path){
 }
 
 
-Component* ObjectLoader::MakeComponent(json j_component, json j_values,const std::string& file_name){
+Component* ObjectLoader::MakeComponent(json j_component, json j_values,const std::string& file_name, SceneData* scene_data){
         //Checks if component factory exists
         if(ComponentFactory::singleton->components_factories.find(j_component.get<std::string>()) == ComponentFactory::singleton->components_factories.end()){
                 std::string params[] = {file_name,j_component.get<std::string>()};
@@ -207,5 +207,5 @@ Component* ObjectLoader::MakeComponent(json j_component, json j_values,const std
                 return nullptr;
         }
         //Returns from function factory
-        return ComponentFactory::singleton->components_factories[j_component.get<std::string>()](j_values,file_name);
+        return ComponentFactory::singleton->components_factories[j_component.get<std::string>()](j_values,file_name, &scene_data->objects);
 }

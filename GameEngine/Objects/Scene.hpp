@@ -23,8 +23,14 @@ class Scene : public Object{
         GameObject* FindGameObject(const std::string& object_name);
         //Returns a list of the games objects of the scene
         std::list<GameObject*>& GameObjectList();
+        //Load scene and unloads the current one, and set itself as the main scene
+        static void LoadScene(const std::string& scene_path);
         //Unloads scene
-        static void UnloadScene();
+        void UnloadScene();
+        std::string scene_name;
     private:
+        std::vector<Object*> objects = std::vector<Object*>(30,nullptr);
+        bool request_change = false;
+        Scene* my_next_scene;
         std::list<GameObject*> game_objects;
 };

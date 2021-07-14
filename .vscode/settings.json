@@ -63,7 +63,8 @@
         "map": "cpp",
         "numeric": "cpp",
         "valarray": "cpp",
-        "xtree": "cpp"
+        "xtree": "cpp",
+        "compare": "cpp"
     },
     "cSpell.words": [
         "Wwindow"

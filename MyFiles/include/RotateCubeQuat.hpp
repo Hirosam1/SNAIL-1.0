@@ -51,7 +51,6 @@ class RotateCubeQuat : public Behavior{
                     pos_prev = pos_A;
                     rot_prev = rot_A;
                 }
-                // float p_dist = Vector::Length(transform->position - pos_prev) /Vector::Length(pos_prev - pos_target) ;
                 float p_dist = 1.0 - t;
                 time_elapsed = p_dist * time_duration;
                 t = time_elapsed/time_duration;

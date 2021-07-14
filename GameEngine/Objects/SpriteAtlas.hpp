@@ -10,6 +10,7 @@
 class SpriteAtlas : public Object{
     public:
         SpriteAtlas(Texture* texture,unsigned int vertical_count, unsigned int horizontal_count);
+        ~SpriteAtlas(){std::cout<<"tried to delete sprite atlas\n";}
         //Returns the beginning and end of the tex coordinates in normalized coordinates
         Vector4 GetCoordinate(Vector2 tex);
         Texture* texture;

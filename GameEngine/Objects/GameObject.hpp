@@ -9,8 +9,9 @@ class GameObject : public Object{
     public:
         Transform* transform;
         GameObject(){transform = new Transform(); PushComponentBack(transform);};
-        void Begin(){for(Component* component : components){component->Begin(this);};} 
-        void Update(){for(Component* component : components){component->Update(this);};}
+        void Begin(){for(Component* component : components){component->Begin(this);}} 
+        void Update(){for(Component* component : components){component->Update(this);}}
+        void UnloadObject() override{for(Component* component : components){component->End(this); delete component; std::cout<<object_name <<" DELETE DA COMPOENENT!!!\n";}}
         //Seraches for the desired component
         template <class T>
         T* GetComponent(){
