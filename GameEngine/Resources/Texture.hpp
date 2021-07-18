@@ -33,7 +33,6 @@ class Texture : public Resource{
         ImageIO::ImageData image_data;
         //Unloads the resourse from the openGL context
         void UnloadObject() override{glDeleteTextures(1,&texture_id); texture_id = 0;}
-        ~Texture(){std::cout<<"tried to delete texture\n";}
     private:
         GLuint texture_id;
 };

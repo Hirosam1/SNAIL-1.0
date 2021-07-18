@@ -9,6 +9,7 @@ Scene::Scene(const std::string& scene_path){
     game_objects = scene_data.game_objects;
     objects = scene_data.objects;
     main_camera = scene_data.main_camera;
+    std::cout<<"OBJECTS SIZE--> "<< this->objects.size() <<"\n";
 }
 
 void Scene::BeginScene(){

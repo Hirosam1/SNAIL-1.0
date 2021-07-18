@@ -26,7 +26,6 @@ class Shader : public Resource{
         void SetUniformMatrix4f(const std::string& uniform_name, const float* mat_ptr) const;
         //Unloads the resourse from the openGL context
         void UnloadObject() override{glDeleteProgram(program_id); program_id = 0;}
-        ~Shader(){std::cout<<"tried to delete shader\n";}
     private:
         GLuint program_id;  
         GLuint LoadShader(GLenum shader_type, std::string& shader_path);

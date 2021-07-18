@@ -12,13 +12,13 @@ void Model::SetUpBuffer(){
     glGenBuffers(1,&EBO);
     //Generate a buffer for the Vertex Array Object
     glGenVertexArrays(1,&VAO);
-    //!!Remember!! we can bind the VBO BEFORE the binding of the VAO
+    //Remember, we can bind the VBO BEFORE the binding of the VAO
     StateManager::state_manager->BindsVBO(VBO);
     StateManager::state_manager->BindsVAO(VAO);
     //then we Bind the Element Buffer Object, this HAS to be after 
     StateManager::state_manager->BindsEBO(EBO);    
-    // //now we buffer (store) the data for the elment and array buffers. It Copies the values to the buffer memory
-    if(indices.size() > 1){
+    //now we buffer (store) the data for the elment and array buffers. It Copies the values to the buffer memory
+    if(indices.size() > 2){
         glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(GLuint)*indices.size(),&indices[0],GL_STATIC_DRAW);
         has_indices = true;
     }
@@ -34,7 +34,7 @@ void Model::SetUpBuffer(){
     //Unbind Thingss------------------------------------------------------
     StateManager::state_manager->BindsVAO(0);
     StateManager::state_manager->BindsVAO(0);
-    StateManager::state_manager->BindsEBO(0);  
+    StateManager::state_manager->BindsEBO(0);
 }
 
 void Model::Draw(const Shader* shader, const Matrix4& MVP_mat){
@@ -53,14 +53,14 @@ void Model::DrawArrays(){
     glDrawArrays(GL_TRIANGLES,0,vertex_data.size());
 }
 
-
 void Model::DrawElements(){
+    //!! breaking here !!
     glDrawElements(GL_TRIANGLES,indices.size(),GL_UNSIGNED_INT,0);
 }
 
 void Model::UpdateIndices(){
     StateManager::state_manager->BindsEBO(EBO);
-    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER,0,sizeof(GLuint)*indices.size(),&indices[0] );
+    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER,0,sizeof(GLuint)*indices.size(),&indices[0]);
     StateManager::state_manager->BindsEBO(0);
 }
 

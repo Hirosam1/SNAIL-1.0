@@ -16,7 +16,7 @@ struct SceneData{
     std::string scene_name;
     std::list<GameObject*> game_objects;
     Camera* main_camera;
-    std::vector<Object*> objects = std::vector<Object*>(30,nullptr);
+    std::vector<Object*> objects = std::vector<Object*>();
     void AddGameObject(GameObject* go){game_objects.push_back(go);};
 };
 

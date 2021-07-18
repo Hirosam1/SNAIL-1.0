@@ -29,7 +29,7 @@ class Scene : public Object{
         void UnloadScene();
         std::string scene_name;
     private:
-        std::vector<Object*> objects = std::vector<Object*>(30,nullptr);
+        std::vector<Object*> objects;
         bool request_change = false;
         Scene* my_next_scene;
         std::list<GameObject*> game_objects;
