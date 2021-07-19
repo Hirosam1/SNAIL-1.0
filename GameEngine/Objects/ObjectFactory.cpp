@@ -223,12 +223,23 @@ Mesh* ObjectsInfo::FindOrLoadMesh(const std::string& name, std::vector<Object*>*
         std::string name_ext = name + "." + ObjectsInfo::extension;
         //Tries to find if the object's already loaded on scene
         Mesh* mesh = dynamic_cast<Mesh*>(FindObjectByName(name_ext, game_objects));
+        Texture* tex;
+        bool tex_good = false;
         if(!mesh){
                 if(ObjectsInfo::singleton->meshes_map.find(name_ext) != ObjectsInfo::singleton->meshes_map.end()){
                         ObjectsInfo::MeshInfo mesh_i = ObjectsInfo::singleton->meshes_map[name_ext];
                         Model* model = ResourcesInfo::FindOrLoadModel(mesh_i.model_name, game_objects);
-                        Texture* tex = ResourcesInfo::FindOrLoadTexture(mesh_i.texture_name, game_objects);
-                        if(model && tex){
+                        if(strcmp(mesh_i.texture_name.data(),"__NO_TEXTURE__") == 0){
+                                tex = nullptr;
+                                tex_good = true;
+                        }
+                        else{
+                                tex = ResourcesInfo::FindOrLoadTexture(mesh_i.texture_name, game_objects);
+                                if(tex){
+                                        tex_good = true;
+                                }
+                        }
+                        if(model && tex_good){
                                 std::cout<< "Mesh -> " << name_ext << " created\n";
                                 mesh = new Mesh(model,tex);
                                 mesh->object_name = name_ext;

@@ -6,6 +6,7 @@ Transform::Transform(){
     scale = Vector3(1.0f,1.0f,1.0f);
     model_mat = Matrix4(1.0);
     BuildMat();
+    object_name = "Transform";
 }
 
 Transform::Transform(const Vector3& pos, const Vector3& rot, const Vector3& scale): position(pos), 

@@ -10,6 +10,7 @@ Camera::Camera(Camera_Projection camera_projection){
     far_plane = 100.0f;
     proj_info.projection_function = camera_projection == Camera_Projection::PERSPECTIVE_PROJECTION ? Projection::Perspective : 
                                                 camera_projection == Camera_Projection::ORTHOGRAPHIC_PROJECTION? Projection::Orthographic : Projection::Orthographic;
+    object_name = "Camera";
     BuildProj();
     BuildMat();
     BuildFrustum();

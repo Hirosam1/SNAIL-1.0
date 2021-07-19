@@ -116,10 +116,11 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                                 ObjectsInfo::MeshInfo mesh_info;
                                 if(FileIO::TryToRead(j_m.value(),"Name",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&mesh_name)){
                                 if(FileIO::TryToRead(j_m.value(),"Model",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&mesh_info.model_name)){
-                                if(FileIO::TryToRead(j_m.value(),"Texture",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&mesh_info.texture_name)){
+                                if(!FileIO::TryToRead(j_m.value(),"Texture",ErrorType::NO_ERROR,params,&mesh_info.texture_name)){
+                                        mesh_info.texture_name = "__NO_TEXTURE__";
+                                }
                                         mesh_name = mesh_name + "." + ObjectsInfo::extension;
                                         ObjectsInfo::singleton->meshes_map[mesh_name] = mesh_info;
-                                }
                                 }
                                 }
 

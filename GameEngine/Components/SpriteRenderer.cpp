@@ -5,6 +5,7 @@ SpriteRenderer::SpriteRenderer(Mesh* mesh, Shader* shader): Renderer(mesh,shader
     sprite_scale = mesh->texture->image_data.width > mesh->texture->image_data.height?
                     Vector3(mesh->texture->image_data.width/(float)mesh->texture->image_data.height,1.0,1.0) :
                     Vector3(1.0,mesh->texture->image_data.height/(float) mesh->texture->image_data.width,1.0);
+    object_name = "SpriteRenderer";
 }
 
 SpriteRenderer::SpriteRenderer(Mesh* mesh, Shader* shader,SpriteAtlas* atlas, unsigned int x_coord, unsigned int y_coord) : Renderer(mesh,shader),sprite_atlas(atlas){

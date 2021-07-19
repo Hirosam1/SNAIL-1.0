@@ -16,7 +16,7 @@
                 {"Transform" : {"Position" : [1.0,0.5,0.0]}}
             ],"ObjectName" : "wood2"},
             {"ObjectComponents":[
-                {"MeshRenderer" : {"Mesh" : "ScaryCubeHead", "Shader" : "MyNormalShader"} },
+                {"MeshRenderer" : {"Mesh" : "ScaryCubeHead", "Shader" : "MyNormalShader"}},
                 {"Transform" : {"Position" : [0.0,1.5,0.5]}},
                 {"Behavior" : "RotateCubeQuat"}
             ], "ObjectName" : "ScaryCubeHead"},
@@ -30,6 +30,12 @@
                     {"Behavior" : "ObjectFollower"},
                     {"Transform": {"Scale" : [1.5,1.5,1.0], "Position" : [-1.0,0.0,-1.0]}}],
              "ObjectName" : "Camera Follower"},
+            {
+                "ObjectComponents" : [
+                    {"MeshRenderer" : {"Mesh" : "SolidColorCube" , "Shader" : "SolidColorShader"}},
+                    {"Transform" : {"Position" : [1.0, 2.0, 0.0]}}],
+                    "ObjectName" : "SolidColor"
+            },
             {"ObjectComponents" : [
                 {"Camera" : {"CameraProjection" : 1}}, 
                 {"Transform" : {"Position" : [0.0,0.5,0.5]}}, 

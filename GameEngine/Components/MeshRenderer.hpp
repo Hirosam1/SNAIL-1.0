@@ -10,7 +10,7 @@ class Matrix4;
 //Needs mesh to render
 class MeshRenderer : public Renderer{
     public:
-        MeshRenderer(Mesh* mesh, Shader* shader) : Renderer(mesh,shader){}
+        MeshRenderer(Mesh* mesh, Shader* shader) : Renderer(mesh,shader){ object_name = "Mesh Renderer";}
         void Draw(const Matrix4& MVP, const Shader& shader) override;
     private:
 };
