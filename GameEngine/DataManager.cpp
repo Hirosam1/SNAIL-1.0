@@ -17,7 +17,7 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
 
         if(!i_f){
                 #ifdef DEBUG
-                std::cout<< "Failed to load resource file!\n";
+                std::cout<< "Failed to load resource file!!\n";
                 #endif
                 Debug::WriteErrorLog(ErrorType::OBJECTLOADER_LOADING_SCENE_FAIL,&resources_path);
                 return;
@@ -32,6 +32,11 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                 Debug::WriteErrorLog(ErrorType::RESLOADER_NO_RESINFO_FAIL,&resources_path);
                 return;
         }
+        
+        if(!FileIO::TryToRead(j["ResourceInfo"],"StartingScene",ErrorType::RESLOADER_NO_RESINFO_FAIL,&resources_path,&ResourcesInfo::starting_scene_path)){
+                std::cout<<"No scene\n";
+        }
+
         if(j.contains("ResourceData")){
                 json j_aux = j["ResourceData"];
                 if(j_aux.contains("Shaders")){

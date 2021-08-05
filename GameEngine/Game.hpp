@@ -77,7 +77,7 @@ class Game {
         }
         //Initiate the games objects with the components previously loaded
         void LoadScene(){
-            Scene* init_scene = new Scene("Scene1.sscene.json");
+            Scene* init_scene = new Scene(ResourcesInfo::starting_scene_path);
             Scene::active_scene = init_scene;
         }
         //Initiate the game objects created

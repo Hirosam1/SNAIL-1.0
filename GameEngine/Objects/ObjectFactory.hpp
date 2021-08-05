@@ -39,6 +39,7 @@ class ComponentFactory{
 class ResourcesInfo{
     public:
     static const std::string extension;
+    static std::string starting_scene_path;
     ResourcesInfo();
     struct ShaderInfo{
         std::string vertex_path;

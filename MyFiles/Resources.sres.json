@@ -1,0 +1,26 @@
+{
+    "ResourceInfo" : {
+        "ResourceName" : "CoolResoure",
+        "StartingScene" : "Scene2.sscene.json"
+    },
+    "ResourceData" : {
+        "Shaders" : [
+            {"Name" : "SolidColorShader" , "VertexPath" : "resources/shaders/vertex/basic.vert", "FragmentPath" : "resources/shaders/fragment/solid_color.frag"},
+            {"Name" : "TextureShader" , "VertexPath" : "resources/shaders/vertex/basic.vert", "FragmentPath" : "resources/shaders/fragment/sprite.frag"}
+        ],
+        "Textures" : [
+           { "Name" : "OmniPotHead", "TexturePath" : "resources/images/omnipothead.png"}
+        ],
+        "Models" : [
+            {"Name" : "Cube", "DefaultShape" : 1},
+            {"Name" : "Square", "DefaultShape" : 0}
+        ]
+    },
+
+    "ObjectData" : {
+        "Meshes" : [
+            {"Name" : "SolidColorCube", "Model" : "Cube"},
+            {"Name" : "OmniPotHead", "Model" : "Square", "Texture" : "OmniPotHead"}
+        ]
+    }
+}

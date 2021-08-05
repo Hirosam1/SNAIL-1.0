@@ -28,6 +28,7 @@ class Scene : public Object{
         //Unloads scene
         void UnloadScene();
         std::string scene_name;
+        std::string scene_path;
     private:
         std::vector<Object*> objects;
         bool request_change = false;

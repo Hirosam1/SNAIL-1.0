@@ -60,3 +60,4 @@ Myfiles/bin/
 
 #Ignore .git ignore
 !*.sscene.json
+!*.sres.json

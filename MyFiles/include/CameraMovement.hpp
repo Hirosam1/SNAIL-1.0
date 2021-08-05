@@ -84,7 +84,7 @@ class CameraMovement : public Behavior{
             ih.HandleInput();
             if(ih.GetInputInfo(SWITCH_SCENE).was_activated){
                 if(Scene::active_scene->scene_name == "My First Cool Scene"){
-                    Scene::LoadScene("Scene1.sscene.json");
+                    Scene::LoadScene(Scene::active_scene->scene_name);
                 }
             }
             if(main_camera != nullptr){

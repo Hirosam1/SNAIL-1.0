@@ -3,7 +3,7 @@
 
 Scene* Scene::active_scene = nullptr;
 
-Scene::Scene(const std::string& scene_path){
+Scene::Scene(const std::string& scene_path) : scene_path(scene_path){
     SceneData scene_data = ObjectLoader::LoadScene(scene_path);
     scene_name = scene_data.scene_name;
     game_objects = scene_data.game_objects;

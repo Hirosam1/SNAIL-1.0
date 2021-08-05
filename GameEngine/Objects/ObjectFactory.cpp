@@ -36,6 +36,8 @@ ObjectsInfo* ObjectsInfo::singleton = nullptr;
 const std::string ResourcesInfo::extension = "sres";
 const std::string ObjectsInfo::extension = "sobj";
 
+std::string ResourcesInfo::starting_scene_path = "NO SCENE";
+
 Object* FindObjectByName(const std::string& obj_name, std::vector<Object*>* objects){
         for(Object* o : *objects){
         if(o){
