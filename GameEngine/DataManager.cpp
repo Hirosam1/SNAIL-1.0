@@ -137,7 +137,9 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
 
 SceneData ObjectLoader::LoadScene(const std::string& scene_path){
         std::ifstream i_f(scene_path);
+        #ifdef DEBUG
         std::cout<<"Loading scene: " << scene_path << "\n";
+        #endif
         //Checks if the file exists
         if(!i_f){
                 #ifdef DEBUG
@@ -157,9 +159,6 @@ SceneData ObjectLoader::LoadScene(const std::string& scene_path){
         if(!FileIO::TryToRead(j["SceneInfo"],"SceneName",ErrorType::OBJECTLOADER_NO_SCENE_INFO_FAIL,&scene_path,&scene_data.scene_name)){
                 return scene_data;
         }
-        #ifdef DEBUG
-        std::cout<<"Loading " << scene_data.scene_name << " scene.\n";
-        #endif
         //Checks if there is data in scene
         if(!j.contains("SceneData")){
                 Debug::WriteErrorLog(ErrorType::OBJECTLOADER_NODATA_SCENE_WARN,&scene_path);

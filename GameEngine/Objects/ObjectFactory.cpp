@@ -242,7 +242,7 @@ Mesh* ObjectsInfo::FindOrLoadMesh(const std::string& name, std::vector<Object*>*
                                 }
                         }
                         if(model && tex_good){
-                                std::cout<< "Mesh -> " << name_ext << " created\n";
+                                //std::cout<< "Mesh -> " << name_ext << " created\n";
                                 mesh = new Mesh(model,tex);
                                 mesh->object_name = name_ext;
                                 game_objects->push_back(mesh);
@@ -262,7 +262,7 @@ SpriteAtlas* ObjectsInfo::FindOrLoadSpriteAtlas(const std::string& name, std::ve
                         ObjectsInfo::SpriteAtlasInfo s_info = ObjectsInfo::singleton->sprite_atlas_map[name_ext];
                         Texture* tex = ResourcesInfo::FindOrLoadTexture(s_info.sheet_texture_name, game_objects);
                         if(tex){
-                                std::cout<< "SpriteAtlas -> " << name_ext << " created\n";
+                                //std::cout<< "SpriteAtlas -> " << name_ext << " created\n";
                                 atlas = new SpriteAtlas(tex, s_info.atlas_dimensions.x, s_info.atlas_dimensions.y);
                                 atlas->object_name = name_ext;
                                 game_objects->push_back(atlas);
@@ -278,7 +278,7 @@ Texture* ResourcesInfo::FindOrLoadTexture(const std::string& name, std::vector<O
         Texture* tex = dynamic_cast<Texture*>(FindObjectByName(name_ext, game_objects));
         if(!tex){
                 if(ResourcesInfo::singleton->texture_map.find(name_ext) != ResourcesInfo::singleton->texture_map.end()){
-                        std::cout<< "Texture -> " << name_ext << " created\n";
+                        //sstd::cout<< "Texture -> " << name_ext << " created\n";
                         tex = new Texture(ResourcesInfo::singleton->texture_map[name_ext].texture_path);
                         tex->object_name = name_ext;
                         game_objects->push_back(tex);
@@ -293,7 +293,7 @@ Shader* ResourcesInfo::FindOrLoadShader(const std::string& name, std::vector<Obj
         Shader* shader=  dynamic_cast<Shader*>(FindObjectByName(name_ext, game_objects));
         if(!shader){
                 if(ResourcesInfo::singleton->shaders_map.find(name_ext) != ResourcesInfo::singleton->shaders_map.end()){
-                        std::cout<< "Shader -> " << name_ext << " created\n";
+                        //std::cout<< "Shader -> " << name_ext << " created\n";
                         shader = new Shader(ResourcesInfo::singleton->shaders_map[name_ext].vertex_path,ResourcesInfo::singleton->shaders_map[name_ext].fragment_path);
                         shader->object_name = name_ext;
                         game_objects->push_back(shader);
@@ -309,7 +309,7 @@ Model* ResourcesInfo::FindOrLoadModel(const std::string& name, std::vector<Objec
         if(!model){
                 if(ResourcesInfo::singleton->model_map.find(name_ext) != ResourcesInfo::singleton->model_map.end()){
                         if(ResourcesInfo::singleton->model_map[name_ext].default_shape >= 0){
-                                std::cout<< "Model  -> " << name_ext << " created\n";
+                                //std::cout<< "Model  -> " << name_ext << " created\n";
                                 switch (ResourcesInfo::singleton->model_map[name_ext].default_shape)
                                 {
                                 case 0:
