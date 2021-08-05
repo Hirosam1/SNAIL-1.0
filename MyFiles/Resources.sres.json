@@ -6,10 +6,12 @@
     "ResourceData" : {
         "Shaders" : [
             {"Name" : "SolidColorShader" , "VertexPath" : "resources/shaders/vertex/basic.vert", "FragmentPath" : "resources/shaders/fragment/solid_color.frag"},
-            {"Name" : "TextureShader" , "VertexPath" : "resources/shaders/vertex/basic.vert", "FragmentPath" : "resources/shaders/fragment/sprite.frag"}
+            {"Name" : "TextureShader" , "VertexPath" : "resources/shaders/vertex/basic.vert", "FragmentPath" : "resources/shaders/fragment/sprite.frag"},
+            {"Name" : "SpriteShader", "VertexPath" : "resources/shaders/vertex/atlas.vert", "FragmentPath" : "resources/shaders/fragment/sprite.frag"}
         ],
         "Textures" : [
-           { "Name" : "OmniPotHead", "TexturePath" : "resources/images/omnipothead.png"}
+           { "Name" : "OmniPotHead", "TexturePath" : "resources/images/omnipothead.png"},
+           {"Name" : "TileMap", "TexturePath" : "resources/images/sprite_sheet.png"}
         ],
         "Models" : [
             {"Name" : "Cube", "DefaultShape" : 1},
@@ -20,7 +22,11 @@
     "ObjectData" : {
         "Meshes" : [
             {"Name" : "SolidColorCube", "Model" : "Cube"},
-            {"Name" : "OmniPotHead", "Model" : "Square", "Texture" : "OmniPotHead"}
+            {"Name" : "OmniPotHead", "Model" : "Square", "Texture" : "OmniPotHead"},
+            {"Name" : "TileMapMesh", "Model" : "Square", "Texture" : "TileMap"}
+        ],
+        "SpriteAtlas" : [
+            {"Name" : "SpriteAtlas", "SheetTexture" : "TileMap","SheetDimensions" : [1,3]}
         ]
     }
 }

@@ -137,6 +137,7 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
 
 SceneData ObjectLoader::LoadScene(const std::string& scene_path){
         std::ifstream i_f(scene_path);
+        std::cout<<"Loading scene: " << scene_path << "\n";
         //Checks if the file exists
         if(!i_f){
                 #ifdef DEBUG

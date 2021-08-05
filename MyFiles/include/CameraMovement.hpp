@@ -10,7 +10,8 @@ class CameraMovement : public Behavior{
         MOVE_DOWNWARDS,
         MOVE_LEFT,
         MOVE_RIGHT,
-        SWITCH_SCENE
+        SWITCH_SCENE,
+        SET_CURSOR
     };
     Camera* main_camera = nullptr;
     float yawn = 90;
@@ -19,8 +20,9 @@ class CameraMovement : public Behavior{
     bool first_mouse = true;
     float lastX;
     float lastY;
-    InputHandler ih = InputHandler(7);
+    InputHandler ih = InputHandler(8);
     float velocity = 2.0f;
+    bool cursor_hidden;
     void CalculateYawnPitch(){
         if(first_mouse && Window::main_window->cursor_info.x_pos >= 0){
             first_mouse = false;
@@ -43,6 +45,7 @@ class CameraMovement : public Behavior{
     }
     public:
         void Begin() override{
+            cursor_hidden = true;
             glfwSetInputMode(Window::main_window->window,GLFW_CURSOR,GLFW_CURSOR_DISABLED);
             ih.AddCommandBack(GLFW_KEY_W,PressType::KEY_HOLD,MOVE_FORWARDS);
             ih.AddCommandBack(GLFW_KEY_S,PressType::KEY_HOLD,MOVE_BACKWARDS);
@@ -51,6 +54,7 @@ class CameraMovement : public Behavior{
             ih.AddCommandBack(GLFW_KEY_A,PressType::KEY_HOLD,MOVE_LEFT);
             ih.AddCommandBack(GLFW_KEY_D,PressType::KEY_HOLD,MOVE_RIGHT);
             ih.AddCommandBack(GLFW_KEY_X,PressType::KEY_PRESS, SWITCH_SCENE);
+            ih.AddCommandBack(GLFW_KEY_ESCAPE,PressType::KEY_PRESS,SET_CURSOR);
             main_camera = game_object->GetComponent<Camera>();
             yawn *= main_camera->Front().z;
 
@@ -80,18 +84,25 @@ class CameraMovement : public Behavior{
             main_camera->LookAt(direction, Vector3(0.0,1.0,0.0));
         }
         void Update() override{
-            CalculateYawnPitch();
-            ih.HandleInput();
-            if(ih.GetInputInfo(SWITCH_SCENE).was_activated){
-                if(Scene::active_scene->scene_name == "My First Cool Scene"){
-                    Scene::LoadScene(Scene::active_scene->scene_name);
-                }
-            }
-            if(main_camera != nullptr){
+            if(cursor_hidden){
+                CalculateYawnPitch();
                 UpdateCamera();
             }
-            if(glfwGetKey(Window::main_window->window,GLFW_KEY_ESCAPE) == GLFW_PRESS){
-                glfwSetWindowShouldClose(Window::main_window->window,true);
+            ih.HandleInput();
+            if(ih.GetInputInfo(SWITCH_SCENE).was_activated){
+                Scene::LoadScene(Scene::active_scene->scene_path);
+            }
+            
+            if(ih.GetInputInfo(SET_CURSOR).was_activated){
+                if(cursor_hidden){
+                    cursor_hidden = false;
+                    glfwSetInputMode(Window::main_window->window,GLFW_CURSOR,GLFW_CURSOR_NORMAL);
+                }else{
+                    cursor_hidden = true;
+                    lastX = Window::main_window->cursor_info.x_pos;
+                    lastY = Window::main_window->cursor_info.y_pos;
+                    glfwSetInputMode(Window::main_window->window,GLFW_CURSOR,GLFW_CURSOR_DISABLED);
+                }
             }
         }
 };

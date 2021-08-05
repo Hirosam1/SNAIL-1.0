@@ -33,9 +33,6 @@ class Game {
             res_load_time.Stop();
 
             Timer obj_loading = Timer(&tes, "Scene loading");
-            #ifdef DEBUG
-            std::cout<<"Loading Scene\n";
-            #endif
 
             LoadScene();
 

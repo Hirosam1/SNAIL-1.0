@@ -15,6 +15,11 @@
             },
             {
                 "ObjectComponents" : [
+                    {"SpriteRenderer" : {"Mesh" : "TileMapMesh", "Shader" : "SpriteShader", "SpriteAtlas" : "SpriteAtlas", "AtlasPosition" : [0,1]}}
+                ]
+            },
+            {
+                "ObjectComponents" : [
                     {"MeshRenderer" : {"Mesh" : "SolidColorCube" , "Shader" : "SolidColorShader"}},
                     {"Transform" : {"Position" : [1.0, 2.0, 0.0]}}],
                     "ObjectName" : "SolidColor"
