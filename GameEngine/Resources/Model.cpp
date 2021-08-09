@@ -1,11 +1,11 @@
 #include "Resources/Model.hpp"
+#include "Math/Math.hpp"
 
-Model::Model(){
-    vertex_data = std::vector<VertexData>();
-    indices = std::vector<GLuint>();
-}
-
-void Model::SetUpBuffer(){
+void Model::SetUpBuffer(ModelData model_data){
+    std::vector<VertexData> vertex_data = model_data.vertex_data;
+    std::vector<GLuint> indices = model_data.indices;
+    indices_size = indices.size();
+    vertices_size = vertex_data.size();
     has_indices = false;
     //Generate a buffer for the Vertex Buffer Object and Element Buffer
     glGenBuffers(1,&VBO);
@@ -35,6 +35,7 @@ void Model::SetUpBuffer(){
     StateManager::state_manager->BindsVAO(0);
     StateManager::state_manager->BindsVAO(0);
     StateManager::state_manager->BindsEBO(0);
+    vertex_data.clear();
 }
 
 void Model::Draw(const Shader* shader, const Matrix4& MVP_mat){
@@ -50,25 +51,24 @@ void Model::Draw(const Shader* shader, const Matrix4& MVP_mat){
 }
 
 void Model::DrawArrays(){
-    glDrawArrays(GL_TRIANGLES,0,vertex_data.size());
+    glDrawArrays(GL_TRIANGLES,0,vertices_size);
 }
 
 void Model::DrawElements(){
-    //!! breaking here !!
-    glDrawElements(GL_TRIANGLES,indices.size(),GL_UNSIGNED_INT,0);
+    glDrawElements(GL_TRIANGLES,indices_size,GL_UNSIGNED_INT,0);
 }
 
-void Model::UpdateIndices(){
-    StateManager::state_manager->BindsEBO(EBO);
-    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER,0,sizeof(GLuint)*indices.size(),&indices[0]);
-    StateManager::state_manager->BindsEBO(0);
-}
+// void Model::UpdateIndices(){
+//     StateManager::state_manager->BindsEBO(EBO);
+//     glBufferSubData(GL_ELEMENT_ARRAY_BUFFER,0,sizeof(GLuint)*indices.size(),&indices[0]);
+//     StateManager::state_manager->BindsEBO(0);
+// }
 
-void Model::UpdateVertices(){
-    StateManager::state_manager->BindsVBO(VBO);
-    glBufferSubData(GL_ARRAY_BUFFER,0,sizeof(VertexData)*vertex_data.size(),&vertex_data[0]);
-    StateManager::state_manager->BindsEBO(0);
-}
+// void Model::UpdateVertices(){
+//     StateManager::state_manager->BindsVBO(VBO);
+//     glBufferSubData(GL_ARRAY_BUFFER,0,sizeof(VertexData)*vertex_data.size(),&vertex_data[0]);
+//     StateManager::state_manager->BindsEBO(0);
+// }
 
 void Model::BindVAO(){
     StateManager::state_manager->BindsVAO(VAO);
@@ -86,7 +86,7 @@ ModelData DefaultShapes::CubeWithTex(){
     vertex_data.push_back(VertexData{Vector3(0.5f, -0.5f, -0.5f),Vector2(0.0f, 0.0f)});
     vertex_data.push_back(VertexData{Vector3(0.5f, -0.5f, -0.5f),Vector2(0.0f, 0.0f)});
     vertex_data.push_back(VertexData{Vector3(-0.5f, 0.5f, -0.5f),Vector2(1.0f, 1.0f)});
-    vertex_data.push_back(VertexData{Vector3(0.5f, 0.5f, -0.5f),Vector2(.0f, 1.0f)});
+    vertex_data.push_back(VertexData{Vector3(0.5f, 0.5f, -0.5f),Vector2(0.0f, 1.0f)});
     //Top V
     vertex_data.push_back(VertexData{Vector3(-0.5f, 0.5f, -0.5f),Vector2(0.0f, 1.0f)});
     vertex_data.push_back(VertexData{Vector3(-0.5f, 0.5f, 0.5f),Vector2(0.0f, 0.0f)});
@@ -128,10 +128,10 @@ ModelData DefaultShapes::CubeWithTex(){
 
 ModelData DefaultShapes::SquareWithTex(){
     std::vector<VertexData> vertex_data = std::vector<VertexData>();
-    vertex_data.push_back(VertexData{Vector3(-.5f,-.5f,0.0f), Vector2(0.0f,0.0f)});
-    vertex_data.push_back(VertexData{Vector3(.5f,-.5f,0.0f), Vector2(1.0f,0.0f)});
-    vertex_data.push_back(VertexData{Vector3(-.5f,.5f,0.0f), Vector2(0.0f,1.0f)});
-    vertex_data.push_back(VertexData{Vector3(.5f,0.5f,0.0f), Vector2(1.0f,1.0f)});
+    vertex_data.push_back(VertexData{Vector3(-0.5f,-0.5f,0.0f), Vector2(0.0f,0.0f)});
+    vertex_data.push_back(VertexData{Vector3(0.5f,-0.5f,0.0f), Vector2(1.0f,0.0f)});
+    vertex_data.push_back(VertexData{Vector3(-0.5f,0.5f,0.0f), Vector2(0.0f,1.0f)});
+    vertex_data.push_back(VertexData{Vector3(0.5f,0.5f,0.0f), Vector2(1.0f,1.0f)});
 
     std::vector<GLuint> indices = std::vector<GLuint>();
     indices.push_back(0);

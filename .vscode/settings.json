@@ -64,7 +64,16 @@
         "numeric": "cpp",
         "valarray": "cpp",
         "xtree": "cpp",
-        "compare": "cpp"
+        "compare": "cpp",
+        "atomic": "cpp",
+        "*.tcc": "cpp",
+        "cwctype": "cpp",
+        "deque": "cpp",
+        "memory_resource": "cpp",
+        "optional": "cpp",
+        "string_view": "cpp",
+        "sstream": "cpp",
+        "cinttypes": "cpp"
     },
     "cSpell.words": [
         "Wwindow"

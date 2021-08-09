@@ -21,6 +21,7 @@
 
     "ObjectData" : {
         "Meshes" : [
+            {"Name" : "CubeAtlas", "Model" : "Cube", "Texture" : "TileMap"},
             {"Name" : "SolidColorCube", "Model" : "Cube"},
             {"Name" : "OmniPotHead", "Model" : "Square", "Texture" : "OmniPotHead"},
             {"Name" : "TileMapMesh", "Model" : "Square", "Texture" : "TileMap"}

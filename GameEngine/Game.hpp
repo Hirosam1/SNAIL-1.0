@@ -28,11 +28,11 @@ class Game {
             #ifdef DEBUG
             std::cout<<"Loading Resources\n";
             #endif
-            Timer res_load_time = Timer(&tes, "Resource loading");
+            Timer res_load_time = Timer(&tes, "Resource indexing");
             LoadResources();
             res_load_time.Stop();
 
-            Timer obj_loading = Timer(&tes, "Scene loading");
+            Timer obj_loading = Timer(&tes, "Scene/Resource loading");
 
             LoadScene();
 
@@ -40,15 +40,16 @@ class Game {
             #ifdef DEBUG
             std::cout<<"Initializing Scene\n";
             #endif
-            
+            Timer obj_init = Timer(&tes,"Object initialization");
             ObjectsInitialization();
+            obj_init.Stop();
 
             tes.EndSession(); 
             is_ready = true;
         }
         void RunGame(){
             if(is_ready){
-                Loop();
+                MainLoop();
             }
         }
         //Terminate the process
@@ -59,7 +60,6 @@ class Game {
             TraceEventsSession end_tes = TraceEventsSession("Terminating game");
             Timer _timer = Timer(&end_tes,"Unloading resources");
             Scene::active_scene->UnloadScene();
-            std::cout<<"Scene unloaded\n";
             _timer.Stop();
             Timer timer2 = Timer(&end_tes,"Terminating glfw window");
             glfwTerminate();
@@ -83,14 +83,15 @@ class Game {
             glClearColor(0.02f,0.05,0.12,1.0);
         }
         //Loops until the game ends
-        void Loop(){   
+        void MainLoop(){   
             //Main loop----------------------------------
             while(!glfwWindowShouldClose(Window::main_window->window)){
                 time.UpdateTime();
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                 Scene::active_scene->UpdateScene();
                 Renderer::draw_count = 0;
-
+                //Testing the glFinish thing
+                glFinish();
                 glfwSwapBuffers(Window::main_window->window);
                 glfwPollEvents();
             }

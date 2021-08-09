@@ -22,17 +22,15 @@ struct ModelData
 //Creates a model with vertex data to be sent to the GPU
 class Model : public Resource{
     public:
-        Model();
-        Model(std::vector<VertexData> vertex_data) : vertex_data(vertex_data){SetUpBuffer();};
-        Model(ModelData model_data) : vertex_data(model_data.vertex_data), indices(model_data.indices){SetUpBuffer();};
-        std::vector<VertexData> vertex_data;
-        std::vector<GLuint> indices;
+        //Model(std::vector<VertexData> vertex_data) : vertex_data(vertex_data){SetUpBuffer();};
+        Model(ModelData model_data){SetUpBuffer(model_data);};
+        unsigned int indices_size, vertices_size;
         //Draws the model using arrays or elements depending of model parameters
         void Draw(const Shader* shader,const Matrix4& MVP_mat);
         //Updates index data with SubBufferData. However cannot increase its size.
-        void UpdateIndices();
+        //void UpdateIndices();
         //Updates Vertex data with SubBufferData. However cannot increase its size.
-        void UpdateVertices();
+        //void UpdateVertices();
         //Binds VAO 
         void BindVAO();
         //Unloads the resourse from the openGL context
@@ -44,7 +42,7 @@ class Model : public Resource{
         //Method for glDrawElements
         void DrawElements();
         //Set up all buffer elements such as VBO,VAO and EBO, also buffers data
-        void SetUpBuffer();
+        void SetUpBuffer(ModelData model_data);
         GLuint VBO = 0;
         GLuint EBO = 0;
         GLuint VAO = 0;
