@@ -15,11 +15,15 @@ class StateManager{
         bool BindTexture(GLuint texture);
         //Use Shader, returns true if there was a state change, if not it returns false
         bool UseProgram(GLuint program);
+        //Clear all States
+        void ClearStates();
 
-    private:
         GLuint current_VAO =  0 ;
         GLuint current_texture = 0;
         GLuint current_shaderProgram = 0;
         GLuint current_VBO = 0;
         GLuint current_EBO = 0;
+
+    private:
+
 };

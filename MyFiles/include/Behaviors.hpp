@@ -5,3 +5,4 @@
 #include "ObjectFollower.hpp"
 #include "HeadFollower.hpp"
 #include "RotateCubeQuat.hpp"
+#include "LineMaker.hpp"

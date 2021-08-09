@@ -8,6 +8,14 @@ StateManager::StateManager(){
     }
 }
 
+void StateManager::ClearStates(){
+    current_VAO =  0 ;
+    current_texture = 0;
+    current_shaderProgram = 0;
+    current_VBO = 0;
+    current_EBO = 0;
+}
+
 bool StateManager::BindsVAO(GLuint vao){
     if(current_VAO != vao){
         glBindVertexArray(vao);

@@ -4,6 +4,8 @@
 #include "Objects/Object.hpp"
 #include "Objects/GameObject.hpp"
 
+#include "GLStateManager.hpp"
+
 class Camera;
 class GameObject;
 
@@ -19,6 +21,8 @@ class Scene : public Object{
         void UpdateScene();
         //Adds a game object to the scene
         void AddGameObject(GameObject* game_object);
+        //Adds a resource object
+        void AddObject(Object* object);
         //Finds a game object from the scene with the name
         GameObject* FindGameObject(const std::string& object_name);
         //Returns a list of the games objects of the scene

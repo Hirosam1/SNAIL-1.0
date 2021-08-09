@@ -1,10 +1,5 @@
 #include "Resources/Model.hpp"
 
-Model::Model(){
-    vertex_data = std::vector<VertexData>();
-    indices = std::vector<GLuint>();
-}
-
 void Model::SetUpBuffer(){
     has_indices = false;
     //Generate a buffer for the Vertex Buffer Object and Element Buffer
@@ -41,6 +36,7 @@ void Model::Draw(const Shader* shader, const Matrix4& MVP_mat){
     if(VAO){
         shader->SetUniformMatrix4f(MVP_str, MVP_mat.GetPtr());
         StateManager::state_manager->BindsVAO(VAO);
+        //glBindVertexArray(VAO);
         if(has_indices){
             DrawElements();
         }else{

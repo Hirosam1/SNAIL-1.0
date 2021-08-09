@@ -22,7 +22,6 @@ struct ModelData
 //Creates a model with vertex data to be sent to the GPU
 class Model : public Resource{
     public:
-        Model();
         Model(std::vector<VertexData> vertex_data) : vertex_data(vertex_data){SetUpBuffer();};
         Model(ModelData model_data) : vertex_data(model_data.vertex_data), indices(model_data.indices){SetUpBuffer();};
         std::vector<VertexData> vertex_data;

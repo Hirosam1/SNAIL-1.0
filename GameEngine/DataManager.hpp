@@ -6,6 +6,8 @@
 #include "Components/Transform.hpp"
 #include "FileIO.hpp"
 
+#include "ResourcesMetaData.hpp"
+
 #include <json/json.hpp>
 
 class GameObject;
