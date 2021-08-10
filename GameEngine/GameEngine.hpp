@@ -20,6 +20,8 @@
 #include "Objects/GameObject.hpp"
 #include "Objects/Mesh.hpp"
 #include "Objects/SpriteAtlas.hpp"
+//Bad idea?? 
+//#include "Objects/ObjectFactory.hpp"
 
 #include "Components/Component.hpp"
 #include "Components/Behavior.hpp"
@@ -38,3 +40,5 @@
 #include "Debug.hpp"
 #include "EventTracer.hpp"
 #include "GLStateManager.hpp"
+#include "ResourcesMetaData.hpp"
+

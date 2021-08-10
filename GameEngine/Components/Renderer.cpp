@@ -6,7 +6,7 @@ Transform Renderer::BuildTransform(const Transform& transform) const{
     return Transform(transform);
 }
 
-void Renderer::Update(GameObject* game_object){
+void Renderer::LateUpdate(GameObject* game_object){
     Transform new_transform = BuildTransform(*game_object->transform);
     if(TestSphereAgainstFrustum(new_transform)){
         Camera* main_camera = Scene::active_scene->main_camera;

@@ -1,11 +1,12 @@
 {
     "ResourceInfo" : {
         "ResourceName" : "CoolResoure",
-        "StartingScene" : "Scene2.sscene.json"
+        "StartingScene" : "SceneLines.json"
     },
     "ResourceData" : {
         "Shaders" : [
-            {"Name" : "SolidColorShader" , "VertexPath" : "resources/shaders/vertex/basic.vert", "FragmentPath" : "resources/shaders/fragment/solid_color.frag"},
+            {"Name" : "SolidColorShadeW" , "VertexPath" : "resources/shaders/vertex/basic.vert", "FragmentPath" : "resources/shaders/fragment/solid_colorW.frag"},
+            {"Name" : "SolidColorShadeB" , "VertexPath" : "resources/shaders/vertex/basic.vert", "FragmentPath" : "resources/shaders/fragment/solid_colorB.frag"},
             {"Name" : "TextureShader" , "VertexPath" : "resources/shaders/vertex/basic.vert", "FragmentPath" : "resources/shaders/fragment/sprite.frag"},
             {"Name" : "SpriteShader", "VertexPath" : "resources/shaders/vertex/atlas.vert", "FragmentPath" : "resources/shaders/fragment/sprite.frag"}
         ],

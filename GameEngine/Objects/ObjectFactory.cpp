@@ -193,6 +193,8 @@ Component* ComponentFactory::CreateBehavior(json j, const std::string& file_name
                 return dynamic_cast<Component*>(new ObjectFollower());
         }else if(strcmp(behavior_name.data(),"RotateCubeQuat") == 0){
                 return dynamic_cast<Component*>(new RotateCubeQuat());
+        }else if(strcmp(behavior_name.data(),"LineMaker") == 0){
+                return dynamic_cast<Component*>(new LineDraw());
         }
         std::string params[] = {file_name,behavior_name};
         Debug::WriteErrorLog(ErrorType::OBJECTLOADER_NO_BEHAVIOR_FAIL,params);

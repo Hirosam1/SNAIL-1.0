@@ -24,8 +24,15 @@ void Scene::UpdateScene(){
             game_object->Update();
         }
     }
+    for(GameObject* game_object : game_objects){
+        if(game_object){
+            game_object->LateUpdate();
+        }
+    }
+
     if(this->request_change){
         this->UnloadScene();
+        StateManager::state_manager->ClearStates();
         Scene::active_scene = this->my_next_scene;
         Scene::active_scene->BeginScene();
         delete this;
@@ -43,7 +50,22 @@ GameObject* Scene::FindGameObject(const std::string& object_name){
 }
 
 void Scene::AddGameObject(GameObject* game_object){
-    game_objects.push_back(game_object);
+    Object* obj = dynamic_cast<GameObject*>(game_object);
+    if(obj){
+        game_object->Begin();
+        game_objects.push_back(game_object);
+        return;
+    }   
+    std::cout<<"WARNING!GO\n";
+}
+
+void Scene::AddObject(Object* object){
+    Object* obj = dynamic_cast<Object*>(object);
+    if(obj){
+        objects.push_back(object);
+        return;
+    }
+    std::cout<<"WARNING!O\n";
 }
 
 std::list<GameObject*>& Scene::GameObjectList(){

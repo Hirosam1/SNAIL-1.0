@@ -72,10 +72,12 @@ class Game {
         void LoadResources(){
             ObjectLoader::LoadResources("Resources.sres.json");
         }
-        //Initiate the games objects with the components previously loaded
+        //Loads inital scene, can be used as a sandbox place to start the scene
         void LoadScene(){
             Scene* init_scene = new Scene(ResourcesInfo::starting_scene_path);
             Scene::active_scene = init_scene;
+            //========== SANDBOX ADD GAMEOBJECTS TO INIT_SCENE ==============
+            
         }
         //Initiate the game objects created
         void ObjectsInitialization(){
@@ -93,6 +95,7 @@ class Game {
                 //Testing the glFinish thing
                 glFinish();
                 glfwSwapBuffers(Window::main_window->window);
+
                 glfwPollEvents();
             }
         }

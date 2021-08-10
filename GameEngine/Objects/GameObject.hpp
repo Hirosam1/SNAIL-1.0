@@ -11,6 +11,7 @@ class GameObject : public Object{
         GameObject(){transform = new Transform(); PushComponentBack(transform);};
         void Begin(){for(Component* component : components){component->Begin(this);}} 
         void Update(){for(Component* component : components){component->Update(this);}}
+        void LateUpdate(){for(Component* component : components){component->LateUpdate(this);}}
         void UnloadObject() override{for(Component* component : components){component->End(this); delete component;}}
         //Seraches for the desired component
         template <class T>

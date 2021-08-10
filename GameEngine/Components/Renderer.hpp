@@ -19,7 +19,8 @@ class Renderer : public Component{
     public:
         Renderer(Mesh* mesh, Shader* shader) : mesh(mesh),
                                                shader(shader){}
-        void Update(GameObject* game_object) override;
+        void Update(GameObject* go){}
+        void LateUpdate(GameObject* game_object) override;
         // !!! Probably have many meshes each one with its shaders and textures !!!
         Mesh* mesh;
         Shader* shader;

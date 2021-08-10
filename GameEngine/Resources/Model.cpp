@@ -42,6 +42,7 @@ void Model::Draw(const Shader* shader, const Matrix4& MVP_mat){
     if(VAO){
         shader->SetUniformMatrix4f(MVP_str, MVP_mat.GetPtr());
         StateManager::state_manager->BindsVAO(VAO);
+        //glBindVertexArray(VAO);
         if(has_indices){
             DrawElements();
         }else{

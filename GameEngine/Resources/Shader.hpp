@@ -12,6 +12,7 @@
 class Shader : public Resource{
     public:
         Shader(std::string vertex_path, std::string fragment_path);
+        Shader(std::string vertex_path, std::string geometry_path, std::string fragment_path);
         //Uses the shader. Use this before any shader operations
         void UseShader();
         //Set uniform for vec3
