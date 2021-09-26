@@ -3,7 +3,7 @@
 #include "Resources/Resource.hpp"
 #include "Resources/Shader.hpp"
 
-#include "GLStateManager.hpp"
+#include "GLHandler/GLStateManager.hpp"
 
 #include  "DataStructures/Vector.hpp"
 #include "DataStructures/Matrix.hpp"

@@ -4,7 +4,7 @@
 #include "Objects/Object.hpp"
 #include "Objects/GameObject.hpp"
 
-#include "GLStateManager.hpp"
+#include "GLHandler/GLStateManager.hpp"
 
 class Camera;
 class GameObject;

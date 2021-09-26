@@ -17,6 +17,8 @@ class StateManager{
         bool UseProgram(GLuint program);
         //Clear all States
         void ClearStates();
+        //
+        void HandleInstructions();
 
         GLuint current_VAO =  0 ;
         GLuint current_texture = 0;
@@ -25,5 +27,11 @@ class StateManager{
         GLuint current_EBO = 0;
 
     private:
-
+        enum Instruction{
+            ADD_MODEL,
+            ADD_TEXTURE,
+            BIND_VAO,
+            BIND_VBO,
+            BIND_TEXTURE
+        };
 };

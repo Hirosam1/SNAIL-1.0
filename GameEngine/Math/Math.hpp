@@ -9,7 +9,7 @@
 namespace Math {
     const float RADIANS = 0.017453292f;
     const float pi = 3.1415926535;
-    const float FLT_EPSILON = std::numeric_limits<float>::epsilon();
+    const float MINE_FLT_EPSILON = std::numeric_limits<float>::epsilon();
 
     inline float ToRadians(const float a){
         return a * RADIANS; 

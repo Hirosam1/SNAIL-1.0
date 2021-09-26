@@ -9,7 +9,7 @@
 
 #include "Resources/Shader.hpp"
 
-#include "GLStateManager.hpp"
+#include "GLHandler/GLStateManager.hpp"
 
 
 namespace ImageIO{

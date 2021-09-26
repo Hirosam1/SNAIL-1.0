@@ -23,7 +23,6 @@ Vector3 SpriteRenderer::SpriteScale(){
     return sprite_scale;
 }
 
-
 Transform SpriteRenderer::BuildTransform(const Transform& transform) const{
     return Transform(transform.position,transform.rotation,transform.scale * sprite_scale);
 }

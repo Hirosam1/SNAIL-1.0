@@ -9,6 +9,7 @@ vertical_count(vertical_count), horizontal_count(horizontal_count){
     horizontal_step = texture->image_data.width/horizontal_count;
     float aspect_ratio = (float)horizontal_step/(float)vertical_step;
     sprite_scale = Vector3(aspect_ratio,1.0,1.0);
+    //Normalize steps
     vertical_step = vertical_step/texture->image_data.height;
     horizontal_step = horizontal_step/texture->image_data.width;
 }

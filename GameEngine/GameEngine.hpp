@@ -39,6 +39,6 @@
 #include "Window.hpp"
 #include "Debug.hpp"
 #include "EventTracer.hpp"
-#include "GLStateManager.hpp"
+#include "GLHandler/GLStateManager.hpp"
 #include "ResourcesMetaData.hpp"
 

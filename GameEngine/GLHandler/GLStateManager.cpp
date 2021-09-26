@@ -9,7 +9,7 @@ StateManager::StateManager(){
 }
 
 void StateManager::ClearStates(){
-    current_VAO =  0 ;
+    current_VAO =  0;
     current_texture = 0;
     current_shaderProgram = 0;
     current_VBO = 0;
@@ -59,4 +59,8 @@ bool StateManager::UseProgram(GLuint program){
         return true;
     }
     return false;
+}
+
+void StateManager::HandleInstructions(){
+    
 }
