@@ -105,6 +105,11 @@ bool Vector4::operator==(const Vector4& other) const{
     return (x == other.x && y == other.y && z == other.z && w == other.w);
 }
 
+bool Vector4::operator!=(const Vector4& other) const{
+    return !(x == other.x && y == other.y && z == other.z && w == other.w);
+}
+
+
 #pragma endregion
 
 /*========================Vector 3====================================*/
@@ -217,6 +222,11 @@ bool Vector3::operator==(const Vector3& other) const{
     return (x == other.x && y == other.y && z == other.z);
 }
 
+bool Vector3::operator!=(const Vector3& other) const{
+    return !(x == other.x && y == other.y && z == other.z);
+}
+
+
 #pragma endregion
 /*========================Vector 2====================================*/
 #pragma region
@@ -307,6 +317,9 @@ Vector2 operator*(float a,const Vector2& vec){
 
 bool Vector2::operator==(const Vector2& other) const{
     return (x == other.x && y == other.y);
+}
+bool Vector2::operator!=(const Vector2& other) const{
+    return !(x == other.x && y == other.y);
 }
 
 #pragma endregion

@@ -1,34 +1,26 @@
 {
-    "ResourceInfo" : {
-        "ResourceName" : "CoolResoure",
-        "StartingScene" : "SceneLines.json"
+    "ResourceInfo": {
+        "ResourceName" : "Cool Resources",
+        "IsFirstResource" : true,
+        "StartingScene" : "Scene1.sscene.json"
     },
     "ResourceData" : {
-        "Shaders" : [
-            {"Name" : "SolidColorShadeW" , "VertexPath" : "resources/shaders/vertex/basic.vert", "FragmentPath" : "resources/shaders/fragment/solid_colorW.frag"},
-            {"Name" : "SolidColorShadeB" , "VertexPath" : "resources/shaders/vertex/basic.vert", "FragmentPath" : "resources/shaders/fragment/solid_colorB.frag"},
-            {"Name" : "TextureShader" , "VertexPath" : "resources/shaders/vertex/basic.vert", "FragmentPath" : "resources/shaders/fragment/sprite.frag"},
-            {"Name" : "SpriteShader", "VertexPath" : "resources/shaders/vertex/atlas.vert", "FragmentPath" : "resources/shaders/fragment/sprite.frag"}
-        ],
-        "Textures" : [
-           { "Name" : "OmniPotHead", "TexturePath" : "resources/images/omnipothead.png"},
-           {"Name" : "TileMap", "TexturePath" : "resources/images/sprite_sheet.png"}
-        ],
-        "Models" : [
-            {"Name" : "Cube", "DefaultShape" : 1},
-            {"Name" : "Square", "DefaultShape" : 0}
-        ]
+        "Shaders" : [{"Name": "MyAtlasShader", "VertexPath" : "resources/shaders/vertex/atlas.vert", "FragmentPath" : "resources/shaders/fragment/sprite.frag"},
+                     {"Name": "MyNormalShader", "VertexPath" : "resources/shaders/vertex/basic.vert", "FragmentPath" : "resources/shaders/fragment/sprite.frag"}],
+        "Textures": [{"Name" : "SpriteSheet", "TexturePath" : "resources/images/sprite_sheet.png"},
+                     {"Name" : "Hotie", "TexturePath" : "resources/images/good_starb.jpg"},
+                     {"Name" : "Box", "TexturePath" : "resources/images/container.jpg"},
+                     {"Name" : "Omnipothead", "TexturePath" : "resources/images/omnipothead.png"},
+                 	 {"Name" : "slime_chalange", "TexturePath" : "resources/images/slime_chalange.png"}],
+        "Models" : [{"Name" : "SquareModel", "DefaultShape" : 0},
+                    {"Name" : "CubeModel", "DefaultShape" : 1}]
     },
-
     "ObjectData" : {
-        "Meshes" : [
-            {"Name" : "CubeAtlas", "Model" : "Cube", "Texture" : "TileMap"},
-            {"Name" : "SolidColorCube", "Model" : "Cube"},
-            {"Name" : "OmniPotHead", "Model" : "Square", "Texture" : "OmniPotHead"},
-            {"Name" : "TileMapMesh", "Model" : "Square", "Texture" : "TileMap"}
-        ],
-        "SpriteAtlas" : [
-            {"Name" : "SpriteAtlas", "SheetTexture" : "TileMap","SheetDimensions" : [1,3]}
-        ]
+        "SpriteAtlas" : [{"Name" : "MySpriteAtlas", "SheetTexture" : "SpriteSheet", "SheetDimensions" : [1,3]}],
+        "Meshes" : [{"Name" : "CoolPlaneAtlas", "Model" : "SquareModel" , "Texture" : "SpriteSheet"},
+                    {"Name" : "HotieMesh", "Model" : "SquareModel", "Texture" : "Hotie"},
+                    {"Name" : "BoxMesh", "Model" : "CubeModel", "Texture" : "Box"},
+                    {"Name" : "OmnipotheadMesh", "Model" : "SquareModel", "Texture" : "Omnipothead"},
+                	{"Name" : "slime_chalange", "Model" : "SquareModel", "Texture" : "slime_chalange"}]
     }
 }

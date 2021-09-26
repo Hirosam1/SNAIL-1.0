@@ -22,11 +22,6 @@
 			"isDefault": true},
 		},
 		{
-			"label": "Make clang-debug",
-			"type": "shell",
-			"args": ["config=clang"]
-		},
-		{
 			"label": "Make Release",
 			"type": "shell",
 			"args": ["config=release"]

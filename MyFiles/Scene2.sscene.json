@@ -1,40 +1,28 @@
 {
     "SceneInfo" : {
-        "SceneName" : "My First Cool Scene",
+        "SceneName" : "Basic Snail Scene",
         "ChangeResources" : false,
         "IsFirstScene" : true
     },
     "SceneData" : { 
     "GameObjects" : [
-            {
-                "ObjectComponents" : [
-                    {"SpriteRenderer" : {"Mesh" : "OmniPotHead", "Shader" : "TextureShader"}},
-                    {"Behavior" : "ObjectFollower"}
-                ],
-                "ObjectName" : "OmnipotHead"
+            {"ObjectComponents":[
+                {"Transform" : {"Position" : [0.0,0.0,-0.01], "Scale" : [3.0,2.0,1.0]}},
+                {"MeshRenderer" : {"Mesh" : "SolidColorPlane", "Shader" : "SolidColorShadeB"}}
+            ]
+                
             },
             {
-                "ObjectComponents" : [
+                "ObjectComponents": [
                     {"SpriteRenderer" : {"Mesh" : "TileMapMesh", "Shader" : "SpriteShader", "SpriteAtlas" : "SpriteAtlas", "AtlasPosition" : [0,1]}}
                 ]
             },
-            {
-                "ObjectComponents" : [
-                    {"SpriteRenderer" : {"Mesh" : "TileMapMesh", "Shader" : "SpriteShader", "SpriteAtlas" : "SpriteAtlas", "AtlasPosition" : [0,2]}},
-                    {"Transform" : {"Position" : [0.5,0.0,0.5], "Rotation" : [0.0,-1.57,0.0]}}
-                ]
-            },
-            {
-                "ObjectComponents" : [
-                    {"SpriteRenderer" : {"Mesh" : "CubeAtlas", "Shader" : "SpriteShader", "SpriteAtlas" : "SpriteAtlas", "AtlasPosition" : [0,0]}},
-                    {"Transform" : {"Position" : [-1.0, 0.0, 0.5]}},
-                    {"Behavior" : "RotateCubeQuat"}],
-                    "ObjectName" : "SolidColor"
-            },
             {"ObjectComponents" : [
                 {"Camera" : {"CameraProjection" : 1}}, 
-                {"Transform" : {"Position" : [0.0,0.5,0.5]}}, 
-                {"Behavior" : "CameraMovement"}],
+                {"Transform" : {"Position" : [0.0,0.0,0.5]}}, 
+                {"Behavior" : "CameraMovement"},
+                {"Behavior" : "LineMaker"}
+                ],
              "ObjectName" : "Main Camera",
              "IsMainCamera" : true
             }

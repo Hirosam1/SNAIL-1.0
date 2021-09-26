@@ -38,7 +38,7 @@
             "cwd": "${workspaceFolder}/MyFiles",
             "environment": [],
             "MIMode": "gdb",
-            "miDebuggerPath": "C:\\MinGW_nuwen\\bin\\gdb.exe",
+            "miDebuggerPath": "C:\\mingw64\\bin\\gdb.exe",
             "logging": {
                 "trace": true,
                 "traceResponse": true,

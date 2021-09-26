@@ -14,7 +14,6 @@ project "ExecutableGame"
         kind "ConsoleApp"
         defines {"DEBUG"}
         symbols "On"
-        exceptionhandling ("SEH")
         optimize "Off"
     filter "configurations:Release"
         kind "WindowedApp"
