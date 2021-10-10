@@ -13,6 +13,12 @@ struct VertexData{
     Vector2 tex_coords;
 };
 
+struct SpriteBatchData{
+    Vector3 pos;
+    Vector2 tex_coords;
+    Vector4 atlas_pos;
+};
+
 struct ModelData
 {
     std::vector<VertexData> vertex_data;

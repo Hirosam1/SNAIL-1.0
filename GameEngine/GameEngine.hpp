@@ -32,6 +32,7 @@
 #include "Components/SpriteRenderer.hpp"
 #include "Components/MeshRenderer.hpp"
 #include "Components/Camera.hpp"
+#include "Components/BatchSpriteRenderer.hpp"
 
 #include "FileIO.hpp"
 #include "Time.hpp"

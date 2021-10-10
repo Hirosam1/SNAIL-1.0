@@ -77,7 +77,21 @@ class Game {
             Scene* init_scene = new Scene(ResourcesInfo::starting_scene_path);
             Scene::active_scene = init_scene;
             //========== SANDBOX ADD GAMEOBJECTS TO INIT_SCENE ==============
-            
+            Texture* tex = new Texture("resources/images/sprite_sheet.png");
+            SpriteAtlas* sprt = new SpriteAtlas(tex,1,3);
+            Shader* shader = new Shader("resources/shaders/vertex/batch_atlas.vert","resources/shaders/fragment/sprite.frag");
+            BatchSpriteRenderer* bsr = new BatchSpriteRenderer(sprt,shader);
+            bsr->AddSprite(Vector3(0.0,0.0,0.0),0,Vector2(0,0));
+            bsr->AddSprite(Vector3(1.0,0.0,0.0),0,Vector2(1,0));
+
+            bsr->AddSprite(Vector3(-1.0,0.0,0.0),0,Vector2(2,0));
+            bsr->AddSprite(Vector3(0.0,1.0,0.0),0,Vector2(0,0));
+            bsr->AddSprite(Vector3(0.0,-1.0,0.0),0,Vector2(0,1));
+            bsr->GenerateGeometry();
+            GameObject* go = new GameObject();
+            go->transform->Translate(Vector3(0,0.5,0));
+            go->PushComponentBack(bsr);
+            init_scene->AddGameObject(go);
         }
         //Initiate the game objects created
         void ObjectsInitialization(){
