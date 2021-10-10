@@ -10,6 +10,7 @@
 
 */
 BatchSpriteRenderer::BatchSpriteRenderer(SpriteAtlas* sprite_atlas, Shader* shader): Renderer(nullptr, shader), sprite_atlas(sprite_atlas), texture(sprite_atlas->texture){
+    use_frustum_culling= false;
     //Generate a buffer for the Vertex Buffer Object and Element Buffer
     glGenBuffers(1,&VBO);
     glGenBuffers(1,&EBO);

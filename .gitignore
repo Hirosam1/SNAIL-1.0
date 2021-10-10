@@ -58,6 +58,8 @@ Makefile
 
 Myfiles/bin/
 
+GameEngine/bin/*
+
 #Ignore .git ignore
 !*.sscene.json
 !*.sres.json

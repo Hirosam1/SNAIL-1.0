@@ -26,6 +26,8 @@ class Renderer : public Component{
         Shader* shader;
         //Draw count in the last frame
         static int draw_count;
+        //
+        bool use_frustum_culling = true;
     private:
         //test a sphere in the transform coordinates against the view frustum, returns true if visible
         bool TestSphereAgainstFrustum(const Transform& transform) const;
