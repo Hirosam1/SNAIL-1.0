@@ -1,7 +1,7 @@
 #version 330 core
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec2 aTexPos;
-layout (location = 2) in vec4 atlas_coord
+layout (location = 2) in vec4 atlas_coord;
 
 
 out vec2 TexCoord;
@@ -11,7 +11,6 @@ out vec2 TexCoord;
 // uniform mat4 projection;
 
 uniform mat4 MVP;
-
 //Remaps texture from (0,1) to the normalized texture segment from texture atlas
 //It takes as arguments the 2 Vec2 coordinates of the texture, bottom left and upper right coordinates,
 // and the vertex tex position, that ranges from 0-1 indicating where the texture starts and ends.
@@ -22,7 +21,7 @@ uniform mat4 MVP;
 // subistitute xm to b, we know xa should be 1: b = (b-a)*1 + β
 //β = a
 //therefore:
-// xm = (b-a)*xa + β
+// xm = (b-a)*xa + a
 // with this function we can get any value between a-b using the aTexPos values 0-1
 vec2 RemapTex(vec2 inputTex, vec4 mapcoords){
     float x_coord = (mapcoords.z-mapcoords.x)*inputTex.x + mapcoords.x;
@@ -32,5 +31,5 @@ vec2 RemapTex(vec2 inputTex, vec4 mapcoords){
 
 void main(){
     gl_Position =  MVP * vec4(aPos,1.0);
-    TexCoord = RemapTex(aTexPos,altas_coord);
+    TexCoord = RemapTex(aTexPos,atlas_coord);
 }
