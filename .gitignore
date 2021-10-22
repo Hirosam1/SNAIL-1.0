@@ -56,7 +56,9 @@
 
 Makefile
 
-Myfiles/bin/
+MyFiles/bin/**
+
+premake5
 
 #Ignore .git ignore
 !*.sscene.json
