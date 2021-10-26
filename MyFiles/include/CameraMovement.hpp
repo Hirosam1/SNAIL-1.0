@@ -23,6 +23,8 @@ class CameraMovement : public Behavior{
     InputHandler ih = InputHandler(8);
     float velocity = 2.0f;
     bool cursor_hidden;
+    std::string scene1 = "Scene1.sscene.json";
+    std::string scene2 = "Scene2.sscene.json";
     void CalculateYawnPitch(){
         if(first_mouse && Window::main_window->cursor_info.x_pos >= 0){
             first_mouse = false;
@@ -90,7 +92,11 @@ class CameraMovement : public Behavior{
             }
             ih.HandleInput();
             if(ih.GetInputInfo(SWITCH_SCENE).was_activated){
-                Scene::LoadScene(Scene::active_scene->scene_path);
+                if(Scene::active_scene->scene_path == scene1){
+                    Scene::LoadScene(scene2);
+                }else{
+                    Scene::LoadScene(scene1);
+                }
             }
             
             if(ih.GetInputInfo(SET_CURSOR).was_activated){

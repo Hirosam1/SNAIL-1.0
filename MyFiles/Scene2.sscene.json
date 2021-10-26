@@ -5,12 +5,10 @@
         "IsFirstScene" : true
     },
     "SceneData" : { 
-    "GameObjects" : [
-            {"ObjectComponents":[
-                {"Transform" : {"Position" : [0.0,0.0,-0.01], "Scale" : [3.0,2.0,1.0]}},
-                {"MeshRenderer" : {"Mesh" : "SolidColorPlane", "Shader" : "SolidColorShadeB"}}
-            ]
-                
+    "GameObjects" : [   
+            {"ObjectComponents" : [
+                {"SpriteRenderer" : {"Mesh" : "CoolPlaneAtlas" , "Shader" : "MyAtlasShader", "SpriteAtlas" : "MySpriteAtlas", "AtlasPosition" : [0 ,2]}},
+                {"Transform" : {"Position" : [0.0,0.5,0.0]} }]
             },
             {
                 "ObjectComponents": [
@@ -20,8 +18,7 @@
             {"ObjectComponents" : [
                 {"Camera" : {"CameraProjection" : 1}}, 
                 {"Transform" : {"Position" : [0.0,0.0,0.5]}}, 
-                {"Behavior" : "CameraMovement"},
-                {"Behavior" : "LineMaker"}
+                {"Behavior" : "CameraMovement"}
                 ],
              "ObjectName" : "Main Camera",
              "IsMainCamera" : true
