@@ -63,3 +63,7 @@ premake5
 #Ignore .git ignore
 !*.sscene.json
 !*.sres.json
+
+*.swp
+
+*.save
