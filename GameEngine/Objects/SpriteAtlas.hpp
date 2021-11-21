@@ -23,4 +23,6 @@ class SpriteAtlas : public Object{
         //Vertical and horizontal tex-coordinate step
         float vertical_step;
         float horizontal_step;
+        float half_pixel_correction_v = 0.0f;
+        float half_pixel_correction_h = 0.0f;
 };

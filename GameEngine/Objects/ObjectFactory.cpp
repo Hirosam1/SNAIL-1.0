@@ -19,6 +19,7 @@
 #include "Components/Renderer.hpp"
 #include "Components/SpriteRenderer.hpp"
 #include "Components/Transform.hpp"
+#include "Components/BatchSpriteRenderer.hpp"
 
 #include "Resources/Model.hpp"
 #include "Resources/Shader.hpp"
@@ -55,7 +56,9 @@ ComponentFactory::ComponentFactory(){
                 {"SpriteRenderer", CreateSpriteRenderer},
                 {"MeshRenderer", CreateMeshRenderer},
                 {"Camera", CreateCamera},
-                {"Behavior", CreateBehavior}};
+                {"Behavior", CreateBehavior},
+                {"SpriteBatchRenderer", CreateSpriteBatchRenderer},
+                };
                 singleton = this;
         }
         else{
@@ -162,6 +165,61 @@ Component* ComponentFactory::CreateSpriteRenderer(json j,const std::string& file
 
 }
 
+Component* ComponentFactory::CreateSpriteBatchRenderer(nlohmann::json j,const std::string& file_name, std::vector<Object*>* game_objects){
+        BatchSpriteRenderer* batch_rend = nullptr;
+        SpriteAtlas* sprite_atlas = nullptr;
+        Shader* shader = nullptr;
+        std::string params[] = {file_name,"SpritebatchRenderer"};
+        std::string obj_name;
+
+        if(!FileIO::TryToRead(j,"SpriteAtlas",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&obj_name)){
+                return nullptr;  
+        }
+        sprite_atlas = ObjectsInfo::FindOrLoadSpriteAtlas(obj_name,game_objects);
+        if(!sprite_atlas){
+                params[1] = obj_name;
+                Debug::WriteErrorLog(ErrorType::OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL,params);
+                return nullptr;  
+        }
+        if(!FileIO::TryToRead(j,"Shader",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&obj_name)){
+                return nullptr;  
+        }
+
+        shader = ResourcesInfo::FindOrLoadShader(obj_name,game_objects);
+        if(!shader){
+                params[1] = obj_name;
+                Debug::WriteErrorLog(ErrorType::OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL,params);
+                return nullptr;  
+        }
+        if(!j.contains("SpriteInstances")){
+                Debug::WriteErrorLog(ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params);
+                return nullptr;  
+        }
+        batch_rend = new BatchSpriteRenderer(sprite_atlas,shader);
+        json j_si = j["SpriteInstances"];
+        for(json::iterator j_instances = j_si.begin() ; j_instances != j_si.end(); j_instances++){
+                std::vector<float> pos;
+                std::vector<float>atlas_pos;
+                json j_instances_v = j_instances.value();
+                if(!FileIO::TryToRead(j_instances_v,"Position",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&pos)){
+                        return nullptr;
+                }
+
+                if(!FileIO::TryToRead(j_instances_v,"AtlasPosition",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&atlas_pos)){
+                        return nullptr;
+                }
+                if(pos.size() != 3 || atlas_pos.size() != 2){
+                        Debug::WriteErrorLog(ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params);
+                }else{
+                        batch_rend->AddSprite(Vector3(pos[0],pos[1],pos[2]), 0, Vector2(atlas_pos[0],atlas_pos[1]));
+                }
+
+        }
+        batch_rend->GenerateGeometry();
+        return dynamic_cast<Component*>(batch_rend);
+
+}
+
 Component* ComponentFactory::CreateCamera(json j, const std::string& file_name, std::vector<Object*>* game_objects){
         int i;
         if(!FileIO::TryToRead(j,"CameraProjection",ErrorType::NO_ERROR,nullptr,&i)){
@@ -223,6 +281,7 @@ Transform ComponentFactory::CreateTransform(json j,const std::string& file_name)
         return trans;
 }
 
+
 Mesh* ObjectsInfo::FindOrLoadMesh(const std::string& name, std::vector<Object*>* game_objects){
         std::string name_ext = name + "." + ObjectsInfo::extension;
         //Tries to find if the object's already loaded on scene
@@ -254,6 +313,7 @@ Mesh* ObjectsInfo::FindOrLoadMesh(const std::string& name, std::vector<Object*>*
         }
         return mesh;
 }
+
 
 SpriteAtlas* ObjectsInfo::FindOrLoadSpriteAtlas(const std::string& name, std::vector<Object*>* game_objects){
         std::string name_ext = name + "." + ObjectsInfo::extension;

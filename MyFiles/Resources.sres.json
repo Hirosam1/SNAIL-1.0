@@ -6,12 +6,15 @@
     },
     "ResourceData" : {
         "Shaders" : [{"Name": "MyAtlasShader", "VertexPath" : "resources/shaders/vertex/atlas.vert", "FragmentPath" : "resources/shaders/fragment/sprite.frag"},
-                     {"Name": "MyNormalShader", "VertexPath" : "resources/shaders/vertex/basic.vert", "FragmentPath" : "resources/shaders/fragment/sprite.frag"}],
+                     {"Name": "MyNormalShader", "VertexPath" : "resources/shaders/vertex/basic.vert", "FragmentPath" : "resources/shaders/fragment/sprite.frag"},
+                     {"Name" : "AtlasBatchShader", "VertexPath" : "resources/shaders/vertex/batch_atlas.vert", "FragmentPath" :"resources/shaders/fragment/sprite.frag"} 
+                    ],
         "Textures": [{"Name" : "SpriteSheet", "TexturePath" : "resources/images/sprite_sheet.png"},
                      {"Name" : "Hotie", "TexturePath" : "resources/images/good_starb.jpg"},
                      {"Name" : "Box", "TexturePath" : "resources/images/container.jpg"},
                      {"Name" : "Omnipothead", "TexturePath" : "resources/images/omnipothead.png"},
-                 	 {"Name" : "slime_chalange", "TexturePath" : "resources/images/slime_chalange.png"}],
+                 	 {"Name" : "slime_chalange", "TexturePath" : "resources/images/slime_chalange.png"},
+                     {"Name" : "bunny_thing_tex", "TexturePath":"resources/images/bunny_thing.png"}],
         "Models" : [{"Name" : "SquareModel", "DefaultShape" : 0},
                     {"Name" : "CubeModel", "DefaultShape" : 1}]
     },
@@ -21,6 +24,7 @@
                     {"Name" : "HotieMesh", "Model" : "SquareModel", "Texture" : "Hotie"},
                     {"Name" : "BoxMesh", "Model" : "CubeModel", "Texture" : "Box"},
                     {"Name" : "OmnipotheadMesh", "Model" : "SquareModel", "Texture" : "Omnipothead"},
-                	{"Name" : "slime_chalange", "Model" : "SquareModel", "Texture" : "slime_chalange"}]
+                	{"Name" : "slime_chalange", "Model" : "SquareModel", "Texture" : "slime_chalange"},
+                    {"Name" : "bunny_thing", "Model" : "SquareModel", "Texture" : "bunny_thing_tex"}]
     }
 }

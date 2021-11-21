@@ -26,6 +26,7 @@ class BatchSpriteRenderer : public Renderer{
         GLuint EBO = 0;
         GLuint VAO = 0;
     private:
+        ~BatchSpriteRenderer();
         //General information  about a sprite batch (a full rectangle with texture and atlas texture)
         struct SpriteBatch
         {

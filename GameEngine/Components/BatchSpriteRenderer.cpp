@@ -14,6 +14,7 @@ BatchSpriteRenderer::BatchSpriteRenderer(SpriteAtlas* sprite_atlas, Shader* shad
     //then we Bind the Element Buffer Object, this HAS to be after 
     StateManager::state_manager->BindsEBO(EBO);
 
+    //Initializes indices as they wold be with the square with textures indices
     for(int last_index = 0 ; last_index < max_models; last_index+=4){
         indices.push_back(0+last_index);
         indices.push_back(1+last_index);
@@ -24,7 +25,9 @@ BatchSpriteRenderer::BatchSpriteRenderer(SpriteAtlas* sprite_atlas, Shader* shad
         indices.push_back(3+last_index);
     }
 
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(GLuint)*2*max_models,&indices[0],GL_STATIC_DRAW);
+    //We wont be chainging the element array, so we set it to static draw
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(GLuint)*6*max_models,&indices[0],GL_STATIC_DRAW);
+    //We might be changing our array buffer, so we set it to dynamic draw
     glBufferData(GL_ARRAY_BUFFER,sizeof(SpriteBatchData)*max_models,nullptr,GL_DYNAMIC_DRAW);
 
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,sizeof(SpriteBatchData),(void*)offsetof(SpriteBatchData,pos));
@@ -33,6 +36,16 @@ BatchSpriteRenderer::BatchSpriteRenderer(SpriteAtlas* sprite_atlas, Shader* shad
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(2,4,GL_FLOAT,false,sizeof(SpriteBatchData),(void*)offsetof(SpriteBatchData,atlas_pos));
     glEnableVertexAttribArray(2);
+}
+
+BatchSpriteRenderer::~BatchSpriteRenderer(){
+    sprites_batches.clear();
+    sprite_data.clear();
+    indices.clear();
+    glDeleteBuffers(1,&EBO);
+    glDeleteBuffers(1,&VBO);
+
+    glDeleteVertexArrays(1,&VAO);
 }
 
 int BatchSpriteRenderer::AddSprite(Vector3 pos,int texture_index, Vector2 atlas_coords){
@@ -88,9 +101,6 @@ void BatchSpriteRenderer::GenerateSprite(SpriteBatch sp){
     sprite_data.push_back(sbd[1]);
     sprite_data.push_back(sbd[2]);
     sprite_data.push_back(sbd[3]);
-
-    //sprites are ordered in fours
-
 }
 
 void BatchSpriteRenderer::UpdateData(){

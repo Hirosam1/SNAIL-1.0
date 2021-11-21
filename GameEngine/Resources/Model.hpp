@@ -13,6 +13,7 @@ struct VertexData{
     Vector2 tex_coords;
 };
 
+//Data structure reserved for sprite batches, it stores they position as well the atlas position
 struct SpriteBatchData{
     Vector3 pos;
     Vector2 tex_coords;
