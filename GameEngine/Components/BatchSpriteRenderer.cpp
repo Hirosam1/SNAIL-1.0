@@ -1,14 +1,5 @@
 #include "BatchSpriteRenderer.hpp"
-/*
-    indices.push_back(0);
-    indices.push_back(1);
-    indices.push_back(3);
 
-    indices.push_back(2);
-    indices.push_back(0);
-    indices.push_back(3);
-
-*/
 BatchSpriteRenderer::BatchSpriteRenderer(SpriteAtlas* sprite_atlas, Shader* shader): Renderer(nullptr, shader), sprite_atlas(sprite_atlas), texture(sprite_atlas->texture){
     use_frustum_culling= false;
     //Generate a buffer for the Vertex Buffer Object and Element Buffer

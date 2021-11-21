@@ -1,0 +1,18 @@
+{
+    "SceneInfo" : {
+        "SceneName" : "Empty Scene",
+        "ChangeResources" : false,
+        "IsFirstScene" : true
+    },
+    "SceneData" : { 
+    "GameObjects" : [
+            {"ObjectComponents" : [
+                {"Camera" : {"CameraProjection" : 1}}, 
+                {"Transform" : {"Position" : [0.0,0.5,0.5]}}, 
+                {"Behavior" : "CameraMovement"}],
+             "ObjectName" : "Main Camera",
+             "IsMainCamera" : true
+            }
+        ]
+    }
+}

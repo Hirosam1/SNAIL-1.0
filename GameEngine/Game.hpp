@@ -81,15 +81,71 @@ class Game {
             SpriteAtlas* sprt = new SpriteAtlas(tex,1,3);
             Shader* shader = new Shader("resources/shaders/vertex/batch_atlas.vert","resources/shaders/fragment/sprite.frag");
             BatchSpriteRenderer* bsr = new BatchSpriteRenderer(sprt,shader);
-            bsr->AddSprite(Vector3(0.0,0.0,0.0),0,Vector2(0,0));
-            bsr->AddSprite(Vector3(1.0,0.0,0.0),0,Vector2(1,0));
 
-            bsr->AddSprite(Vector3(-1.0,0.0,0.0),0,Vector2(2,0));
-            bsr->AddSprite(Vector3(0.0,1.0,0.0),0,Vector2(0,0));
-            bsr->AddSprite(Vector3(0.0,-1.0,0.0),0,Vector2(0,1));
+            bsr->AddSprite(Vector3(0,2,0),0,Vector2(0,0));
+            bsr->AddSprite(Vector3(0,1,0),0,Vector2(0,0));
+            bsr->AddSprite(Vector3(0,0,0),0,Vector2(0,0));
+            bsr->AddSprite(Vector3(0,-1,0),0,Vector2(0,0));
+            bsr->AddSprite(Vector3(0,-2,0),0,Vector2(0,0));
+
+            bsr->AddSprite(Vector3(1,2,0),0,Vector2(0,0));
+            bsr->AddSprite(Vector3(1,1,0),0,Vector2(0,0));
+            bsr->AddSprite(Vector3(1,0,0),0,Vector2(0,0));
+            bsr->AddSprite(Vector3(1,-1,0),0,Vector2(0,0));
+            bsr->AddSprite(Vector3(1,-2,0),0,Vector2(0,0));
+
+            bsr->AddSprite(Vector3(2,2,0),0,Vector2(0,0));
+            bsr->AddSprite(Vector3(2,1,0),0,Vector2(0,0));
+            bsr->AddSprite(Vector3(2,0,0),0,Vector2(0,0));
+            bsr->AddSprite(Vector3(2,-1,0),0,Vector2(0,0));
+            bsr->AddSprite(Vector3(2,-2,0),0,Vector2(0,0));
+
+            bsr->AddSprite(Vector3(-2,2,0),0,Vector2(0,0));
+            bsr->AddSprite(Vector3(-2,1,0),0,Vector2(0,0));
+            bsr->AddSprite(Vector3(-2,0,0),0,Vector2(0,0));
+            bsr->AddSprite(Vector3(-2,-1,0),0,Vector2(0,0));
+            bsr->AddSprite(Vector3(-2,-2,0),0,Vector2(0,0));
+
+            bsr->AddSprite(Vector3(-1,2,0),0,Vector2(0,0));
+            bsr->AddSprite(Vector3(-1,1,0),0,Vector2(0,0));
+            bsr->AddSprite(Vector3(-1,0,0),0,Vector2(0,0));
+            bsr->AddSprite(Vector3(-1,-1,0),0,Vector2(0,0));
+            bsr->AddSprite(Vector3(-1,-2,0),0,Vector2(0,0));
+
+            bsr->AddSprite(Vector3(0,3,0),0,Vector2(1,0));
+            bsr->AddSprite(Vector3(-1,3,0),0,Vector2(1,0));
+            bsr->AddSprite(Vector3(-2,3,0),0,Vector2(1,0));
+            bsr->AddSprite(Vector3(-3,3,0),0,Vector2(1,0));
+            bsr->AddSprite(Vector3(1,3,0),0,Vector2(1,0));
+            bsr->AddSprite(Vector3(2,3,0),0,Vector2(1,0));
+            bsr->AddSprite(Vector3(3,3,0),0,Vector2(1,0));
+
+            bsr->AddSprite(Vector3(3,2,0),0,Vector2(1,0));
+            bsr->AddSprite(Vector3(3,1,0),0,Vector2(1,0));
+            bsr->AddSprite(Vector3(3,0,0),0,Vector2(1,0));
+            bsr->AddSprite(Vector3(3,-1,0),0,Vector2(1,0));
+            bsr->AddSprite(Vector3(3,-2,0),0,Vector2(1,0));
+            
+            bsr->AddSprite(Vector3(-3,2,0),0,Vector2(1,0));
+            bsr->AddSprite(Vector3(-3,1,0),0,Vector2(1,0));
+            bsr->AddSprite(Vector3(-3,0,0),0,Vector2(1,0));
+            bsr->AddSprite(Vector3(-3,-1,0),0,Vector2(1,0));
+            bsr->AddSprite(Vector3(-3,-2,0),0,Vector2(1,0));
+
+            bsr->AddSprite(Vector3(0,-3,0),0,Vector2(1,0));
+            bsr->AddSprite(Vector3(-1,-3,0),0,Vector2(1,0));
+            bsr->AddSprite(Vector3(-2,-3,0),0,Vector2(1,0));
+            bsr->AddSprite(Vector3(-3,-3,0),0,Vector2(1,0));
+            bsr->AddSprite(Vector3(1,-3,0),0,Vector2(1,0));
+            bsr->AddSprite(Vector3(2,-3,0),0,Vector2(1,0));
+            bsr->AddSprite(Vector3(3,-3,0),0,Vector2(1,0));
+
+
             bsr->GenerateGeometry();
             GameObject* go = new GameObject();
-            go->transform->Translate(Vector3(0,0.5,0));
+            // go->transform->Translate(Vector3(0,-1.0,0));
+            go->transform->Rotate(Quaternion(Vector3(-1.0,.0,.0),Math::pi/2));
+            //go->PushComponentBack(new MovingObject());
             go->PushComponentBack(bsr);
             init_scene->AddGameObject(go);
         }
