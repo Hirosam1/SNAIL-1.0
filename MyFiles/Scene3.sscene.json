@@ -71,14 +71,16 @@
                 },
             {"ObjectComponents" : [
                 {"Camera" : {"CameraProjection" : 0}}, 
-                {"Transform" : {"Position" : [0.0,0.0,10.0]}}
+                {"Transform" : {"Position" : [0.0,0.0,10.0]}},
+                {"Behavior" : "FollowObject"}
                 ],
              "ObjectName" : "Main Camera",
              "IsMainCamera" : true
             },
             {"ObjectComponents":[
                 {"SpriteRenderer":{"Mesh" : "bunny_thing", "Shader" : "MyNormalShader"}},
-                {"Transform" : {"Position" : [0.0,0.0,0.5]}}
+                {"Transform" : {"Position" : [0.0,0.0,0.5]}},
+                {"Behavior" : "CharacterMovement"}
             ],
             "ObjectName" : "character"
             }

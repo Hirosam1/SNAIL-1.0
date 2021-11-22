@@ -9,8 +9,9 @@ class GameObject : public Object{
     public:
         Transform* transform;
         GameObject(){transform = new Transform(); PushComponentBack(transform);};
-        void Begin(){for(Component* component : components){component->Begin(this);}} 
+        void Begin(){for(Component* component : components){component->Begin(this);}}
         void Update(){for(Component* component : components){component->Update(this);}}
+        void EarlyUpdate(){for(Component* component : components){component->EarlyUpdate(this);}}
         void LateUpdate(){for(Component* component : components){component->LateUpdate(this);}}
         void UnloadObject() override{for(Component* component : components){component->End(this); delete component;}}
         //Seraches for the desired component

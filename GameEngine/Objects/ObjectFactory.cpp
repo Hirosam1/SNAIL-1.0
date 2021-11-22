@@ -243,16 +243,16 @@ Component* ComponentFactory::CreateBehavior(json j, const std::string& file_name
         FileIO::TryToRead(j,"__THIS_CELL__",ErrorType::NO_ERROR,nullptr,&behavior_name);
         if(strcmp(behavior_name.data(),"CameraMovement") == 0){
                 return dynamic_cast<Component*>(new CameraMovement());
-        }else if(strcmp(behavior_name.data(),"HeadFollower") == 0){
-                return dynamic_cast<Component*>(new HeadFollower());
         }else if(strcmp(behavior_name.data(),"MovingObject") == 0){
                 return dynamic_cast<Component*>(new MovingObject());
         }else if(strcmp(behavior_name.data(),"ObjectFollower") == 0){
                 return dynamic_cast<Component*>(new ObjectFollower());
         }else if(strcmp(behavior_name.data(),"RotateCubeQuat") == 0){
                 return dynamic_cast<Component*>(new RotateCubeQuat());
-        }else if(strcmp(behavior_name.data(),"LineMaker") == 0){
-                return dynamic_cast<Component*>(new LineDraw());
+        }else if(strcmp(behavior_name.data(),"CharacterMovement")==0){
+                return dynamic_cast<Component*>(new CharacterMovement());
+        }else if(strcmp(behavior_name.data(),"FollowObject")==0){
+                return dynamic_cast<Component*>(new FollowObject());
         }
         std::string params[] = {file_name,behavior_name};
         Debug::WriteErrorLog(ErrorType::OBJECTLOADER_NO_BEHAVIOR_FAIL,params);

@@ -10,6 +10,8 @@ class Component : public Object {
         virtual void Begin(GameObject* game_object){}; 
         //Update method called once per frame by each component
         virtual void Update(GameObject* game_object) = 0;
+        //early update before update
+        virtual void EarlyUpdate(GameObject* game_object){};
         //late update after update
         virtual void LateUpdate(GameObject* game_object){};
         //Methos caleed before deleting and ending component

@@ -21,6 +21,11 @@ void Scene::BeginScene(){
 void Scene::UpdateScene(){
     for(GameObject* game_object : game_objects){
         if(game_object){
+            game_object->EarlyUpdate();
+        }
+    }
+    for(GameObject* game_object : game_objects){
+        if(game_object){
             game_object->Update();
         }
     }
