@@ -9,7 +9,14 @@ project "ExecutableGame"
     files {"include/*.hpp","src/*.cpp","../thirdparty/json/json.cpp","../thirdparty/glad/glad.cpp"}
     includedirs {"include/","../thirdparty/","../GameEngine/"}
     libdirs{"../thirdparty/GLFW"}
-    links{"glfw3", "gdi32", "GameEngine"}
+    if os.istarget("windows") then
+        links{"glfw3", "gdi32", "GameEngine"}
+
+    elseif os.istarget("linux") then
+        links{"glfw3", "dl" ,"m", "GL", "GLU", "X11", "pthread","GameEngine"}
+    else 
+        print("Can't support os")
+    end
     filter "configurations:Debug"
         kind "ConsoleApp"
         defines {"DEBUG"}

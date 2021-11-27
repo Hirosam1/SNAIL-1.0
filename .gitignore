@@ -56,10 +56,16 @@
 
 Makefile
 
-Myfiles/bin/
+MyFiles/bin/**
+
+premake5
 
 GameEngine/bin/*
 
 #Ignore .git ignore
 !*.sscene.json
 !*.sres.json
+
+*.swp
+
+*.save

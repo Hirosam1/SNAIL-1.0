@@ -3,6 +3,7 @@
         "ResourceName" : "Cool Resources",
         "IsFirstResource" : true,
         "StartingScene" : "Scene3.sscene.json"
+
     },
     "ResourceData" : {
         "Shaders" : [{"Name": "MyAtlasShader", "VertexPath" : "resources/shaders/vertex/atlas.vert", "FragmentPath" : "resources/shaders/fragment/sprite.frag"},
