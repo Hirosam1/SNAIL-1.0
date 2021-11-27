@@ -72,11 +72,20 @@ void Camera::BuildMat(){
     view_projection = proj_info.projection * view;
 }
 
-void Camera::Update(GameObject* game_object){
-    BuildProj();
-    BuildMat();
-    BuildFrustum();
-    NormalizeFrustum();
+void Camera::UpdateCamera(){
+    //Only updates the camera once
+    if(!has_updated_this_frame){
+        BuildProj();
+        BuildMat();
+        BuildFrustum();
+        NormalizeFrustum();
+        has_updated_this_frame = true;
+    }
+}
+
+void Camera::EarlyUpdate(GameObject* game_object){
+    //Once per frame sets has_updated_this_frame as false
+    has_updated_this_frame = false;
 }
 
 const Matrix4& Camera::View() const{

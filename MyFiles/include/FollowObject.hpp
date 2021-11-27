@@ -8,7 +8,7 @@ class FollowObject : public Behavior{
             go_2_follow = Scene::active_scene->FindGameObject("character");
         }
 
-        void LateUpdate() override{
+        void Update() override{
             Vector3 pos = go_2_follow->transform->position;
             this->transform->SetPos(Vector3(pos.x,pos.y,this->transform->position.z));
         }

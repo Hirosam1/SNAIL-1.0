@@ -8,8 +8,9 @@ Transform Renderer::BuildTransform(const Transform& transform) const{
 
 void Renderer::LateUpdate(GameObject* game_object){
     Transform new_transform = BuildTransform(*game_object->transform);
+    Camera* main_camera = Scene::active_scene->main_camera;
+    main_camera->UpdateCamera();
     if(!use_frustum_culling || TestSphereAgainstFrustum(new_transform)){
-        Camera* main_camera = Scene::active_scene->main_camera;
         Matrix4 MVP = (main_camera->ViewProjection() * new_transform.ModelMat());
         shader->UseShader();
         //Chooses the winding order based on the scale

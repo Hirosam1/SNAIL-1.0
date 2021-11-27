@@ -46,7 +46,8 @@ class Camera : public Component{
         //Build the projection matrix
         void BuildProj();
         //The update method for updating the matrix information
-        void Update(GameObject* game_object) override;
+        void UpdateCamera();
+        void EarlyUpdate(GameObject* game_object) override;
         //Returns the view matrix
         const Matrix4& View() const;
         //Returns the projection matrix of the camera
@@ -66,6 +67,7 @@ class Camera : public Component{
         float far_plane;
         
     private:
+        bool has_updated_this_frame = false;
         //Build the camera matrix given the position and front vectors
         void BuildMat();
         void NormalizeFrustum();

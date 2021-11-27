@@ -20,7 +20,7 @@ class CharacterMovement : public Behavior{
             ih.AddCommandBack(GLFW_KEY_A,PressType::KEY_HOLD,MOVE_LEFT);
             ih.AddCommandBack(GLFW_KEY_D,PressType::KEY_HOLD,MOVE_RIGHT);
         }
-        void Update() override{
+        void EarlyUpdate() override{
             Vector3 mov_direction;
             ih.HandleInput();
             if(ih.GetInputInfo(MOVE_UP).was_activated){
