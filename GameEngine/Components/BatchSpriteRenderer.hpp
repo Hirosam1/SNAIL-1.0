@@ -18,6 +18,8 @@ class BatchSpriteRenderer : public Renderer{
         void UpdateSpritePos(int index,Vector3 pos);
 
         void Draw(const Matrix4& transform, const Shader& shader) override;
+
+        void End(GameObject* game_object) override;
         
         const int max_models = 500;
         Mesh* batch_mesh = nullptr;
@@ -26,7 +28,6 @@ class BatchSpriteRenderer : public Renderer{
         GLuint EBO = 0;
         GLuint VAO = 0;
     private:
-        ~BatchSpriteRenderer();
         //General information  about a sprite batch (a full rectangle with texture and atlas texture)
         struct SpriteBatch
         {

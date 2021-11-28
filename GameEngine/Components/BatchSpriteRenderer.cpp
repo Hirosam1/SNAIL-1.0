@@ -38,7 +38,7 @@ BatchSpriteRenderer::BatchSpriteRenderer(SpriteAtlas* sprite_atlas, Shader* shad
     glEnableVertexAttribArray(2);
 }
 
-BatchSpriteRenderer::~BatchSpriteRenderer(){
+void BatchSpriteRenderer::End(GameObject* game_object){
     sprites_batches.clear();
     sprite_data.clear();
     indices.clear();
