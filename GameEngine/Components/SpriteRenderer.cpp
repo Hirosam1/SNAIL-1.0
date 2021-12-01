@@ -8,7 +8,7 @@ SpriteRenderer::SpriteRenderer(Mesh* mesh, Shader* shader): Renderer(mesh,shader
     object_name = "SpriteRenderer";
 }
 
-SpriteRenderer::SpriteRenderer(Mesh* mesh, Shader* shader,SpriteAtlas* atlas, unsigned int x_coord, unsigned int y_coord) : Renderer(mesh,shader),sprite_atlas(atlas){
+SpriteRenderer::SpriteRenderer(Mesh* mesh, Shader* shader,SpriteAtlas* atlas, int x_coord,  int y_coord) : Renderer(mesh,shader),sprite_atlas(atlas){
     sprite_scale = sprite_atlas->sprite_scale;
     atlas_coords = Vector2(x_coord,y_coord);
     tex_coord = sprite_atlas->GetCoordinate(atlas_coords);

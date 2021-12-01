@@ -14,9 +14,9 @@ class SpriteAtlas : public Object{
         Vector4 GetCoordinate(Vector2 tex);
         Texture* texture;
         //The vertical count of images in the image atlas
-        unsigned int vertical_count;
+        int vertical_count;
         //The horizontal count of images in the image atlas
-        unsigned int horizontal_count;
+        int horizontal_count;
         //The scale of each image, used by the sprite
         Vector3 sprite_scale;
     private:

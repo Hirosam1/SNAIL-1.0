@@ -15,7 +15,7 @@ class SpriteRenderer : public Renderer{
     public:
         //I really dont think I should be passing the model in the sprite constructor! Neighther the Texture! or maaybe yes?
         SpriteRenderer(Mesh* mesh, Shader* shader);
-        SpriteRenderer(Mesh* mesh, Shader* shader,SpriteAtlas* sprite_atlas, unsigned int x_coord, unsigned int y_coord);
+        SpriteRenderer(Mesh* mesh, Shader* shader,SpriteAtlas* sprite_atlas, int x_coord, int y_coord);
         //Sets the coordinates of the atlas, "x" sets the horizontal element, "y" selects the vertical element. If you have given the sprite a Sprite Atlas it will set up the normalized coordinates to send to the shader
         void SetAtlasCoordinate(const Vector2& coords);
         //Returns constant value of the Sprite Atlas coordinates, currently set

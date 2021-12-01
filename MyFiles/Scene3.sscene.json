@@ -78,7 +78,7 @@
              "IsMainCamera" : true
             },
             {"ObjectComponents":[
-                {"SpriteRenderer":{"Mesh" : "bunny_thing", "Shader" : "MyNormalShader"}},
+                {"SpriteRenderer":{"Mesh" : "bunny_thing", "Shader" : "MyAtlasShader", "SpriteAtlas" : "BunnyThingAtlas", "AtlasPosition" : [0,2]}},
                 {"Transform" : {"Position" : [0.0,0.0,0.5]}},
                 {"Behavior" : "CharacterMovement"}
             ],

@@ -20,7 +20,9 @@
                     {"Name" : "CubeModel", "DefaultShape" : 1}]
     },
     "ObjectData" : {
-        "SpriteAtlas" : [{"Name" : "MySpriteAtlas", "SheetTexture" : "SpriteSheet", "SheetDimensions" : [1,3]}],
+        "SpriteAtlas" : [{"Name" : "MySpriteAtlas", "SheetTexture" : "SpriteSheet", "SheetDimensions" : [1,3]},
+                         {"Name" : "BunnyThingAtlas", "SheetTexture" : "bunny_thing_tex", "SheetDimensions" : [3,3]}
+                        ],
         "Meshes" : [{"Name" : "CoolPlaneAtlas", "Model" : "SquareModel" , "Texture" : "SpriteSheet"},
                     {"Name" : "HotieMesh", "Model" : "SquareModel", "Texture" : "Hotie"},
                     {"Name" : "BoxMesh", "Model" : "CubeModel", "Texture" : "Box"},

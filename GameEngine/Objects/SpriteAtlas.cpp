@@ -20,7 +20,7 @@ vertical_count(vertical_count), horizontal_count(horizontal_count){
 
 Vector4 SpriteAtlas::GetCoordinate(Vector2 tex_coords){
     return Vector4((int)tex_coords.x*horizontal_step+this->half_pixel_correction_h,
-                (int)tex_coords.y*vertical_step+this->half_pixel_correction_v,
+                (-(int)tex_coords.y+vertical_count-1)*vertical_step+this->half_pixel_correction_v,
                 ((int)tex_coords.x+1)*horizontal_step-this->half_pixel_correction_h,
-                ((int)tex_coords.y+1)*vertical_step-this->half_pixel_correction_v);
+                (-(int)tex_coords.y+vertical_count)*vertical_step-this->half_pixel_correction_v);
 }

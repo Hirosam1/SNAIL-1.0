@@ -4,6 +4,7 @@
 class FollowObject : public Behavior{
     public:
         GameObject* go_2_follow;
+
         void Begin() override{
             go_2_follow = Scene::active_scene->FindGameObject("character");
         }
