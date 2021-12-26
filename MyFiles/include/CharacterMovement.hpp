@@ -27,48 +27,6 @@ class CharacterMovement : public Behavior{
             ih.AddCommandBack(GLFW_KEY_E,PressType::KEY_PRESS,ATTACK);
             sprite_rend = game_object->GetComponent<SpriteRenderer>();
             anim_ctr = game_object->GetComponent<SpriteAnimationController>();
-            //-------------------------------------------------------------
-            // anim_ctr = new SpriteAnimationController();
-            // this->game_object->PushComponentBack(anim_ctr);
-            // anim_ctr->Begin(this->game_object);
-
-            // Animation idle_down_anim =  Animation();
-            // idle_down_anim.animation_keys.push_back({0.5,Vector2(0,0)});
-            // idle_down_anim.animation_keys.push_back({0.5,Vector2(1,0)});
-
-            // Animation walk_down_anim = Animation();
-            // walk_down_anim.animation_keys.push_back({0.3,Vector2(0,1)});
-            // walk_down_anim.animation_keys.push_back({0.3,Vector2(1,1)});
-            // walk_down_anim.animation_keys.push_back({0.3,Vector2(2,1)});
-            // walk_down_anim.animation_keys.push_back({0.3,Vector2(1,1)});
-
-            // Animation idle_side_anim = Animation();
-            // idle_side_anim.animation_keys.push_back({0.5,Vector2(0,2)});
-            // idle_side_anim.animation_keys.push_back({0.5,Vector2(1,2)});
-
-            // Animation walk_side_anim = Animation();
-            // walk_side_anim.animation_keys.push_back({0.3,Vector2(0,3)});
-            // walk_side_anim.animation_keys.push_back({0.3,Vector2(1,3)});
-            // walk_side_anim.animation_keys.push_back({0.3,Vector2(2,3)});
-            // walk_side_anim.animation_keys.push_back({0.3,Vector2(1,3)});
-
-            // Animation idle_up_anim = Animation();
-            // idle_up_anim.animation_keys.push_back({0.5,Vector2(0,4)});
-            // idle_up_anim.animation_keys.push_back({0.5,Vector2(1,4)});
-
-            // Animation walk_up_anim = Animation();
-            // walk_up_anim.animation_keys.push_back({0.3,Vector2(0,5)});
-            // walk_up_anim.animation_keys.push_back({0.3,Vector2(1,5)});
-            // walk_up_anim.animation_keys.push_back({0.3,Vector2(2,5)});
-            // walk_up_anim.animation_keys.push_back({0.3,Vector2(1,5)});
-
-            // anim_ctr->animation_list.push_back(idle_down_anim);
-            // anim_ctr->animation_list.push_back(walk_down_anim);
-            // anim_ctr->animation_list.push_back(idle_side_anim);
-            // anim_ctr->animation_list.push_back(walk_side_anim);
-            // anim_ctr->animation_list.push_back(idle_up_anim);
-            // anim_ctr->animation_list.push_back(walk_up_anim);
-            //-------------------------------------------------------------------
 
         }
         void EarlyUpdate() override{
