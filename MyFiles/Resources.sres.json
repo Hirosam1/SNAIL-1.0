@@ -29,9 +29,35 @@
         "AnimationControllers":[
             {"Name" : "Character_Animation_Controller", 
             "Animations" : [
-                {"Name" : "Idle", "AnimationKeys" : [
+                {"Name" : "idle_down_anim", "AnimationKeys" : [
                     {"WaitTime"  : 0.5, "AtlasPos": [0,0]},
                     {"WaitTime"  : 0.5, "AtlasPos": [1,0]}
+                ]},
+                {"Name" : "walk_down_anim", "AnimationKeys" : [
+                    {"WaitTime" : 0.3, "AtlasPos": [0,1]},
+                    {"WaitTime": 0.3, "AtlasPos": [1,1]},
+                    {"WaitTime": 0.3, "AtlasPos": [2,1]},
+                    {"WaitTime": 0.3, "AtlasPos": [1,1]}
+                ]},
+                {"Name" : "idle_side_anim", "AnimationKeys" : [
+                    {"WaitTime"  : 0.5, "AtlasPos": [0,2]},
+                    {"WaitTime"  : 0.5, "AtlasPos": [1,2]}
+                ]},
+                {"Name" : "walk_side_anim", "AnimationKeys" : [
+                    {"WaitTime" : 0.3, "AtlasPos": [0,3]},
+                    {"WaitTime": 0.3, "AtlasPos": [1,3]},
+                    {"WaitTime": 0.3, "AtlasPos": [2,3]},
+                    {"WaitTime": 0.3, "AtlasPos": [1,3]}
+                ]},
+                {"Name" : "idle_up_anim", "AnimationKeys" : [
+                    {"WaitTime"  : 0.5, "AtlasPos": [0,4]},
+                    {"WaitTime"  : 0.5, "AtlasPos": [1,4]}
+                ]},
+                {"Name" : "walk_up_anim", "AnimationKeys" : [
+                    {"WaitTime" : 0.3, "AtlasPos": [0,5]},
+                    {"WaitTime": 0.3, "AtlasPos": [1,5]},
+                    {"WaitTime": 0.3, "AtlasPos": [2,5]},
+                    {"WaitTime": 0.3, "AtlasPos": [1,5]}
                 ]}
             ]}
         ],

@@ -16,6 +16,8 @@ The GameObject MUST have a sprite renderer with sprite atlas.
 */
 class SpriteAnimationController : public Component{
     public:
+        SpriteAnimationController(){};
+        SpriteAnimationController(const SpriteAnimationController& cp);
         std::vector<Animation> animation_list;
         void Begin(GameObject* go) override;
         void Update(GameObject* go) override;

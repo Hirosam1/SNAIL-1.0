@@ -1,5 +1,12 @@
 #include "Components/SpriteAnimationController.hpp"
 
+
+SpriteAnimationController::SpriteAnimationController(const SpriteAnimationController& cp){
+    this->animation_list = cp.animation_list;
+    this->object_name = cp.object_name;
+}
+
+
 void SpriteAnimationController::Begin(GameObject* game_object){
     sprite_renderer = game_object->GetComponent<SpriteRenderer>();
     if(sprite_renderer == nullptr){

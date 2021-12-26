@@ -173,12 +173,13 @@ Component* ComponentFactory::CreateSpriteAnimationController(nlohmann::json j,co
         if(!FileIO::TryToRead(j,"Controller",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&obj_name)){
                return nullptr;
         }
-        SpriteAnimationController* sac = ObjectsInfo::FindOrLoadSpriteAnimationController(obj_name,game_objects);
-        if(!sac){
+        SpriteAnimationController* prime_sac = ObjectsInfo::FindOrLoadSpriteAnimationController(obj_name,game_objects);
+        if(!prime_sac){
                 params[1] = obj_name;
                 Debug::WriteErrorLog(ErrorType::OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL,params);
                 return nullptr;
         }
+        SpriteAnimationController* sac = new SpriteAnimationController(*prime_sac);
         return dynamic_cast<Component*>(sac);
 
 }
