@@ -4,7 +4,9 @@
 Scene* Scene::active_scene = nullptr;
 
 Scene::Scene(const std::string& scene_path) : scene_path(scene_path){
+    std::cout<<"!! HIT-1 !!\n";
     SceneData scene_data = ObjectLoader::LoadScene(scene_path);
+    std::cout<<"!! HIT2 !!\n";
     scene_name = scene_data.scene_name;
     game_objects = scene_data.game_objects;
     objects = scene_data.objects;
@@ -13,9 +15,11 @@ Scene::Scene(const std::string& scene_path) : scene_path(scene_path){
 }
 
 void Scene::BeginScene(){
+    std::cout<<"!! HIT3 !!\n";
     for(GameObject* game_object : game_objects){
         game_object->Begin();
     }
+    std::cout<<"!! HIT4 !!\n";
 }
 
 void Scene::UpdateScene(){

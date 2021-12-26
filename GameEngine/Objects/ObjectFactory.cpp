@@ -19,6 +19,7 @@
 #include "Components/Renderer.hpp"
 #include "Components/SpriteRenderer.hpp"
 #include "Components/Transform.hpp"
+#include "Components/SpriteAnimationController.hpp"
 #include "Components/BatchSpriteRenderer.hpp"
 
 #include "Resources/Model.hpp"
@@ -58,6 +59,7 @@ ComponentFactory::ComponentFactory(){
                 {"Camera", CreateCamera},
                 {"Behavior", CreateBehavior},
                 {"SpriteBatchRenderer", CreateSpriteBatchRenderer},
+                {"SpriteAnimationController",CreateSpriteAnimationController}
                 };
                 singleton = this;
         }
@@ -165,6 +167,22 @@ Component* ComponentFactory::CreateSpriteRenderer(json j,const std::string& file
 
 }
 
+Component* ComponentFactory::CreateSpriteAnimationController(nlohmann::json j,const std::string& file_name, std::vector<Object*>* game_objects){
+        std::string obj_name;
+        std::string params[] = {file_name,"CreateSpriteAnimationController"};
+        if(!FileIO::TryToRead(j,"Controller",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&obj_name)){
+               return nullptr;
+        }
+        SpriteAnimationController* sac = ObjectsInfo::FindOrLoadSpriteAnimationController(obj_name,game_objects);
+        if(!sac){
+                params[1] = obj_name;
+                Debug::WriteErrorLog(ErrorType::OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL,params);
+                return nullptr;
+        }
+        return dynamic_cast<Component*>(sac);
+
+}
+
 Component* ComponentFactory::CreateSpriteBatchRenderer(nlohmann::json j,const std::string& file_name, std::vector<Object*>* game_objects){
         BatchSpriteRenderer* batch_rend = nullptr;
         SpriteAtlas* sprite_atlas = nullptr;
@@ -253,6 +271,8 @@ Component* ComponentFactory::CreateBehavior(json j, const std::string& file_name
                 return dynamic_cast<Component*>(new CharacterMovement());
         }else if(strcmp(behavior_name.data(),"FollowObject")==0){
                 return dynamic_cast<Component*>(new FollowObject());
+        }else if(strcmp(behavior_name.data(),"EnemyMovement")==0){
+                return dynamic_cast<Component*>(new EnemyMovement());
         }
         std::string params[] = {file_name,behavior_name};
         Debug::WriteErrorLog(ErrorType::OBJECTLOADER_NO_BEHAVIOR_FAIL,params);
@@ -314,6 +334,23 @@ Mesh* ObjectsInfo::FindOrLoadMesh(const std::string& name, std::vector<Object*>*
         return mesh;
 }
 
+
+SpriteAnimationController* ObjectsInfo::FindOrLoadSpriteAnimationController(const std::string& name, std::vector<Object*>* game_objects){
+        std::string name_ext = name + "." + ObjectsInfo::extension;
+        SpriteAnimationController* sac = dynamic_cast<SpriteAnimationController*>(FindObjectByName(name_ext,game_objects));
+        if(!sac){
+                if(ObjectsInfo::singleton->sac_map.find(name_ext) != ObjectsInfo::singleton->sac_map.end()){
+                        ObjectsInfo::SpriteAnimationControllerInfo sac_info = ObjectsInfo::singleton->sac_map[name_ext];
+                        sac = new SpriteAnimationController();
+                        for(int i = 0; i < sac_info.animations.size(); i++){
+                                sac->animation_list.push_back(sac_info.animations[i]);
+                        }
+                        sac->object_name= name_ext;
+                        game_objects->push_back(sac);
+                }
+        }
+        return sac;
+}
 
 SpriteAtlas* ObjectsInfo::FindOrLoadSpriteAtlas(const std::string& name, std::vector<Object*>* game_objects){
         std::string name_ext = name + "." + ObjectsInfo::extension;

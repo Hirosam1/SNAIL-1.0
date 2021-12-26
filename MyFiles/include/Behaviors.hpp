@@ -6,3 +6,4 @@
 #include "RotateCubeQuat.hpp"
 #include "CharacterMovement.hpp"
 #include "FollowObject.hpp"
+#include "EnemyMovement.hpp"

@@ -4,6 +4,8 @@
 #include "DataStructures/Vector.hpp"
 #include "Components/Transform.hpp"
 
+#include "Animation.hpp"
+
 class Component;
 class Resource;
 class Object;
@@ -14,6 +16,7 @@ class Texture;
 
 class Mesh;
 class SpriteAtlas;
+class SpriteAnimationController;
 
 
 class ResourcesInfo{
@@ -54,6 +57,12 @@ class ObjectsInfo{
         std::string sheet_texture_name;
         Vector2 atlas_dimensions;
     };
+
+    struct SpriteAnimationControllerInfo{
+        std::string sac_name;
+        std::vector<Animation> animations;
+    };
+
     struct MeshInfo{
         std::string model_name;
         std::string texture_name;
@@ -62,7 +71,9 @@ class ObjectsInfo{
 
     std::map<std::string, SpriteAtlasInfo> sprite_atlas_map;
     std::map<std::string, MeshInfo> meshes_map;
+    std::map<std::string, SpriteAnimationControllerInfo> sac_map;
 
     static SpriteAtlas* FindOrLoadSpriteAtlas(const std::string& name, std::vector<Object*>* game_objects);
     static Mesh* FindOrLoadMesh(const std::string& name, std::vector<Object*>* game_objects);
+    static SpriteAnimationController* FindOrLoadSpriteAnimationController(const std::string& name, std::vector<Object*>* game_objects);
 };

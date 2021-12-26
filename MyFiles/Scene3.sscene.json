@@ -78,11 +78,21 @@
              "IsMainCamera" : true
             },
             {"ObjectComponents":[
-                {"SpriteRenderer":{"Mesh" : "bunny_thing", "Shader" : "MyAtlasShader", "SpriteAtlas" : "BunnyThingAtlas", "AtlasPosition" : [0,2]}},
+                {"SpriteRenderer":{"Mesh" : "human", "Shader" : "MyAtlasShader", "SpriteAtlas" : "HumanAtlas", "AtlasPosition" : [0,0]}},
+                {"SpriteAnimationController" : {"Controller" : "Character_Animation_Controller"}},
                 {"Transform" : {"Position" : [0.0,0.0,0.5]}},
                 {"Behavior" : "CharacterMovement"}
             ],
+            
             "ObjectName" : "character"
+            },
+            {"ObjectComponents":[
+                {"SpriteRenderer":{"Mesh" : "bunny_thing", "Shader" : "MyAtlasShader", "SpriteAtlas" : "BunnyThingAtlas", "AtlasPosition" : [0,0]}},
+                {"Transform" : {"Position" : [0.0,0.0,0.5]}},
+                {"Behavior" : "EnemyMovement"}
+            ],
+            
+            "ObjectName" : "Enemy"
             }
         ]
     }

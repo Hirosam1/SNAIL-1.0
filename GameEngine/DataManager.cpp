@@ -114,6 +114,37 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                                 }
                         }
                 }
+                if(j_aux.contains("AnimationControllers")){
+                     std::string params[] = {resources_path,"AnimationControllers"};
+                     for(json::iterator j_spa = j_aux["AnimationControllers"].begin() ; j_spa != j_aux["AnimationControllers"].end() ; j_spa++){
+                        std::string sac_name;
+                        ObjectsInfo::SpriteAnimationControllerInfo sac_info;
+                        if(FileIO::TryToRead(j_spa.value(),"Name",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&sac_name)){
+                                json animations = j_spa.value()["Animations"].get<json>();
+                                for(json::iterator j_anim = animations.begin() ; j_anim != animations.end() ; j_anim++){
+                                        Animation anim;
+                                                if(j_anim.value().contains("AnimationKeys")){
+                                                if(FileIO::TryToRead(j_anim.value(),"Name",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&anim.name)){
+                                                        for(json::iterator j_key_f = j_anim.value()["AnimationKeys"].begin(); j_key_f != j_anim.value()["AnimationKeys"].end(); j_key_f++){
+                                                                float time_to_wait;
+                                                                std::vector<int> atlas_pos;
+                                                                if(FileIO::TryToRead(j_key_f.value(),"WaitTime",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&time_to_wait)){
+                                                                if(FileIO::TryToRead(j_key_f.value(),"AtlasPos",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&atlas_pos)){
+                                                                if(atlas_pos.size() == 2){
+                                                                        anim.animation_keys.push_back({time_to_wait,Vector2(atlas_pos[0],atlas_pos[1])});
+                                                                }
+                                                                }
+                                                                }
+                                                        }
+                                                }
+                                        }
+                                        sac_info.animations.push_back(anim);
+                                }
+                        }
+                        sac_name = sac_name + "." + ObjectsInfo::extension;
+                        ObjectsInfo::singleton->sac_map[sac_name] = sac_info;
+                     }   
+                }
                 if(j_aux.contains("Meshes")){
                         std::string params[] = {resources_path,"Meshes"};
                         for(json::iterator j_m = j_aux["Meshes"].begin() ; j_m != j_aux["Meshes"].end() ; j_m++){
@@ -182,9 +213,10 @@ SceneData ObjectLoader::LoadScene(const std::string& scene_path){
                                 }
                                 else{
                                         Component* comp = MakeComponent(obj.begin()->first, obj.begin()->second, scene_path, &scene_data);
+                                        
                                         if(comp){
                                                 go->PushComponentBack(comp);
-                                        }   
+                                        }
                                 }
 
                         }

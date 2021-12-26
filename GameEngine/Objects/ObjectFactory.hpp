@@ -32,6 +32,7 @@ class ComponentFactory{
     static Component* CreateSpriteRenderer(nlohmann::json j,const std::string& file_name, std::vector<Object*>* game_objects);
     static Component* CreateMeshRenderer(nlohmann::json j,const std::string& file_name, std::vector<Object*>* game_objects);
     static Component* CreateSpriteBatchRenderer(nlohmann::json j,const std::string& file_name, std::vector<Object*>* game_objects);
+    static Component* CreateSpriteAnimationController(nlohmann::json j,const std::string& file_name, std::vector<Object*>* game_objects);
     static Transform CreateTransform(nlohmann::json j,const std::string& file_name);
     
     //Map that handles the Creation of the components, based on string and function pointer

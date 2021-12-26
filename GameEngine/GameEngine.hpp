@@ -33,6 +33,7 @@
 #include "Components/MeshRenderer.hpp"
 #include "Components/Camera.hpp"
 #include "Components/BatchSpriteRenderer.hpp"
+#include "Components/SpriteAnimationController.hpp"
 
 #include "FileIO.hpp"
 #include "Time.hpp"
@@ -42,4 +43,5 @@
 #include "EventTracer.hpp"
 #include "GLHandler/GLStateManager.hpp"
 #include "ResourcesMetaData.hpp"
+#include "Animation.hpp"
 
