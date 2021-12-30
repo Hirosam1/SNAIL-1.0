@@ -27,17 +27,35 @@ void SpriteAnimationController::Update(GameObject* game_object){
     }
 }
 
-void SpriteAnimationController::ChangeAnimationI(int anim,bool restart_anim){
-    if(!restart_anim && this->current_animation == anim){
+void SpriteAnimationController::ChangeAnimation(int animation,bool restart_anim){
+    if(!restart_anim && this->current_animation == animation){
         return;
     }
-    if(anim >= animation_list.size()){
+    if(animation >= animation_list.size()){
         return;
     }
     timer = 0;
     current_key = 0;
-    sprite_renderer->SetAtlasCoordinate(animation_list[anim].animation_keys[0].atlas_pos);
-    current_animation = anim;
+    sprite_renderer->SetAtlasCoordinate(animation_list[animation].animation_keys[0].atlas_pos);
+    current_animation = animation;
+}
+
+void SpriteAnimationController::ChangeAnimation(const std::string& animation, bool restart_anim){
+    int anim = -1;
+    for(int i =  0; i < animation_list.size(); i++){
+        if(strcmp(animation_list[i].name.data(),animation.data()) == 0){
+            anim = i;
+            break;
+        }
+    }
+    if(anim == -1){
+        return;
+    }
+    this->ChangeAnimation(anim);
+}
+
+std::string SpriteAnimationController::CurrentAnimationS(){
+    return animation_list[current_animation].name;
 }
 
 int SpriteAnimationController::CurrentAnimationI(){

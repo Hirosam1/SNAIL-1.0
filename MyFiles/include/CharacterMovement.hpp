@@ -74,7 +74,7 @@ class CharacterMovement : public Behavior{
                 default:
                     break;
                 }
-                anim_ctr->ChangeAnimationI(anim);
+                anim_ctr->ChangeAnimation(anim);
             }else if(!moved){
                 int anim = 0;
                 switch (last_direction)
@@ -94,7 +94,7 @@ class CharacterMovement : public Behavior{
                 default:
                     break;
                 }
-                anim_ctr->ChangeAnimationI(anim);
+                anim_ctr->ChangeAnimation(anim);
 
             }
 

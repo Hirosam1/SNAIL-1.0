@@ -22,8 +22,10 @@ class SpriteAnimationController : public Component{
         void Begin(GameObject* go) override;
         void Update(GameObject* go) override;
 
-        void ChangeAnimationI(int animation, bool restart_anim=false);
+        void ChangeAnimation(int animation, bool restart_anim=false);
         int CurrentAnimationI();
+        std::string CurrentAnimationS();
+        void ChangeAnimation(const std::string& animation, bool restart_anim=false);
     private:
         SpriteRenderer* sprite_renderer;
         float timer=0;
