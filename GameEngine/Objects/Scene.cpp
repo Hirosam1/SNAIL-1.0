@@ -2,14 +2,15 @@
 #include "DataManager.hpp"
 
 Scene* Scene::active_scene = nullptr;
+Logger Scene::log = Logger("Scene");
 
 Scene::Scene(const std::string& scene_path) : scene_path(scene_path){
+    log.LogDebug("Loading Scene \""+ scene_path +"\".");
     SceneData scene_data = ObjectLoader::LoadScene(scene_path);
     scene_name = scene_data.scene_name;
     game_objects = scene_data.game_objects;
     objects = scene_data.objects;
     main_camera = scene_data.main_camera;
-    //std::cout<<"OBJECTS SIZE--> "<< this->objects.size() <<"\n";
 }
 
 void Scene::BeginScene(){

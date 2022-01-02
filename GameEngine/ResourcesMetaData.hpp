@@ -46,6 +46,8 @@ class ResourcesInfo{
     static Shader* FindOrLoadShader(const std::string& name, std::vector<Object*>* game_objects);
     static Texture* FindOrLoadTexture(const std::string& name, std::vector<Object*>* game_objects);
     static Model* FindOrLoadModel(const std::string& name, std::vector<Object*>* game_objects);
+
+    static Logger log;
     
 };
 

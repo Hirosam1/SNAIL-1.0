@@ -6,6 +6,8 @@
 
 #include "GLHandler/GLStateManager.hpp"
 
+#include "Debug.hpp"
+
 class Camera;
 class GameObject;
 
@@ -34,6 +36,7 @@ class Scene : public Object{
         std::string scene_name;
         std::string scene_path;
     private:
+        static Logger log;
         std::vector<Object*> objects;
         bool request_change = false;
         Scene* my_next_scene;

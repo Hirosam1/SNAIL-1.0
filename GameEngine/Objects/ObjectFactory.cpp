@@ -40,6 +40,8 @@ const std::string ObjectsInfo::extension = "sobj";
 
 std::string ResourcesInfo::starting_scene_path = "NO SCENE";
 
+Logger ResourcesInfo::log = Logger("ResourceInfo");
+
 Object* FindObjectByName(const std::string& obj_name, std::vector<Object*>* objects){
         for(Object* o : *objects){
         if(o){
@@ -378,10 +380,11 @@ Texture* ResourcesInfo::FindOrLoadTexture(const std::string& name, std::vector<O
         Texture* tex = dynamic_cast<Texture*>(FindObjectByName(name_ext, game_objects));
         if(!tex){
                 if(ResourcesInfo::singleton->texture_map.find(name_ext) != ResourcesInfo::singleton->texture_map.end()){
-                        //sstd::cout<< "Texture -> " << name_ext << " created\n";
+                        
                         tex = new Texture(ResourcesInfo::singleton->texture_map[name_ext].texture_path);
                         tex->object_name = name_ext;
                         game_objects->push_back(tex);
+                        ResourcesInfo::log.LogDebug("Loading texture \""+ name +"\"");
                 }
         }
         return tex;
@@ -397,6 +400,7 @@ Shader* ResourcesInfo::FindOrLoadShader(const std::string& name, std::vector<Obj
                         shader = new Shader(ResourcesInfo::singleton->shaders_map[name_ext].vertex_path,ResourcesInfo::singleton->shaders_map[name_ext].fragment_path);
                         shader->object_name = name_ext;
                         game_objects->push_back(shader);
+                        ResourcesInfo::log.LogDebug("Loading Shader \""+ name +"\"");
                 }
         }
         return shader;
@@ -416,11 +420,13 @@ Model* ResourcesInfo::FindOrLoadModel(const std::string& name, std::vector<Objec
                                         model = new Model(DefaultShapes::SquareWithTex());
                                         model->object_name = name_ext;
                                         game_objects->push_back(model);
+                                        ResourcesInfo::log.LogDebug("Loading Model \""+ name +"\"");
                                         break;
                                 case 1:
                                         model = new Model(DefaultShapes::CubeWithTex());
                                         model->object_name = name_ext;
                                         game_objects->push_back(model);
+                                        ResourcesInfo::log.LogDebug("Loading Model \""+ name +"\"");
                                         break;
                                 
                                 default:

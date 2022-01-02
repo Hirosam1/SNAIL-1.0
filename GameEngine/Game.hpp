@@ -24,13 +24,15 @@ class Game {
             //-------------------------------------------------------- 
         }
         void InitGame(){
+            Logger::WriteSeparator();
+            log.LogDebug("Initializing Game.");
             #ifdef DEBUG
             std::cout<<"Loading Resources\n";
             #endif
             Timer res_load_time = Timer(&tes, "Resource indexing");
             LoadResources();
             res_load_time.Stop();
-            log.Log("Initializing Game.");
+
             Timer obj_loading = Timer(&tes, "Scene/Resource loading");
 
             LoadScene();
@@ -57,6 +59,7 @@ class Game {
             std::cout<<"Terminating game\n";
             #endif
             TraceEventsSession end_tes = TraceEventsSession("Terminating game");
+            log.LogDebug("Terminating game.");
             Timer _timer = Timer(&end_tes,"Unloading resources");
             Scene::active_scene->UnloadScene();
             _timer.Stop();
@@ -64,6 +67,7 @@ class Game {
             glfwTerminate();
             timer2.Stop();
             end_tes.EndSession();
+            log.LogDebug("Exiting game successfully.");
         }
 
     private:

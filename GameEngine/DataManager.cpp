@@ -137,7 +137,7 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                                         ObjectLoader::log.LogError("From the scene "+ resources_path +" is passing bad/few paramters to component Models of Name="+ atlas_name + ".");
                                 }
                                 }else{
-                                        ObjectLoader::log.LogError("From the scene "+ resources_path +" component of type SpriteAtlas is missing parameter Name" + ".");
+                                        ObjectLoader::log.LogError("From the scene "+ resources_path +" component of type SpriteAtlas is missing parameter Name.");
                                 }
                         }
                 }
@@ -169,7 +169,7 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                                                                 }
                                                         }
                                                 }else{
-                                                         ObjectLoader::log.LogError("From the scene "+ resources_path +" component of type Animation is missing parameter Name" + ".");
+                                                         ObjectLoader::log.LogError("From the scene "+ resources_path +" component of type Animation is missing parameter Name.");
                                                 }
            
                                         }

@@ -4,8 +4,8 @@ Logger::Logger(const std::string& local_name) : local_name(local_name){
     
 }
 
-void Logger::Log(const std::string& msg){
-    char type[] = "LOG";
+void Logger::LogDebug(const std::string& msg){
+    char type[] = "DEBUG";
     this->WriteLogMessage(type,msg.data());
 }
 
@@ -17,6 +17,13 @@ void Logger::LogWarning(const std::string& msg){
 void Logger::LogError(const std::string& msg){
     char type[] = "ERROR";
     this->WriteLogMessage(type,msg.data());
+}
+
+void Logger::WriteSeparator(){
+    FILE* fp = fopen("GameLog.log", "a");
+    char str[] = "\n\n==============================================\n\n";
+    fwrite(str,sizeof(char),sizeof(str)/sizeof(char)-1,fp);
+    fclose(fp);
 }
 
 void Logger::WriteLogMessage(const char* type,const char* msg){
