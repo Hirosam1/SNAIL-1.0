@@ -31,7 +31,7 @@ class Game {
             Timer res_load_time = Timer(&tes, "Resource indexing");
             LoadResources();
             res_load_time.Stop();
-
+            log.Log("Initializing Game.");
             Timer obj_loading = Timer(&tes, "Scene/Resource loading");
 
             LoadScene();
@@ -102,6 +102,7 @@ class Game {
         TraceEventsSession tes = TraceEventsSession("Profile");
         //Global funcs
         Time time;
+        Logger log = Logger("Game");
         StateManager state_man;
         //flag that sets ready to start the game
         bool is_ready = false;

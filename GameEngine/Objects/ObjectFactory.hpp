@@ -4,6 +4,8 @@
 #include "DataStructures/Vector.hpp"
 #include "Components/Transform.hpp"
 
+#include "Debug.hpp"
+
 #include "json/json.hpp"
 
 #include "ResourcesMetaData.hpp"
@@ -27,6 +29,7 @@ class SpriteAtlas;
 class ComponentFactory{
     public:
     ComponentFactory();
+    Logger log = Logger("ComponentFactory");
     static Component* CreateBehavior(nlohmann::json j, const std::string& file_name, std::vector<Object*>* game_objects);
     static Component* CreateCamera(nlohmann::json j, const std::string& file_name, std::vector<Object*>* game_objects);
     static Component* CreateSpriteRenderer(nlohmann::json j,const std::string& file_name, std::vector<Object*>* game_objects);

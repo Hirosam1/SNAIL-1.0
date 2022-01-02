@@ -19,7 +19,7 @@ namespace FileIO{
     }
     //Tries to get value, if it fails then debug error
     template<typename T>
-        bool TryToRead(nlohmann::json j,const std::string& e,ErrorType err,const std::string*  params,T* value = nullptr){
+        bool TryToRead(nlohmann::json j,const std::string& e,T* value = nullptr){
             if(j.contains(e)){
                 try{
                     *value = j[e].get<T>();
@@ -40,7 +40,6 @@ namespace FileIO{
                     }
                 }
             }
-            Debug::WriteErrorLog(err,params);
             return false;
     };
 }

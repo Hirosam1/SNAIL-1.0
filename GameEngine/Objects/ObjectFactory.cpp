@@ -91,17 +91,20 @@ Component* ComponentFactory::CreateMeshRenderer(json j,const std::string& file_n
         std::string shader_name;
         std::string mesh_name;
         std::string params[] = {file_name,"MeshRenderer"};
-        if(FileIO::TryToRead(j,"Mesh",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&mesh_name)){
+        bool success = false;
+        if(FileIO::TryToRead(j,"Mesh",&mesh_name)){
                 mesh = ObjectsInfo::FindOrLoadMesh(mesh_name, game_objects);
-        if(FileIO::TryToRead(j,"Shader", ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&shader_name)){
+        if(FileIO::TryToRead(j,"Shader",&shader_name)){
                shader = ResourcesInfo::FindOrLoadShader(shader_name, game_objects);
                if(mesh && shader){
                         m_r = new MeshRenderer(mesh,shader);
+                        success = true;
                         
                 }else{
                      if(!shader){
                              params[1] = shader_name;
-                             Debug::WriteErrorLog(ErrorType::OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL,params);
+                             //Debug::WriteErrorLog(ErrorType::OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL,params);
+                             ComponentFactory::singleton->log.LogError("From the scene "+ file_name +" the object "+ shader_name +" created on resources does not exist, or does not match type.")
                      }   
                      if(!mesh){
                              params[1] = mesh_name;  
@@ -109,6 +112,9 @@ Component* ComponentFactory::CreateMeshRenderer(json j,const std::string& file_n
                      }
                 }
         }
+        }
+        if(!success){
+                ComponentFactory::singleton->log.LogError("From the scene "+ file_name +" is passing bad/few paramters to component MeshRenderer" + ".")
         }
         return  m_r; 
 }

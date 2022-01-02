@@ -6,6 +6,8 @@
 
 using namespace nlohmann;
 
+Logger ObjectLoader::log = Logger("ObjectLoader");
+
 void ObjectLoader::LoadResources(const std::string& resources_path){
         std::ifstream i_f(resources_path);
         //Checks if the file exists
@@ -19,22 +21,24 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                 #ifdef DEBUG
                 std::cout<< "Failed to load resource file!!\n";
                 #endif
-                Debug::WriteErrorLog(ErrorType::OBJECTLOADER_LOADING_SCENE_FAIL,&resources_path);
+                ObjectLoader::log.LogError("Failed to load the " + resources_path +" file, check the name/extension.");
                 return;
         } 
         json j;
         i_f >> j;
         if(!j.contains("ResourceInfo")){
-                Debug::WriteErrorLog(ErrorType::RESLOADER_NO_RESINFO_FAIL,&resources_path);
+                ObjectLoader::log.LogError("There is not enough information in resource file " + resources_path + "Missing(ResourceInfo).");
                 return;
         }
         if(!j["ResourceInfo"].contains("ResourceName")){
-                Debug::WriteErrorLog(ErrorType::RESLOADER_NO_RESINFO_FAIL,&resources_path);
+                ObjectLoader::log.LogError("There is not enough information in resource file " + resources_path + "Missing(ResourceName).");
                 return;
         }
         
-        if(!FileIO::TryToRead(j["ResourceInfo"],"StartingScene",ErrorType::RESLOADER_NO_RESINFO_FAIL,&resources_path,&ResourcesInfo::starting_scene_path)){
+        if(!FileIO::TryToRead(j["ResourceInfo"],"StartingScene",&ResourcesInfo::starting_scene_path)){
                 std::cout<<"No scene\n";
+        }else{
+                ObjectLoader::log.LogError("There is not enough information in resource file " + resources_path + "Missing(StartingScene).");
         }
 
         if(j.contains("ResourceData")){
@@ -45,14 +49,23 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                                 ResourcesInfo::ShaderInfo shader_info;
                                 std::string shader_name;
                                 std::string params[] = {resources_path,"Shader"};
-
-                                if(FileIO::TryToRead(j_sh.value(),"Name",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&shader_name)){
-                                if(FileIO::TryToRead(j_sh.value(),"VertexPath",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&shader_info.vertex_path)){
-                                if(FileIO::TryToRead(j_sh.value(),"FragmentPath",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&shader_info.fragment_path)){
+                                bool success = false;
+                                if(FileIO::TryToRead(j_sh.value(),"Name",&shader_name)){
+                                if(FileIO::TryToRead(j_sh.value(),"VertexPath",&shader_info.vertex_path)){
+                                if(FileIO::TryToRead(j_sh.value(),"FragmentPath",&shader_info.fragment_path)){
                                         shader_name = shader_name + "." + ResourcesInfo::extension;    
                                         ResourcesInfo::singleton->shaders_map[shader_name] = shader_info;
+                                        success = true;
+                                }
+                                if(!success){
+                                ObjectLoader::log.LogError("From the scene "+ resources_path +" is passing bad/few paramters to component Models of Name="+ shader_name + ".");
+                                }
+                                }else{
+                                        ObjectLoader::log.LogError("From the scene "+ resources_path +" component of type SpriteAtlas is missing parameter Name" + ".");
                                 }
                                 }
+                                if(!success){
+                                        ObjectLoader::log.LogError("From the scene "+ resources_path +" is passing bad/few paramters to component Shader" + ".");
                                 }
                         }
                 }
@@ -60,23 +73,34 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                         std::string params[] = {resources_path,"Textures"};
                         std::string texture_name;
                         ResourcesInfo::TextureInfo tex_info;
+                        bool success = false;
                         for(json::iterator j_tex = j_aux["Textures"].begin() ; j_tex != j_aux["Textures"].end() ; j_tex++){
-                                if(FileIO::TryToRead(j_tex.value(),"Name",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&texture_name)){
-                                if(FileIO::TryToRead(j_tex.value(),"TexturePath",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&tex_info.texture_path)){
-                                        texture_name = texture_name + "." + ResourcesInfo::extension;
-                                        ResourcesInfo::singleton->texture_map[texture_name] = tex_info;
-                                }
-                                }
+                        if(FileIO::TryToRead(j_tex.value(),"Name",&texture_name)){
+                        if(FileIO::TryToRead(j_tex.value(),"TexturePath",&tex_info.texture_path)){
+                                texture_name = texture_name + "." + ResourcesInfo::extension;
+                                ResourcesInfo::singleton->texture_map[texture_name] = tex_info;
+                                success = true;
+                        }
+                        if(!success){
+                                ObjectLoader::log.LogError("From the scene "+ resources_path +" is passing bad/few paramters to component Models of Name="+ texture_name + ".");
+                        }
+                        }else{
+                                ObjectLoader::log.LogError("From the scene "+ resources_path +" component of type SpriteAtlas is missing parameter Name" + ".");
+                        }
+                        }
+                        if(!success){
+                                ObjectLoader::log.LogError("From the scene "+ resources_path +" is passing bad/few paramters to component Textures" + ".");
                         }
                 }
                 if(j_aux.contains("Models")){
                         std::string params[] = {resources_path,"Models"};
                         std::string model_name;
                         ResourcesInfo::ModelInfo model_info;
+                        bool success = false;
                         for(json::iterator j_model = j_aux["Models"].begin() ; j_model != j_aux["Models"].end() ; j_model++){
-                                if(FileIO::TryToRead(j_model.value(),"Name",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&model_name)){
+                                if(FileIO::TryToRead(j_model.value(),"Name",&model_name)){
                                 int i;
-                                if(FileIO::TryToRead(j_model.value(),"DefaultShape",ErrorType::NO_ERROR,nullptr,&i)){
+                                if(FileIO::TryToRead(j_model.value(),"DefaultShape",&i)){
                                         switch (i)
                                         {
                                         case 0:
@@ -88,9 +112,13 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                                         default:
                                                 break;
                                         }
-                                }
+                                }       
+                                        success = true;
                                         model_name = model_name + "." + ResourcesInfo::extension;
                                         ResourcesInfo::singleton->model_map[model_name] = model_info;
+                                }
+                                if(!success){
+                                        ObjectLoader::log.LogError("From the scene "+ resources_path +" is passing bad/few paramters to component Models" + ".");
                                 }
                         }
                 }
@@ -103,14 +131,21 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                                 std::string atlas_name;
                                 ObjectsInfo::SpriteAtlasInfo atlas_info;
                                 std::vector<int> vec2;
-                                if(FileIO::TryToRead(j_spa.value(),"Name",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&atlas_name)){
-                                if(FileIO::TryToRead(j_spa.value(),"SheetTexture",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&atlas_info.sheet_texture_name)){
-                                if(FileIO::TryToRead(j_spa.value(),"SheetDimensions",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&vec2)){
+                                bool success = false;
+                                if(FileIO::TryToRead(j_spa.value(),"Name",&atlas_name)){
+                                if(FileIO::TryToRead(j_spa.value(),"SheetTexture",&atlas_info.sheet_texture_name)){
+                                if(FileIO::TryToRead(j_spa.value(),"SheetDimensions",&vec2)){
                                         atlas_info.atlas_dimensions = Vector2(vec2[0],vec2[1]);
                                         atlas_name = atlas_name + "." + ObjectsInfo::extension;
+                                        success = true;
                                         ObjectsInfo::singleton->sprite_atlas_map[atlas_name] = atlas_info;
                                 }
                                 }
+                                if(!success){
+                                        ObjectLoader::log.LogError("From the scene "+ resources_path +" is passing bad/few paramters to component Models of Name="+ atlas_name + ".");
+                                }
+                                }else{
+                                        ObjectLoader::log.LogError("From the scene "+ resources_path +" component of type SpriteAtlas is missing parameter Name" + ".");
                                 }
                         }
                 }
@@ -119,17 +154,18 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                      for(json::iterator j_spa = j_aux["AnimationControllers"].begin() ; j_spa != j_aux["AnimationControllers"].end() ; j_spa++){
                         std::string sac_name;
                         ObjectsInfo::SpriteAnimationControllerInfo sac_info;
-                        if(FileIO::TryToRead(j_spa.value(),"Name",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&sac_name)){
+                        bool success = false;
+                        if(FileIO::TryToRead(j_spa.value(),"Name",&sac_name)){
                                 json animations = j_spa.value()["Animations"].get<json>();
                                 for(json::iterator j_anim = animations.begin() ; j_anim != animations.end() ; j_anim++){
                                         Animation anim;
                                                 if(j_anim.value().contains("AnimationKeys")){
-                                                if(FileIO::TryToRead(j_anim.value(),"Name",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&anim.name)){
+                                                if(FileIO::TryToRead(j_anim.value(),"Name",&anim.name)){
                                                         for(json::iterator j_key_f = j_anim.value()["AnimationKeys"].begin(); j_key_f != j_anim.value()["AnimationKeys"].end(); j_key_f++){
                                                                 float time_to_wait;
                                                                 std::vector<int> atlas_pos;
-                                                                if(FileIO::TryToRead(j_key_f.value(),"WaitTime",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&time_to_wait)){
-                                                                if(FileIO::TryToRead(j_key_f.value(),"AtlasPos",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&atlas_pos)){
+                                                                if(FileIO::TryToRead(j_key_f.value(),"WaitTime",&time_to_wait)){
+                                                                if(FileIO::TryToRead(j_key_f.value(),"AtlasPos",&atlas_pos)){
                                                                 if(atlas_pos.size() == 2){
                                                                         anim.animation_keys.push_back({time_to_wait,Vector2(atlas_pos[0],atlas_pos[1])});
                                                                 }
@@ -137,27 +173,39 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                                                                 }
                                                         }
                                                 }
+           
                                         }
                                         sac_info.animations.push_back(anim);
                                 }
-                        }
+                                if(!success){
+                                        ObjectLoader::log.LogError("From the scene "+ resources_path +" is passing bad/few paramters to component AnimationControllers of Name="+ sac_name + ".");
+                                }
+                                }else{
+                                        ObjectLoader::log.LogError("From the scene "+ resources_path +" component of type AnimationControllers is missing parameter Name" + ".");
+                                }
                         sac_name = sac_name + "." + ObjectsInfo::extension;
                         ObjectsInfo::singleton->sac_map[sac_name] = sac_info;
-                     }   
+                     }          
                 }
                 if(j_aux.contains("Meshes")){
                         std::string params[] = {resources_path,"Meshes"};
                         for(json::iterator j_m = j_aux["Meshes"].begin() ; j_m != j_aux["Meshes"].end() ; j_m++){
                                 std::string mesh_name;
                                 ObjectsInfo::MeshInfo mesh_info;
-                                if(FileIO::TryToRead(j_m.value(),"Name",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&mesh_name)){
-                                if(FileIO::TryToRead(j_m.value(),"Model",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&mesh_info.model_name)){
-                                if(!FileIO::TryToRead(j_m.value(),"Texture",ErrorType::NO_ERROR,params,&mesh_info.texture_name)){
+                                bool success = true;
+                                if(FileIO::TryToRead(j_m.value(),"Name",&mesh_name)){
+                                if(FileIO::TryToRead(j_m.value(),"Model",&mesh_info.model_name)){
+                                if(!FileIO::TryToRead(j_m.value(),"Texture",&mesh_info.texture_name)){
                                         mesh_info.texture_name = "__NO_TEXTURE__";
                                 }
                                         mesh_name = mesh_name + "." + ObjectsInfo::extension;
                                         ObjectsInfo::singleton->meshes_map[mesh_name] = mesh_info;
                                 }
+                                if(!success){
+                                        ObjectLoader::log.LogError("From the scene "+ resources_path +" is passing bad/few paramters to component Meshes of Name="+ mesh_name + ".");
+                                }
+                                }else{
+                                        ObjectLoader::log.LogError("From the scene "+ resources_path +" component of type Meshes is missing parameter Name" + ".");
                                 }
 
                         }
@@ -176,7 +224,7 @@ SceneData ObjectLoader::LoadScene(const std::string& scene_path){
                 #ifdef DEBUG
                 std::cout<< "Failed to load scene file!\n";
                 #endif
-                Debug::WriteErrorLog(ErrorType::OBJECTLOADER_LOADING_SCENE_FAIL,&scene_path);
+                ObjectLoader::log.LogError("Failed to load the " + scene_path + " file, check the name/extension.");
                 return SceneData{};
         }
         //Loads file into program
@@ -184,26 +232,27 @@ SceneData ObjectLoader::LoadScene(const std::string& scene_path){
         json j;
         i_f >> j;
         if(!j.contains("SceneInfo")){
-                Debug::WriteErrorLog(ErrorType::OBJECTLOADER_NO_SCENE_INFO_FAIL,&scene_path);
+                ObjectLoader::log.LogError("There is not enough scene information in file " + scene_path + " scene must have: SceneInfo.");
                 return scene_data;
         }
-        if(!FileIO::TryToRead(j["SceneInfo"],"SceneName",ErrorType::OBJECTLOADER_NO_SCENE_INFO_FAIL,&scene_path,&scene_data.scene_name)){
+        if(!FileIO::TryToRead(j["SceneInfo"],"SceneName",&scene_data.scene_name)){
+                ObjectLoader::log.LogError("There is not enough scene information in file " + scene_path + " scene must have: SceneName.");
                 return scene_data;
         }
         //Checks if there is data in scene
         if(!j.contains("SceneData")){
-                Debug::WriteErrorLog(ErrorType::OBJECTLOADER_NODATA_SCENE_WARN,&scene_path);
+                ObjectLoader::log.LogWarning("Scene " + scene_path + " is completely empty!");
                 return scene_data;
         }
         json j_game_objects = j["SceneData"];
         if(!j_game_objects.contains("GameObjects")){
-                Debug::WriteErrorLog(ErrorType::OBJECTLOADER_NODATA_SCENE_WARN,&scene_path);
+                ObjectLoader::log.LogWarning("Scene " + scene_path + " is completely empty!");
                 return scene_data;
         }
         j_game_objects = j_game_objects["GameObjects"];
         for(json::iterator j_go = j_game_objects.begin(); j_go != j_game_objects.end(); j_go++){
                 GameObject* go = new GameObject();
-                FileIO::TryToRead(j_go.value(),"ObjectName",ErrorType::NO_ERROR,nullptr,&go->object_name);
+                FileIO::TryToRead(j_go.value(),"ObjectName",&go->object_name);
                 if(j_go.value().contains("ObjectComponents")){
                         json j_go_comps = j_go.value()["ObjectComponents"];
                         for(json::iterator j_comp = j_go_comps.begin() ; j_comp != j_go_comps.end() ; j_comp++){
@@ -223,7 +272,7 @@ SceneData ObjectLoader::LoadScene(const std::string& scene_path){
                 }
                 if(j_go.value().contains("IsMainCamera")){
                         bool is_main_cam = false;
-                        if(FileIO::TryToRead(j_go.value(),"IsMainCamera", ErrorType::NO_ERROR,nullptr,&is_main_cam)){
+                        if(FileIO::TryToRead(j_go.value(),"IsMainCamera",&is_main_cam)){
                                 Camera* camera;
                                 //Checks if isMainCam true and if there was a camera created in the game object
                                 if(is_main_cam && (camera = go->GetComponent<Camera>())){

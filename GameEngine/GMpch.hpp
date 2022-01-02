@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iomanip> //std::set precision
 #include <cstring>
+#include <stdio.h>
 //Mathematics
 #include <math.h>
 #include <random>
@@ -18,6 +19,7 @@
 #include<typeinfo>
 //Data and time
 #include<chrono>
+#include <time.h>
 //Memory
 #include <memory>
 

@@ -22,3 +22,15 @@ namespace Debug{
     void WriteErrorLog(ErrorType err, const std::string* params, unsigned int size = 0);
     void CleanErrorLog();
 }
+
+class Logger{
+    public:
+        Logger(const std::string& local_name);
+        void Log(const std::string&  msg);
+        void LogWarning(const std::string& msg);
+        void LogError(const std::string& msg);
+    private:
+        void WriteLogMessage(const char* type,const char* msg);
+        Logger* singleton = nullptr;
+        std::string local_name;
+};
