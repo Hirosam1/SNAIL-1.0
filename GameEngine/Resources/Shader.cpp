@@ -1,5 +1,8 @@
 #include "Resources/Shader.hpp"
 
+
+Logger Shader::log = Logger("Shader");
+
 Shader::Shader(std::string vertex_path, std::string fragment_path){
     int sucess;
     char info_log[512];
@@ -19,8 +22,7 @@ Shader::Shader(std::string vertex_path, std::string fragment_path){
         #ifdef DEBUG
         std::cout<<"ERROR while linking two shaders ("<<vertex_path<<", "<<fragment_path<<")\n\tInfoLog->"<<info_log<<"\n";
         #endif
-        std::string params[] = {vertex_path, fragment_path, info_log};
-        Debug::WriteErrorLog(ErrorType::SHADER_LINK_FAIL,params);
+        log.LogError("Error while linking two shaders ("+vertex_path+", "+fragment_path+")\n\tInfoLog-> "+info_log+".");
     }
 
     glDeleteShader(vertex_shader);
@@ -50,8 +52,7 @@ Shader::Shader(std::string vertex_path, std::string geometry_path, std::string f
         #ifdef DEBUG
         std::cout<<"ERROR while linking two shaders ("<<vertex_path<<", "<<fragment_path<<")\n\tInfoLog->"<<info_log<<"\n";
         #endif
-        std::string params[] = {vertex_path, fragment_path, info_log};
-        Debug::WriteErrorLog(ErrorType::SHADER_LINK_FAIL,params);
+        log.LogError("Error while linking two shaders ("+vertex_path+", "+fragment_path+")\n\tInfoLog-> "+info_log+".");
     }
 
     glDeleteShader(geometry_shader);
@@ -74,8 +75,7 @@ GLuint Shader::LoadShader(GLenum shader_type,std::string& shader_path){
         #ifdef DEBUG
         std::cout<<"ERROR while compiling shader (" <<shader_path<<")\n\tInfoLog-> " <<info_log<<"\n";
         #endif
-        std::string params[] = {shader_path, info_log};
-        Debug::WriteErrorLog(ErrorType::SHADER_COMPILE_FAIL,params);
+        log.LogError("Error while compiling shader ("+shader_path+")\n\tInfoLog-> "+info_log +".");
     }
 
     return shader;

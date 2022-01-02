@@ -6,8 +6,6 @@
 
 using namespace nlohmann;
 
-Logger ObjectLoader::log = Logger("ObjectLoader");
-
 void ObjectLoader::LoadResources(const std::string& resources_path){
         std::ifstream i_f(resources_path);
         //Checks if the file exists
@@ -27,18 +25,16 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
         json j;
         i_f >> j;
         if(!j.contains("ResourceInfo")){
-                ObjectLoader::log.LogError("There is not enough information in resource file " + resources_path + "Missing(ResourceInfo).");
+                ObjectLoader::log.LogError("There is not enough information in resource file " + resources_path + " Missing(ResourceInfo).");
                 return;
         }
         if(!j["ResourceInfo"].contains("ResourceName")){
-                ObjectLoader::log.LogError("There is not enough information in resource file " + resources_path + "Missing(ResourceName).");
+                ObjectLoader::log.LogError("There is not enough information in resource file " + resources_path + " Missing(ResourceName).");
                 return;
         }
         
         if(!FileIO::TryToRead(j["ResourceInfo"],"StartingScene",&ResourcesInfo::starting_scene_path)){
-                std::cout<<"No scene\n";
-        }else{
-                ObjectLoader::log.LogError("There is not enough information in resource file " + resources_path + "Missing(StartingScene).");
+                ObjectLoader::log.LogError("There is not enough information in resource file " + resources_path + " Missing(StartingScene).");
         }
 
         if(j.contains("ResourceData")){
@@ -48,7 +44,6 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                         for(json::iterator j_sh = j_aux["Shaders"].begin() ; j_sh != j_aux["Shaders"].end() ; j_sh++){
                                 ResourcesInfo::ShaderInfo shader_info;
                                 std::string shader_name;
-                                std::string params[] = {resources_path,"Shader"};
                                 bool success = false;
                                 if(FileIO::TryToRead(j_sh.value(),"Name",&shader_name)){
                                 if(FileIO::TryToRead(j_sh.value(),"VertexPath",&shader_info.vertex_path)){
@@ -70,7 +65,6 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                         }
                 }
                 if(j_aux.contains("Textures")){
-                        std::string params[] = {resources_path,"Textures"};
                         std::string texture_name;
                         ResourcesInfo::TextureInfo tex_info;
                         bool success = false;
@@ -93,7 +87,6 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                         }
                 }
                 if(j_aux.contains("Models")){
-                        std::string params[] = {resources_path,"Models"};
                         std::string model_name;
                         ResourcesInfo::ModelInfo model_info;
                         bool success = false;
@@ -126,7 +119,6 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
         if(j.contains("ObjectData")){
                 json j_aux = j["ObjectData"];
                 if(j_aux.contains("SpriteAtlas")){
-                        std::string params[] = {resources_path,"SpariteAtlas"};
                         for(json::iterator j_spa = j_aux["SpriteAtlas"].begin() ; j_spa != j_aux["SpriteAtlas"].end(); j_spa++){
                                 std::string atlas_name;
                                 ObjectsInfo::SpriteAtlasInfo atlas_info;
@@ -150,7 +142,6 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                         }
                 }
                 if(j_aux.contains("AnimationControllers")){
-                     std::string params[] = {resources_path,"AnimationControllers"};
                      for(json::iterator j_spa = j_aux["AnimationControllers"].begin() ; j_spa != j_aux["AnimationControllers"].end() ; j_spa++){
                         std::string sac_name;
                         ObjectsInfo::SpriteAnimationControllerInfo sac_info;
@@ -158,6 +149,7 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                         if(FileIO::TryToRead(j_spa.value(),"Name",&sac_name)){
                                 json animations = j_spa.value()["Animations"].get<json>();
                                 for(json::iterator j_anim = animations.begin() ; j_anim != animations.end() ; j_anim++){
+                                        success = false;
                                         Animation anim;
                                                 if(j_anim.value().contains("AnimationKeys")){
                                                 if(FileIO::TryToRead(j_anim.value(),"Name",&anim.name)){
@@ -168,17 +160,20 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                                                                 if(FileIO::TryToRead(j_key_f.value(),"AtlasPos",&atlas_pos)){
                                                                 if(atlas_pos.size() == 2){
                                                                         anim.animation_keys.push_back({time_to_wait,Vector2(atlas_pos[0],atlas_pos[1])});
+                                                                        success = true;
                                                                 }
                                                                 }
+                                                                }
+                                                                if(!success){
+                                                                        ObjectLoader::log.LogError("From the scene "+ resources_path +" is passing bad/few paramters to Animation of Name="+ anim.name + ".");
                                                                 }
                                                         }
+                                                }else{
+                                                         ObjectLoader::log.LogError("From the scene "+ resources_path +" component of type Animation is missing parameter Name" + ".");
                                                 }
            
                                         }
                                         sac_info.animations.push_back(anim);
-                                }
-                                if(!success){
-                                        ObjectLoader::log.LogError("From the scene "+ resources_path +" is passing bad/few paramters to component AnimationControllers of Name="+ sac_name + ".");
                                 }
                                 }else{
                                         ObjectLoader::log.LogError("From the scene "+ resources_path +" component of type AnimationControllers is missing parameter Name" + ".");
@@ -188,7 +183,6 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                      }          
                 }
                 if(j_aux.contains("Meshes")){
-                        std::string params[] = {resources_path,"Meshes"};
                         for(json::iterator j_m = j_aux["Meshes"].begin() ; j_m != j_aux["Meshes"].end() ; j_m++){
                                 std::string mesh_name;
                                 ObjectsInfo::MeshInfo mesh_info;
@@ -289,8 +283,7 @@ SceneData ObjectLoader::LoadScene(const std::string& scene_path){
 Component* ObjectLoader::MakeComponent(json j_component, json j_values,const std::string& file_name, SceneData* scene_data){
         //Checks if component factory exists
         if(ComponentFactory::singleton->components_factories.find(j_component.get<std::string>()) == ComponentFactory::singleton->components_factories.end()){
-                std::string params[] = {file_name,j_component.get<std::string>()};
-                Debug::WriteErrorLog(ErrorType::OBJECTLOADER_NO_COMPONENT_FACTOR_FAIL,params);
+                ObjectLoader::log.LogWarning("From the scene "+ file_name +" there are no factories to build component "+ j_component.get<std::string>()  +".");
                 return nullptr;
         }
         //Returns from function factory

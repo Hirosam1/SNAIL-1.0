@@ -29,7 +29,7 @@ namespace ObjectLoader {
         //Reads and loads objects based on the resource data, it will create the game objects and bind with the components in it, using the objectFactory file.
         SceneData LoadScene(const std::string& scene_path);
         Component* MakeComponent(nlohmann::json j_component, nlohmann::json j_values,const std::string& file_name, SceneData* scene_data);
-        static Logger log;
+        static Logger log("ObjectLOader");
 };
 
  

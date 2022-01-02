@@ -1,6 +1,8 @@
 #include "Resources/Texture.hpp"
 using namespace ImageIO;
 
+Logger Texture::log = Logger("Texture");
+
 inline ImageData ImageIO::LoadImage(std::string& path){
         ImageData img_data{0,0,0,nullptr};
         img_data.data = stbi_load(path.data(), &img_data.width, &img_data.height, &img_data.nChannels, 0);
@@ -39,7 +41,7 @@ Texture::Texture(std::string texture_path, bool repeat){
         #ifdef DEBUG
         std::cout<<"Failed to load texture\n";
         #endif
-        Debug::WriteErrorLog(ErrorType::TEXTURE_IMG_LOAD_FAIL,&texture_path,1);
+        log.LogError("TEXTURE_IMG_LOAD_FAIL(Failed to load the "+texture_path+" texture. Check file name/extension");
     }
     FreeImageData(image_data);
     // glPixelStorei(GL_UNPACK_ALIGNMENT,4);

@@ -28,6 +28,7 @@ class Shader : public Resource{
         //Unloads the resourse from the openGL context
         void UnloadObject() override{glDeleteProgram(program_id); program_id = 0;}
     private:
+        static Logger log;
         GLuint program_id;  
         GLuint LoadShader(GLenum shader_type, std::string& shader_path);
 

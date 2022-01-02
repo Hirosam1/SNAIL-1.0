@@ -34,5 +34,6 @@ class Texture : public Resource{
         //Unloads the resourse from the openGL context
         void UnloadObject() override{glDeleteTextures(1,&texture_id); texture_id = 0;}
     private:
+        static Logger log;
         GLuint texture_id;
 };

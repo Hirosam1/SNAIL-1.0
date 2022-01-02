@@ -13,7 +13,6 @@ class Game {
                 // std::cout<<std::setprecision(4);
                 std::cout<<"THIS IS DEBUG\n";
             #endif
-            Debug::CleanErrorLog();
             //Benchmark windown init----------------------------------
             #ifdef DEBUG
             std::cout<<"Initializing Window\n";

@@ -90,7 +90,6 @@ Component* ComponentFactory::CreateMeshRenderer(json j,const std::string& file_n
         Shader* shader;
         std::string shader_name;
         std::string mesh_name;
-        std::string params[] = {file_name,"MeshRenderer"};
         bool success = false;
         if(FileIO::TryToRead(j,"Mesh",&mesh_name)){
                 mesh = ObjectsInfo::FindOrLoadMesh(mesh_name, game_objects);
@@ -102,19 +101,16 @@ Component* ComponentFactory::CreateMeshRenderer(json j,const std::string& file_n
                         
                 }else{
                      if(!shader){
-                             params[1] = shader_name;
-                             //Debug::WriteErrorLog(ErrorType::OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL,params);
-                             ComponentFactory::singleton->log.LogError("From the scene "+ file_name +" the object "+ shader_name +" created on resources does not exist, or does not match type.")
+                             ComponentFactory::singleton->log.LogError("From the scene "+ file_name +" the object "+ shader_name +" created on resources does not exist, or does not match type.");
                      }   
                      if(!mesh){
-                             params[1] = mesh_name;  
-                             Debug::WriteErrorLog(ErrorType::OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL,params);
+                             ComponentFactory::singleton->log.LogError("From the scene "+ file_name +" the object "+ mesh_name +" created on resources does not exist, or does not match type.");
                      }
                 }
         }
         }
         if(!success){
-                ComponentFactory::singleton->log.LogError("From the scene "+ file_name +" is passing bad/few paramters to component MeshRenderer" + ".")
+                ComponentFactory::singleton->log.LogError("From the scene "+ file_name +" is passing bad/few paramters to component MeshRenderer" + ".");
         }
         return  m_r; 
 }
@@ -126,39 +122,37 @@ Component* ComponentFactory::CreateSpriteRenderer(json j,const std::string& file
         Vector2 atlas_pos;
         SpriteRenderer* sptr = nullptr;
         std::string obj_name;
-        std::string params[] = {file_name,"SpriteRenderer"};
         //Tries to get mesh
-        if(!FileIO::TryToRead(j,"Mesh",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&obj_name)){
+        if(!FileIO::TryToRead(j,"Mesh",&obj_name)){
+                ComponentFactory::singleton->log.LogError("From the scene "+ file_name +" is passing bad/few paramters to component SpriteRenderer. Missing Mesh.");
                 return nullptr;
         }
         mesh = ObjectsInfo::FindOrLoadMesh(obj_name, game_objects);
         if(!mesh){
-                params[1]  = obj_name;
-                Debug::WriteErrorLog(ErrorType::OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL,params);
+                ComponentFactory::singleton->log.LogError("From the scene "+ file_name +" the object "+ obj_name +" created on resources does not exist, or does not match type.");
+                //OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL
                 return nullptr;
         }
         //Tries to get shader
-        params[1] = "SpriteRenderer";
-        if(!FileIO::TryToRead(j,"Shader",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&obj_name)){
+        if(!FileIO::TryToRead(j,"Shader",&obj_name)){
+                ComponentFactory::singleton->log.LogError("From the scene "+ file_name +" is passing bad/few paramters to component SpriteRenderer. Missing Shader.");
                 return nullptr;
         }
         shader = ResourcesInfo::FindOrLoadShader(obj_name, game_objects);
         if(!shader){
-                params[1] = obj_name;
-                Debug::WriteErrorLog(ErrorType::OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL,params);
+                ComponentFactory::singleton->log.LogError("From the scene "+ file_name +" the object "+ obj_name +" created on resources does not exist, or does not match type.");
                 return nullptr;
         }
         //Tries to get sprite atlas
-        if(FileIO::TryToRead(j,"SpriteAtlas",ErrorType::NO_ERROR,nullptr,&obj_name)){
+        if(FileIO::TryToRead(j,"SpriteAtlas",&obj_name)){
                 sprite_atlas = ObjectsInfo::FindOrLoadSpriteAtlas(obj_name, game_objects);
                 if(!sprite_atlas){
-                        params[1] = obj_name;
-                        Debug::WriteErrorLog(ErrorType::OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL,params);
+                        ComponentFactory::singleton->log.LogError("From the scene "+ file_name +" the object "+ obj_name +" created on resources does not exist, or does not match type.");
                         return nullptr;  
                 }
-                params[1] = "SpriteRenderer";
                 std::vector<int> vec2;
-                if(!FileIO::TryToRead(j,"AtlasPosition",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&vec2)){
+                if(!FileIO::TryToRead(j,"AtlasPosition",&vec2)){
+                        ComponentFactory::singleton->log.LogError("From the scene "+ file_name +" is passing bad/few paramters to component SpriteRenderer. Missing AtlasPosition.");
                         return nullptr;
                 }
                 atlas_pos = Vector2(vec2[0],vec2[1]);
@@ -175,14 +169,13 @@ Component* ComponentFactory::CreateSpriteRenderer(json j,const std::string& file
 
 Component* ComponentFactory::CreateSpriteAnimationController(nlohmann::json j,const std::string& file_name, std::vector<Object*>* game_objects){
         std::string obj_name;
-        std::string params[] = {file_name,"CreateSpriteAnimationController"};
-        if(!FileIO::TryToRead(j,"Controller",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&obj_name)){
-               return nullptr;
+        if(!FileIO::TryToRead(j,"Controller",&obj_name)){
+                ComponentFactory::singleton->log.LogError("From the scene "+ file_name +" is passing bad/few paramters to component SpriteAnimationController. Missing Controller.");
+                return nullptr;
         }
         SpriteAnimationController* prime_sac = ObjectsInfo::FindOrLoadSpriteAnimationController(obj_name,game_objects);
         if(!prime_sac){
-                params[1] = obj_name;
-                Debug::WriteErrorLog(ErrorType::OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL,params);
+                ComponentFactory::singleton->log.LogError("From the scene "+ file_name +" the object "+ obj_name +" created on resources does not exist, or does not match type.");
                 return nullptr;
         }
         SpriteAnimationController* sac = new SpriteAnimationController(*prime_sac);
@@ -194,30 +187,29 @@ Component* ComponentFactory::CreateSpriteBatchRenderer(nlohmann::json j,const st
         BatchSpriteRenderer* batch_rend = nullptr;
         SpriteAtlas* sprite_atlas = nullptr;
         Shader* shader = nullptr;
-        std::string params[] = {file_name,"SpritebatchRenderer"};
         std::string obj_name;
 
-        if(!FileIO::TryToRead(j,"SpriteAtlas",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&obj_name)){
+        if(!FileIO::TryToRead(j,"SpriteAtlas",&obj_name)){
+                ComponentFactory::singleton->log.LogError("From the scene "+ file_name +" is passing bad/few paramters to component SpritebatchRenderer. Missing SpriteAtlas.");
                 return nullptr;  
         }
         sprite_atlas = ObjectsInfo::FindOrLoadSpriteAtlas(obj_name,game_objects);
         if(!sprite_atlas){
-                params[1] = obj_name;
-                Debug::WriteErrorLog(ErrorType::OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL,params);
+                ComponentFactory::singleton->log.LogError("From the scene "+ file_name +" the object "+ obj_name +" created on resources does not exist, or does not match type.");
                 return nullptr;  
         }
-        if(!FileIO::TryToRead(j,"Shader",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&obj_name)){
+        if(!FileIO::TryToRead(j,"Shader",&obj_name)){
+                ComponentFactory::singleton->log.LogError("From the scene "+ file_name +" is passing bad/few paramters to component SpritebatchRenderer. Missing Shader.");
                 return nullptr;  
         }
 
         shader = ResourcesInfo::FindOrLoadShader(obj_name,game_objects);
         if(!shader){
-                params[1] = obj_name;
-                Debug::WriteErrorLog(ErrorType::OBJECTLOADER_OBJECT_DATA_MISMATCH_FAIL,params);
+                ComponentFactory::singleton->log.LogError("From the scene "+ file_name +" the object "+ obj_name +" created on resources does not exist, or does not match type.");
                 return nullptr;  
         }
         if(!j.contains("SpriteInstances")){
-                Debug::WriteErrorLog(ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params);
+                ComponentFactory::singleton->log.LogError("From the scene "+ file_name +" is passing bad/few paramters to component SpritebatchRenderer. Missing SpriteInstances.");
                 return nullptr;  
         }
         batch_rend = new BatchSpriteRenderer(sprite_atlas,shader);
@@ -226,15 +218,18 @@ Component* ComponentFactory::CreateSpriteBatchRenderer(nlohmann::json j,const st
                 std::vector<float> pos;
                 std::vector<float>atlas_pos;
                 json j_instances_v = j_instances.value();
-                if(!FileIO::TryToRead(j_instances_v,"Position",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&pos)){
+                if(!FileIO::TryToRead(j_instances_v,"Position",&pos)){
+                        ComponentFactory::singleton->log.LogError("From the scene "+ file_name +" is passing bad/few paramters to component SpritebatchRenderer. Missing Position.");
                         return nullptr;
                 }
 
-                if(!FileIO::TryToRead(j_instances_v,"AtlasPosition",ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params,&atlas_pos)){
+                if(!FileIO::TryToRead(j_instances_v,"AtlasPosition",&atlas_pos)){
+                        ComponentFactory::singleton->log.LogError("From the scene "+ file_name +" is passing bad/few paramters to component SpritebatchRenderer. Missing AtlasPosition.");
                         return nullptr;
                 }
                 if(pos.size() != 3 || atlas_pos.size() != 2){
-                        Debug::WriteErrorLog(ErrorType::OBJECTLOADER_COMPONENT_BAD_PARAM_FAIL,params);
+                        ComponentFactory::singleton->log.LogError("From the scene "+ file_name +" is passing bad/few paramters to component SpriteInstances. Invalid vector size on Position.");
+
                 }else{
                         batch_rend->AddSprite(Vector3(pos[0],pos[1],pos[2]), 0, Vector2(atlas_pos[0],atlas_pos[1]));
                 }
@@ -247,7 +242,7 @@ Component* ComponentFactory::CreateSpriteBatchRenderer(nlohmann::json j,const st
 
 Component* ComponentFactory::CreateCamera(json j, const std::string& file_name, std::vector<Object*>* game_objects){
         int i;
-        if(!FileIO::TryToRead(j,"CameraProjection",ErrorType::NO_ERROR,nullptr,&i)){
+        if(!FileIO::TryToRead(j,"CameraProjection",&i)){
                 return dynamic_cast<Component*>(new Camera());
         }
         switch (i)
@@ -265,7 +260,7 @@ Component* ComponentFactory::CreateCamera(json j, const std::string& file_name, 
 Component* ComponentFactory::CreateBehavior(json j, const std::string& file_name, std::vector<Object*>* game_objects){
         // std::string behavior_name = j.get<std::string>();
         std::string behavior_name;
-        FileIO::TryToRead(j,"__THIS_CELL__",ErrorType::NO_ERROR,nullptr,&behavior_name);
+        FileIO::TryToRead(j,"__THIS_CELL__",&behavior_name);
         if(strcmp(behavior_name.data(),"CameraMovement") == 0){
                 return dynamic_cast<Component*>(new CameraMovement());
         }else if(strcmp(behavior_name.data(),"MovingObject") == 0){
@@ -281,8 +276,7 @@ Component* ComponentFactory::CreateBehavior(json j, const std::string& file_name
         }else if(strcmp(behavior_name.data(),"EnemyMovement")==0){
                 return dynamic_cast<Component*>(new EnemyMovement());
         }
-        std::string params[] = {file_name,behavior_name};
-        Debug::WriteErrorLog(ErrorType::OBJECTLOADER_NO_BEHAVIOR_FAIL,params);
+        ComponentFactory::singleton->log.LogError("From the scene" + file_name +" there is no behavior named "+ behavior_name +".");
         return nullptr;
 
 }
@@ -290,17 +284,17 @@ Component* ComponentFactory::CreateBehavior(json j, const std::string& file_name
 Transform ComponentFactory::CreateTransform(json j,const std::string& file_name){
         Transform trans = Transform();
         std::vector<float> vec3;
-        if(FileIO::TryToRead(j,"Position",ErrorType::NO_ERROR,nullptr,&vec3)){
+        if(FileIO::TryToRead(j,"Position",&vec3)){
                 if(vec3.size() == 3){
                         trans.position = Vector3(vec3[0],vec3[1],vec3[2]);
                 }
         }
-        if(FileIO::TryToRead(j,"Rotation",ErrorType::NO_ERROR,nullptr,&vec3)){
+        if(FileIO::TryToRead(j,"Rotation",&vec3)){
                 if(vec3.size() == 3){
                         trans.SetRot(Vector3(vec3[0],vec3[1],vec3[2]));
                 }
         }
-        if(FileIO::TryToRead(j,"Scale",ErrorType::NO_ERROR,nullptr,&vec3)){
+        if(FileIO::TryToRead(j,"Scale",&vec3)){
                 if(vec3.size() == 3){
                         trans.scale = Vector3(vec3[0],vec3[1],vec3[2]);
                 }
