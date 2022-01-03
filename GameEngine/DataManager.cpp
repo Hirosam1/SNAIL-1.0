@@ -111,7 +111,7 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                                         ResourcesInfo::singleton->model_map[model_name] = model_info;
                                 }
                                 if(!success){
-                                        ObjectLoader::log.LogError("From the scene "+ resources_path +" is passing bad/few paramters to component Models" + ".");
+                                        ObjectLoader::log.LogError("From the scene "+ resources_path +" is passing bad/few paramters to component Models.");
                                 }
                         }
                 }
@@ -176,7 +176,7 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                                         sac_info.animations.push_back(anim);
                                 }
                                 }else{
-                                        ObjectLoader::log.LogError("From the scene "+ resources_path +" component of type AnimationControllers is missing parameter Name" + ".");
+                                        ObjectLoader::log.LogError("From the scene "+ resources_path +" component of type AnimationControllers is missing parameter Name.");
                                 }
                         sac_name = sac_name + "." + ObjectsInfo::extension;
                         ObjectsInfo::singleton->sac_map[sac_name] = sac_info;
@@ -199,7 +199,7 @@ void ObjectLoader::LoadResources(const std::string& resources_path){
                                         ObjectLoader::log.LogError("From the scene "+ resources_path +" is passing bad/few paramters to component Meshes of Name="+ mesh_name + ".");
                                 }
                                 }else{
-                                        ObjectLoader::log.LogError("From the scene "+ resources_path +" component of type Meshes is missing parameter Name" + ".");
+                                        ObjectLoader::log.LogError("From the scene "+ resources_path +" component of type Meshes is missing parameter Name.");
                                 }
 
                         }
