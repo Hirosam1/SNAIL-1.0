@@ -8,12 +8,12 @@ project "ExecutableGame"
     
     files {"include/*.hpp","src/*.cpp","../thirdparty/json/json.cpp","../thirdparty/glad/glad.cpp"}
     includedirs {"include/","../thirdparty/","../GameEngine/"}
-    libdirs{"../thirdparty/GLFW"}
+    libdirs{"../thirdparty/GLFW","../thirdparty/portaudio"}
     if os.istarget("windows") then
         links{"glfw3", "gdi32", "GameEngine"}
 
     elseif os.istarget("linux") then
-        links{"glfw3", "dl" ,"m", "GL", "GLU", "X11", "pthread","GameEngine"}
+        links{"glfw3", "dl" ,"m", "GL", "GLU", "X11", "asound","pthread","GameEngine"}
     else 
         print("Can't support os")
     end
