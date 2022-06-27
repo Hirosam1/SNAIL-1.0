@@ -1,14 +1,13 @@
 #pragma once
 #include "GMpch.hpp"
 #include "cmixer.h"
-#include "portaudio.h"
+#include "portaudio/portaudio.h"
 
 class SoundSystem {
     public:
-        SoundSystem(int sample_rate, double master_volume);
+        SoundSystem(double master_volume=1.0);
 
         double SetMasterVolume(double volume);
     private:
         double master_volume;
-        int sample_rate;
 };

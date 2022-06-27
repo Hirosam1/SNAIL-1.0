@@ -5,6 +5,21 @@
 
 Sound::Sound(std::string sound_path){
     sound_src = cm_new_source_from_file(sound_path.data());
+    if(sound_src == NULL){
+        std::cout<<"Error while loading sound!\n";
+    }
+}
+
+void Sound::Play(){
+    cm_play(this->sound_src);
+}
+
+void Sound::Pause(){
+    cm_play(this->sound_src);
+}
+
+void Sound::Stop(){
+    cm_play(this->sound_src);
 }
 
 double Sound::SetVolume(double volume){
@@ -31,4 +46,8 @@ double Sound::SetPitch(double pitch){
 
 double Sound::GetPitch(){
     return this->pitch;
+}
+
+void Sound::SetLoop(bool is_loop){
+    cm_set_loop(this->sound_src,is_loop);
 }

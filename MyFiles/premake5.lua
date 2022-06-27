@@ -10,7 +10,7 @@ project "ExecutableGame"
     includedirs {"include/","../thirdparty/","../GameEngine/"}
     libdirs{"../thirdparty/GLFW","../thirdparty/portaudio"}
     if os.istarget("windows") then
-        links{"glfw3", "gdi32", "GameEngine"}
+        links{"glfw3", "gdi32","portaudio","GameEngine"}
 
     elseif os.istarget("linux") then
         links{"glfw3", "dl" ,"m", "GL", "GLU", "X11", "asound","pthread","GameEngine"}

@@ -13,8 +13,8 @@ static int PlaySoundCallback(const void* input_buffer, void* output_buffer,
     return 0;
 }
 
-SoundSystem::SoundSystem(int sample_rate, double master_volume){
-    cm_init(sample_rate);
+SoundSystem::SoundSystem(double master_volume){
+    cm_init(GLOBAL_SAMPLERATE);
     this->master_volume = master_volume;
     cm_set_master_gain(master_volume);
 
@@ -24,4 +24,15 @@ SoundSystem::SoundSystem(int sample_rate, double master_volume){
         printf("Something while initializing PortAudio!");
     }
     err = Pa_OpenDefaultStream(&stream,0,2,paInt16,GLOBAL_SAMPLERATE,FRAMES_PER_BUFFER,PlaySoundCallback,NULL);
+    if (err != paNoError){
+        printf("Something while initializing PortAudio!");
+    }
+    err = Pa_StartStream(stream);
+    if (err != paNoError){
+        printf("Something while initializing PortAudio!");
+    }
+}
+
+double SoundSystem::SetMasterVolume(double volume){
+    cm_set_master_gain(volume);
 }

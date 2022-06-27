@@ -3,7 +3,7 @@ project "GameEngine"
     language "C++"
     cppdialect "C++14"
     targetdir "bin/%{cfg.buildcfg}"
-    files {"**.hpp","../thirdparty/*", "../thirdparty/glad/*.c", "**.cpp","**.c"}
+    files {"**.hpp","*.h","../thirdparty/*", "../thirdparty/glad/*.c", "**.cpp","*.c"}
 
     includedirs {".","../thirdparty/"}
     filter "configurations:Debug"

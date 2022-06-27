@@ -1,5 +1,6 @@
 #include "GameEngine.hpp"
-
+#include "SoundSystem.hpp"
+#include "Resources/Sound.hpp"
 
 
 class CharacterMovement : public Behavior{
@@ -16,6 +17,10 @@ class CharacterMovement : public Behavior{
         InputHandler ih = InputHandler(6);
         SpriteRenderer* sprite_rend;
         SpriteAnimationController* anim_ctr;
+        SoundSystem* ss;
+        Sound* sound;
+        float time_to_repeat=0.4;
+        float time_passed=0;
         //0-> Down 1->Right 2->Up 3->left
         int last_direction = 0;
         void Begin() override{
@@ -27,6 +32,8 @@ class CharacterMovement : public Behavior{
             ih.AddCommandBack(GLFW_KEY_E,PressType::KEY_PRESS,ATTACK);
             sprite_rend = game_object->GetComponent<SpriteRenderer>();
             anim_ctr = game_object->GetComponent<SpriteAnimationController>();
+            ss = new SoundSystem();
+            sound = new Sound("resources/sounds/walking.wav");
 
         }
         void EarlyUpdate() override{
@@ -99,6 +106,19 @@ class CharacterMovement : public Behavior{
             }
 
             Vector3 mov_final = Vector::Normalize(mov_direction)*speed*Time::deltaTime;
+            is_moving = Vector::Length(mov_final) > 0.01;
             this->transform->Translate(mov_final);
+        }
+        bool is_moving;
+        void Update() override{
+            time_passed+=Time::deltaTime;
+            if(is_moving){
+                if(time_passed >= time_to_repeat){
+                    time_passed = 0;
+                    sound->Play();
+                }
+            }else{
+                time_passed=time_to_repeat/2.0;
+            }
         }
 };
