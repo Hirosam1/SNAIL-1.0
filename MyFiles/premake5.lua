@@ -13,7 +13,7 @@ project "ExecutableGame"
         links{"glfw3", "gdi32","portaudio","GameEngine"}
 
     elseif os.istarget("linux") then
-        links{"glfw3", "dl" ,"m", "GL", "GLU", "X11", "asound","pthread","GameEngine"}
+        links{"glfw3", "dl" ,"m", "GL", "GLU", "X11", "portaudio", "asound","pthread","GameEngine"}
     else 
         print("Can't support os")
     end
