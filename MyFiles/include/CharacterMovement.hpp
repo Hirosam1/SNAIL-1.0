@@ -104,9 +104,8 @@ class CharacterMovement : public Behavior{
                 anim_ctr->ChangeAnimation(anim);
 
             }
-
+            is_moving = Vector::Length(mov_direction) > 0.1;
             Vector3 mov_final = Vector::Normalize(mov_direction)*speed*Time::deltaTime;
-            is_moving = Vector::Length(mov_final) > 0.01;
             this->transform->Translate(mov_final);
         }
         bool is_moving;
@@ -118,6 +117,7 @@ class CharacterMovement : public Behavior{
                     sound->Play();
                 }
             }else{
+                sound->Stop();
                 time_passed=time_to_repeat/2.0;
             }
         }

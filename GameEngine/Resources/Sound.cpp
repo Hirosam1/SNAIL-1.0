@@ -19,7 +19,7 @@ void Sound::Pause(){
 }
 
 void Sound::Stop(){
-    cm_play(this->sound_src);
+    cm_stop(this->sound_src);
 }
 
 double Sound::SetVolume(double volume){
